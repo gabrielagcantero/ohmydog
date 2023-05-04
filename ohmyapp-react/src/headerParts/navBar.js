@@ -1,5 +1,6 @@
-import LoginBtns from './loginBtns';
-import VeteLink from './veteLink';
+
+import  { VeteLink } from '../log';
+import  { LoginBtns } from '../log';
 
 function NavBar(){
     return(

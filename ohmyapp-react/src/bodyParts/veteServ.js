@@ -1,5 +1,5 @@
 import Cards from './veterinario/cards';
-import VeteLog from '../veteLog';
+import { VeteLog } from '../log.js';
 
 function VeteServ(){
     if(VeteLog())

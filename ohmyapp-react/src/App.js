@@ -32,8 +32,7 @@ import './assets/ytplayer/index.js';
 
 
 
-function App() {
-  let veter = true;
+function App() { 
   return (
       <div>
         <Header />

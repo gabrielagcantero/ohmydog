@@ -1,7 +1,7 @@
 import Header from './headerParts/header';
 import Footer from './footerParts/footer';
 import Body from './bodyParts/body'
-import Up from './bodyParts/up';
+
 import './assets/bootstrap/css/bootstrap.min.css';
 import './assets/bootstrap/css/bootstrap-grid.min.css';
 import './assets/bootstrap/css/bootstrap-reboot.min.css';
@@ -31,7 +31,9 @@ import './assets/web/assets/mobirise-icons-bold/mobirise-icons-bold.woff';
 import './assets/ytplayer/index.js';
 
 
+
 function App() {
+  let veter = true;
   return (
       <div>
         <Header />

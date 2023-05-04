@@ -1,4 +1,5 @@
-
+import LoginBtns from './loginBtns';
+import VeteLink from './veteLink';
 
 function NavBar(){
     return(
@@ -7,14 +8,9 @@ function NavBar(){
                 <li className="nav-item">
                     <a className="nav-link link text-info text-primary display-4" href="index.html#contacts3-x">Contacto</a>
                 </li>
-                <li className="nav-item">
-                    <a className="nav-link link text-info text-primary display-4" href="index.html#features1-y">Veterinario</a>
-                </li>
+                <VeteLink />
             </ul>
-            <div className="navbar-buttons mbr-section-btn">
-                <a className="btn btn-info display-4" href="login.html">Ingresar</a>
-                <a className="btn btn-info display-4" href="login.html">Salir</a>
-            </div>
+            <LoginBtns />
         </div>
     )
 }

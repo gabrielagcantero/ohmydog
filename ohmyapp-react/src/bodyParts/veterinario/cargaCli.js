@@ -1,6 +1,14 @@
 import { useState } from 'react';
 
-function confirCli(){
+const formulario = document.querySelector('#cliForm');
+
+
+function confirCli(event){
+    const datos = new FormData(event.target);
+    const datosCompletos = Object.fromEntries(datos.entries());
+    console.log(JSON.stringify(datosCompletos));
+    if (!datosCompletos.name)
+        alert("datos");
     alert("Los datos del nuevo cliente han sido guardados")
 }
 
@@ -9,7 +17,10 @@ function CargaCli(){
     let [showCargaCli, setShowCargaCli] = useState(false);
     
     const CargaCliente = () => { setShowCargaCli(!showCargaCli)};
-    const guardar = () => {confirCli()};
+    const guardar = (event) => {
+            event.preventDefault();
+            confirCli(event);
+        };
     
     if (showCargaCli)
         return(
@@ -23,10 +34,10 @@ function CargaCli(){
                     </div>
                     <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                         <div class="col-lg-12 mx-auto mbr-form">
-                            <form class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente">
+                            <form onSubmit={guardar} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
                                 <div class="dragArea row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                        <input type="text" name="name" placeholder="Nombre" class="form-control" />
+                                        <input type="text" name="name" placeholder="Nombre" class="form-control"/>
                                         <input type="text" name="lastName" placeholder="Apellido" class="form-control" />
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
@@ -39,7 +50,7 @@ function CargaCli(){
                                     </div>
 
                                     <div class="col-auto mbr-section-btn align-center">
-                                        <button type="submit" class="btn btn-info display-4" onClick={guardar} style={{width: "50%", margin: "auto"}}>Guardar</button>
+                                        <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Guardar</button>
                                     </div>
                                 </div>
                             </form>

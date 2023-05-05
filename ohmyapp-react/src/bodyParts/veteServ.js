@@ -1,4 +1,6 @@
-import Cards from './veterinario/cards';
+import CargaCli from './veterinario/cargaCli';
+import CargaDog from './veterinario/cargaDog';
+import Turnos from './veterinario/verTurn';
 import { VeteLog } from '../log.js';
 
 function VeteServ(){
@@ -13,8 +15,11 @@ function VeteServ(){
                             </h3>
                         </div>
                     </div>
-
-                    <Cards />
+                        <div className="row">
+                            <CargaCli />
+                            <CargaDog />
+                            <Turnos />
+                        </div>
                 </div>
             </section>
         )

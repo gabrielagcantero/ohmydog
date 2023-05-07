@@ -1,13 +1,22 @@
 import { useState } from 'react';
 
+
 function confirCli(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-    console.log(JSON.stringify(datosCompletos));
+   
     if (new Date(datosCompletos.nac).getTime() > new Date().getTime()){ //controla la fecha
         alert("La fecha de nacimiento debe ser anterior a la fecha actual")
-    } else
+    } else {
+        datosCompletos.veterinario = false; //agrego datos por defecto
+        datosCompletos.perros = [];
+        let add = JSON.stringify(datosCompletos) //lo paso a JSON
+        let persona = ['{"name": "Pedro"}'];
+        persona.push(localStorage.getItem("persona")); //traigo la lista de personas
+        persona.push(add); //agrego a la nueva persona
+        localStorage.setItem("persona", persona); //la guardo
         alert("Los datos del nuevo cliente han sido guardados")
+    }
 }
 
 function CargaCli(){

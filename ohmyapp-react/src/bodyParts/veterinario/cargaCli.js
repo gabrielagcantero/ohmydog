@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-//se llama cuando se le da "Guardar" a un cliente
-function confirCli(event){
+//guarda en "myClient" los datos del cliente en formato Json. hay que pasarlos a la BD
+//hay que hacer que mande el mail para la contraseña
+function exportCli(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
     let guardado = false;
@@ -11,10 +12,10 @@ function confirCli(event){
     } else {
         datosCompletos.veterinario = false; //agrego datos por defecto
         datosCompletos.perros = [];
-        let add = JSON.stringify(datosCompletos) //lo paso a JSON
-        let persona= [localStorage.getItem("persona")] ; //traigo la lista de personas
-        persona.push(add); //agrego a la nueva persona
-        localStorage.setItem("persona", persona); //la guardo
+        let myClient = JSON.stringify(datosCompletos) //lo paso a JSON
+        /*let persona= [localStorage.getItem("persona")] ; //traigo la lista de personas
+        persona.push(myClient); //agrego a la nueva persona
+        localStorage.setItem("persona", persona); //la guardo*/
         alert("Los datos del nuevo cliente han sido guardados");
         guardado = true;
     }
@@ -28,7 +29,7 @@ function CargaCli(){
     const CargaCliente = () => {setShowCargaCli(!showCargaCli)}; //muestra/oculta el formulario
     const guardar = (event) => {
             event.preventDefault(); //para que no refresque por defecto
-            if(confirCli(event))
+            if(exportCli(event))
                 setShowCargaCli(!showCargaCli); //si se guardó oculta el formulario
         };
 
@@ -36,7 +37,7 @@ function CargaCli(){
     // formulario para carga de cliente
     const formCargaCli = (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">
-            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={CargaCliente}></span>
+            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={CargaCliente}></span> 
             <div class="container">
                 <div class="mbr-section-head">
                     <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
@@ -72,7 +73,7 @@ function CargaCli(){
 
     );
 
-    //tarjeta de sCargar cliente
+    //tarjeta de Cargar cliente
     const cardCargaCli = ( 
     <div className="card col-12 col-md-6 col-lg-3">
         <div className="card-wrapper">

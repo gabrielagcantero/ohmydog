@@ -34,9 +34,9 @@ import './assets/ytplayer/index.js';
 
 
 function App() {
-  const [log, setLog] = useState(false);
-  const [veter, setVeter] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+  const [log, setLog] = useState(false); //true si está logueado
+  const [veter, setVeter] = useState(false); //true si el logueado es veterinario
+  const [showForm, setShowForm] = useState(false); //true si muestra el formulario de login
 
   const handleLog = (event) => {
     event.preventDefault();
@@ -54,29 +54,31 @@ function App() {
     setLog(!log);
   }
 
-
+  //formulario de login
   const formLogin = (
     <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
         <div class="container">
-            <div class="mbr-section-head">
-                <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                    <strong>Ingreso</strong>
-                </h3>
-            </div>
             <div class="row justify-content-center mt-4">
                 <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
-                    <form onSubmit={handleLogin}class="mbr-form form-with-styler mx-auto" data-form-title="Form login">
-                        <div class="dragArea row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="user">
-                                <input type="email" name="user" placeholder="Usuario" data-form-field="user" class="form-control" value="" />
-                            </div>
-                            <div data-for="pass" class="col-lg-12 col-md-12 col-sm-12 form-group mb-3">
-                                <input type="password" name="pass" placeholder="Contraseña" data-form-field="pass" class="form-control" value="" />
-                            </div>
-                            <div class="col-auto mbr-section-btn align-center">
-                                <button type="submit" class="btn btn-info display-4">Enviar</button>
-                            </div>
-                        </div>
+                    <form onSubmit={handleLogin}class="mbr-form form-with-styler mx-auto" data-form-title="Form login"> 
+                      <img src="assets/images/logo.png" />
+                      <br />
+                      <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>Ingreso</strong>
+                      </h3>
+                      <br/>
+                      <div class="dragArea row">
+                          <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3">
+                              <input type="email" name="user" placeholder="Usuario" class="form-control" required />
+                          </div>
+                          <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3">
+                              <input type="password" name="pass" placeholder="Contraseña" class="form-control" required/>
+                          </div>
+                          <div class="col-auto mbr-section-btn align-center">
+                              <button type="submit" class="btn btn-info display-4">Enviar</button>
+                              <button type="button" class="btn btn-link" onClick={handleShowForm}>Cancelar</button>
+                          </div>
+                      </div>
                     </form>
                 </div>
             </div>
@@ -84,6 +86,7 @@ function App() {
     </section>
   );
 
+  //pagina de inicio
   const indexPage = (
     <>
       <Header 

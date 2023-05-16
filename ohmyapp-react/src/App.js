@@ -1,6 +1,7 @@
 import Header from './headerParts/header';
 import Footer from './footerParts/footer';
-import Body from './bodyParts/body'
+import Body from './bodyParts/body';
+import React, { useState, useEffect } from 'react';
 
 import './assets/bootstrap/css/bootstrap.min.css';
 import './assets/bootstrap/css/bootstrap-grid.min.css';
@@ -32,12 +33,74 @@ import './assets/ytplayer/index.js';
 
 
 
-function App() { 
+function App() {
+  const [log, setLog] = useState(false);
+  const [veter, setVeter] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleLog = (event) => {
+    event.preventDefault();
+    setLog(!log);
+  };
+
+  const handleShowForm = (event) => {
+    event.preventDefault();
+    setShowForm(!showForm);
+  }
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    setShowForm(!showForm);
+    setLog(!log);
+  }
+
+
+  const formLogin = (
+    <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
+        <div class="container">
+            <div class="mbr-section-head">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                    <strong>Ingreso</strong>
+                </h3>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
+                    <form onSubmit={handleLogin}class="mbr-form form-with-styler mx-auto" data-form-title="Form login">
+                        <div class="dragArea row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="user">
+                                <input type="email" name="user" placeholder="Usuario" data-form-field="user" class="form-control" value="" />
+                            </div>
+                            <div data-for="pass" class="col-lg-12 col-md-12 col-sm-12 form-group mb-3">
+                                <input type="password" name="pass" placeholder="Contraseña" data-form-field="pass" class="form-control" value="" />
+                            </div>
+                            <div class="col-auto mbr-section-btn align-center">
+                                <button type="submit" class="btn btn-info display-4">Enviar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+  );
+
+  const indexPage = (
+    <>
+      <Header 
+        log={log} 
+        veter={veter} 
+        handleLog={handleLog} 
+        showForm={showForm}
+        handleShowForm={handleShowForm} 
+      />
+      <Body log={log} veter={veter}/>
+      <Footer />
+    </>
+  );
+  
   return (
       <div>
-        <Header />
-        <Body />
-        <Footer />
+        {showForm? formLogin : indexPage }
       </div>
   );
 }

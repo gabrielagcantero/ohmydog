@@ -1,10 +1,9 @@
 import CargaCli from './veterinario/cargaCli';
 import CargaDog from './veterinario/cargaDog';
 import Turnos from './veterinario/verTurn';
-import { VeteLog } from '../log.js';
 
 function VeteServ(){
-    if(VeteLog())
+    if(localStorage.getItem("veteLog") === true)
         return(
             <section data-bs-version="5.1" className="features1 cid-tCttVg7EHo" id="features1-y">
                 <div className="container">

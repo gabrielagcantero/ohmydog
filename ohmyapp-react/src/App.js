@@ -41,7 +41,8 @@ function App() {
 
   const handleLog = (event) => {
     event.preventDefault();
-    setLog(!log);
+    alert("La sesión ha sido cerrada");
+    setLog(false);
   };
 
   const handleShowForm = (event) => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export function LoginBtns({ log, veter, handleLog, showForm, handleShowForm }){
+export function LoginBtns({ log, handleLog, handleShowForm }){
 
     const btnLogIn = <a className="btn btn-info display-4" href="login.html" onClick={handleShowForm}>Ingresar</a>;
     const btnLogOut = <a className="btn btn-info display-4" href="index.html" onClick={handleLog}>Salir</a>;

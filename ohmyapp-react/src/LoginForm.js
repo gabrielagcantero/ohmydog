@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function LoginForm({setLog, setVeter, setShowForm, handleShowForm }){
+function LoginForm({ setLog, setVeter, setShowForm, handleShowForm }){
 
     //controla que todo esté bien y después loguea
     const handleLogin = (event) => {
@@ -20,13 +20,15 @@ function LoginForm({setLog, setVeter, setShowForm, handleShowForm }){
             else {
                 //if (el usuario es veterinario)
                     setVeter(true);
+                alert("sesion iniciada correctamente")
                 setLog(true);
                 setShowForm(false);
             }
         }
     }
 
-    return(
+    //formulario de login
+    const form = (
         <section data-bs-version="5.1" className="form7 cid-tCtCU4eUuo">
             <div className="container">
                 <div className="row justify-content-center mt-4">
@@ -56,5 +58,7 @@ function LoginForm({setLog, setVeter, setShowForm, handleShowForm }){
             </div>
         </section>
     )
+
+    return form;
 }
 export default LoginForm;

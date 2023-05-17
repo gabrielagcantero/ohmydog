@@ -1,11 +1,11 @@
 import Services from './servicios/services';
 import VeteServ from './veteServ';
 
-function Body(props){
+function Body({log, veter}){
     return(
         <div>
             <Services />
-            <VeteServ />
+            <VeteServ log={log} veter={veter} />
         </div>
     )
 }

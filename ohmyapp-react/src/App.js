@@ -65,7 +65,6 @@ function App() {
         log={log} 
         veter={veter} 
         handleLog={handleLog} 
-        showForm={showForm}
         handleShowForm={handleShowForm} 
       />
       <Body log={log} veter={veter}/>

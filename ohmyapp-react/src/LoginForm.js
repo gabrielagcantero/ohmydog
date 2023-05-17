@@ -8,7 +8,7 @@ function LoginForm({ setLog, setVeter, setShowForm, handleShowForm }){
         const datos = new FormData(event.target); //toma los datos del formulario
         const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
         //traer personas de la bd y chequear que el mail exista.
-        if (datosCompletos.user !== "Pepe@gmail.com")
+        if (datosCompletos.user !== "pepe@gmail.com")
             //si no existe: 
             alert("El mail ingresado no pertenece a un usuario registrado");
         //else: chequear que el mail coincida con la contraseña
@@ -20,6 +20,8 @@ function LoginForm({ setLog, setVeter, setShowForm, handleShowForm }){
             else {
                 //if (el usuario es veterinario)
                     setVeter(true);
+                //else
+                    //setVeter(false);
                 alert("sesion iniciada correctamente")
                 setLog(true);
                 setShowForm(false);

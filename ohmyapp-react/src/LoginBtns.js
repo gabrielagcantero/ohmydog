@@ -12,12 +12,3 @@ export function LoginBtns({ log, handleLog, handleShowForm }){
         </div>
     )
 }
-
-export function VeteLink(){
-    if (localStorage.getItem("veteLog") === true)
-        return (
-            <li className="nav-item">
-                <a className="nav-link link text-info text-primary display-4" href="index.html#features1-y">Veterinario</a>
-            </li>
-        )
-}

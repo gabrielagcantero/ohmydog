@@ -10,14 +10,15 @@ function exportCli(event){
     if (new Date(datosCompletos.nac).getTime() > new Date().getTime()){ //controla la fecha
         alert("La fecha de nacimiento debe ser anterior a la fecha actual")
     } else {
-        datosCompletos.veterinario = false; //agrego datos por defecto
-        datosCompletos.perros = [];
-        let myClient = JSON.stringify(datosCompletos) //lo paso a JSON
-        /*let persona= [localStorage.getItem("persona")] ; //traigo la lista de personas
-        persona.push(myClient); //agrego a la nueva persona
-        localStorage.setItem("persona", persona); //la guardo*/
-        alert("Los datos del nuevo cliente han sido guardados");
-        guardado = true;
+        //ver si el mail ya está registrado
+        //if (registrado)
+            //alert("El mail que ingresó ya se encuentra registrado en el sistema")
+        //else (si está todo bién)
+            datosCompletos.veterinario = false; //agrego datos por defecto
+            datosCompletos.perros = [];
+            let myClient = JSON.stringify(datosCompletos) //lo paso a JSON
+            alert("Los datos del nuevo cliente han sido guardados");
+            guardado = true;
     }
     return guardado;
 }
@@ -49,8 +50,8 @@ function CargaCli(){
                         <form onSubmit={guardar} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
                             <div class="dragArea row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <input type="text" name="name" placeholder="Nombre" class="form-control" required/>
-                                    <input type="text" name="lastName" placeholder="Apellido" class="form-control" required />
+                                    <input type="text" pattern="[a-zA-Z ]{2,40}" name="name" placeholder="Nombre" class="form-control" required/>
+                                    <input type="text" pattern="[a-zA-Z ]{2,20}" name="lastName" placeholder="Apellido" class="form-control" required />
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <label for="nac" >Fecha de nacimiento</label>
@@ -58,7 +59,7 @@ function CargaCli(){
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <input type="email" name="mail" placeholder="Email" class="form-control" required />
-                                    <input type="text" name="Tel" placeholder="Teléfono" class="form-control" required/>
+                                    <input type="text" pattern="[0-9]{8,13}" name="Tel" placeholder="Teléfono" class="form-control" required/>
                                 </div>
 
                                 <div class="col-auto mbr-section-btn align-center">

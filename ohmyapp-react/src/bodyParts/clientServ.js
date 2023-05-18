@@ -1,30 +1,29 @@
-import CargaCli from './veterinario/cargaCli';
-import CargaDog from './veterinario/cargaDog';
-import Turnos from './veterinario/verTurn';
+import React from 'react';
+import Turnos from './cliente/turnos';
+import MisTurnos from './cliente/misTurnos';
 
-function VeteServ({log, veter}){
+function ClientServ({log, veter}){
 
     //seccion para veterinarios
-    const veteSec = (
-        <section data-bs-version="5.1" className="features1 cid-tCttVg7EHo" id="veteSec">
+    const clientSec = (
+        <section data-bs-version="5.1" className="features1 cid-tCttVg7EHo" id="clientSec">
             <div className="container">
                 <div className="row">
                     <div className="col-12 col-lg-9">
                         <h3 className="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                            <strong>Sección para veterinarios</strong>
+                            <strong>Sección para Clientes</strong>
                         </h3>
                     </div>
                 </div>
                     <div className="row">
-                        <CargaCli />
-                        <CargaDog />
                         <Turnos />
+                        <MisTurnos />
                     </div>
             </div>
         </section>
     )
 
-    return ((log && veter) && veteSec);
+    return ((log && !veter) && clientSec);
 }
 
-export default VeteServ;
+export default ClientServ;

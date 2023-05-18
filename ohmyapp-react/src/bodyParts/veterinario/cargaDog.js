@@ -7,20 +7,23 @@ function exportDog(event){
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
     let guardado = false;
    
+    //controles
     if (new Date(datosCompletos.nac).getTime() > new Date().getTime()){ //controla la fecha
         alert("La fecha de nacimiento debe ser anterior a la fecha actual")
     } else {
-        //agrego datos por defecto
-        datosCompletos.cruza = true;
-        datosCompletos.libreta = {
-            vacunas: [],
-            antiparasitario: [],
-            castrado: false
-        }
-        let myDog = JSON.stringify(datosCompletos); //lo paso a JSON
+        //if (el nombre del perro está repetido)
+            //alert("El cliente ya posee un perro con ese nombre")
+        // else agrego datos por defecto
+            datosCompletos.cruza = true;
+            datosCompletos.libreta = {
+                vacunas: [],
+                antiparasitario: [],
+                castrado: false
+            }
+            let myDog = JSON.stringify(datosCompletos); //lo paso a JSON
 
-        alert("Los datos del nuevo perro han sido guardados");
-        guardado = true;
+            alert("Los datos del nuevo perro han sido guardados");
+            guardado = true;
     }
     return guardado;
 }
@@ -54,14 +57,14 @@ function CargaDog(){
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <select name="client" class="form-control" required>
                                         <option value="" selected disabled>Seleccione cliente</option>
-                                        <option value="client1">cliente 1</option>
+                                        <option value="client1">naty999@gmail.com</option>
                                         <option value="client2">cliente 2</option>
                                         <option value="client3">cliente 3</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <input type="text" name="name" placeholder="Nombre" class="form-control" required/>
-                                    <input type="text" name="raza" placeholder="Raza" class="form-control" required /> <br/>
+                                    <input type="text" pattern="[a-zA-Z ]{2,20}" name="raza" placeholder="Raza" class="form-control" required /> <br/>
                                     <label for="sex">Sexo:</label><br/>
                                     <input type="radio" id="fem" name="sex" value="femenino" required />
                                     <label for="fem">Femenino</label><br/>

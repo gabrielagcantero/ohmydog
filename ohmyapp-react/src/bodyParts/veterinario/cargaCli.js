@@ -6,7 +6,8 @@ function exportCli(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
     let guardado = false;
-   
+    
+    //controles
     if (new Date(datosCompletos.nac).getTime() > new Date().getTime()){ //controla la fecha
         alert("La fecha de nacimiento debe ser anterior a la fecha actual")
     } else {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Data } from '../../data';
 
 //guarda en "myClient" los datos del cliente en formato Json. hay que pasarlos a la BD
 //hay que hacer que mande el mail para la contraseña
@@ -12,14 +13,26 @@ function exportCli(event){
         alert("La fecha de nacimiento debe ser anterior a la fecha actual")
     } else {
         //ver si el mail ya está registrado
-        //if (registrado)
-            //alert("El mail que ingresó ya se encuentra registrado en el sistema")
-        //else (si está todo bién)
-            datosCompletos.veterinario = false; //agrego datos por defecto
-            datosCompletos.perros = [];
-            let myClient = JSON.stringify(datosCompletos) //lo paso a JSON
+        const myData = Data.personas.filter(p => p.mail === datosCompletos.mail); //busco en el archivo una persona que tenga ese mail
+        if (myData.length > 0)//(registrado)
+            alert("El mail que ingresó ya se encuentra registrado en el sistema")
+        else {//(si está todo bién)
+            let myClient = JSON.stringify(datosCompletos)
+
+            fetch('http://localhost:3000/store-clientdata', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                // We convert the React state to JSON and send it as the POST body
+                body: myClient
+            }).then(function(response) {
+                return response.json();
+            });
+
             alert("Los datos del nuevo cliente han sido guardados");
             guardado = true;
+        }
     }
     return guardado;
 }
@@ -60,7 +73,7 @@ function CargaCli(){
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <input type="email" name="mail" placeholder="Email" class="form-control" required />
-                                    <input type="text" pattern="[0-9]{8,13}" name="Tel" placeholder="Teléfono" class="form-control" required/>
+                                    <input type="text" pattern="[0-9]{8,13}" name="tel" placeholder="Teléfono" class="form-control" required/>
                                 </div>
 
                                 <div class="col-auto mbr-section-btn align-center">

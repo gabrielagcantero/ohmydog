@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Data } from './data';
 
 function LoginForm({ setLog, setVeter, setShowForm, handleShowForm }){
 
@@ -7,22 +8,23 @@ function LoginForm({ setLog, setVeter, setShowForm, handleShowForm }){
         event.preventDefault();
         const datos = new FormData(event.target); //toma los datos del formulario
         const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+        
         //traer personas de la bd y chequear que el mail exista.
-        if (datosCompletos.user !== "pepe@gmail.com")
+        const myData = Data.personas.filter(p => p.mail === datosCompletos.user); //busco en el archivo una persona que tenga ese mail
+        if (myData.length == 0)
             //si no existe: 
             alert("El mail ingresado no pertenece a un usuario registrado");
         //else: chequear que el mail coincida con la contraseña
         else{
-            if (datosCompletos.pass !== "123456")
-            //si no coincide: 
+            if (myData[0].pass !== datosCompletos.pass) //si no coincide: 
                 alert("la contraseña ingresada es incorrecta");
             //else: inicia la sesion y chequea si es veterinario
             else {
-                //if (el usuario es veterinario)
+                if (myData[0].veter == true) //el usuario es veterinario
                     setVeter(true);
-                //else
-                    //setVeter(false);
-                alert("sesion iniciada correctamente")
+                else
+                    setVeter(false);
+                alert("sesion iniciada correctamente");
                 setLog(true);
                 setShowForm(false);
             }

@@ -66,9 +66,9 @@ function CargaDog(){
                                     <input type="text" name="name" placeholder="Nombre" class="form-control" required/>
                                     <input type="text" pattern="[a-zA-Z ]{2,20}" name="raza" placeholder="Raza" class="form-control" required /> <br/>
                                     <label for="sex">Sexo:</label><br/>
-                                    <input type="radio" id="fem" name="sex" value="femenino" required />
+                                    <input type="radio" id="fem" name="sex" value="f" required />
                                     <label for="fem">Femenino</label><br/>
-                                    <input type="radio" id="masc" name="sex" value="masculino" required />
+                                    <input type="radio" id="masc" name="sex" value="m" required />
                                     <label for="masc">Masculino</label><br/>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >

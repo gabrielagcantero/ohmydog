@@ -28,17 +28,34 @@ function exportDog(event){
     return guardado;
 }
 
+//trae los mails de los clientes y los pone en el select
+const mails = [];
+
+fetch('http://localhost:3000/get-clientdata')
+    .then((response) => response.json())
+    .then((results) => {results.map((e) => mails.push(e.mail));
+    });
+
+function options() {
+    const children = mails.map((m) => (
+        React.createElement("option", {value: m}, m)))
+    return children;
+}
+
+
+
 function CargaDog(){
 
     let [showCargaDog, setShowCargaDog] = useState(false); 
 
-    const CargaPerro = () => {setShowCargaDog(!showCargaDog)}; //muestra/oculta el formulario
+
+    const CargaPerro = () => {
+        setShowCargaDog(!showCargaDog)}; //muestra/oculta el formulario
     const guardar = (event) => {
             event.preventDefault(); //para que no refresque por defecto
             if(exportDog(event))
                 setShowCargaDog(!showCargaDog); //si se guardó oculta el formulario
         };
-
 
     // formulario para carga de perro (hay que trer los id de cliente de la BD)
     const formCargaDog = (
@@ -55,11 +72,9 @@ function CargaDog(){
                         <form onSubmit={guardar} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
                             <div class="dragArea row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <select name="client" class="form-control" required>
-                                        <option value="" selected disabled>Seleccione cliente</option>
-                                        <option value="client1">naty999@gmail.com</option>
-                                        <option value="client2">cliente 2</option>
-                                        <option value="client3">cliente 3</option>
+                                    <select id="select-new-dog" name="client" class="form-control" required>
+                                        <option  value="" selected disabled>Seleccione cliente</option>
+                                        {options()}
                                     </select>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >

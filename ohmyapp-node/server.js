@@ -34,6 +34,33 @@ app.post('/store-clientdata',(req, res) => {
       res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
     });
   });
+
+//add new dog
+app.post('/store-dogdata',(req, res) => {
+  let d = req.body;
+  let data = [d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true];
+  let sql = "INSERT INTO dogs(owner, name, breed, sex, nac, obs, cruza) VALUES(?,?,?,?,?,?,?)";
+  conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+//get clients
+app.get('/get-clientdata',(req, res) => {
+    let sql = 'SELECT * FROM personas';
+    conn.query(sql, [0], (err, results) => {
+      if(err) throw err;
+      res.json(results);
+    })});
+
+//get dogs
+app.get('/get-ownerdata',(req, res) => {
+  let sql = 'SELECT * FROM dogs';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })});
  
 app.listen(3000, () => {
   console.log("Server running successfully on 3000");

@@ -19,12 +19,12 @@ function exportCli(event){
         else {//(si está todo bién)
             let myClient = JSON.stringify(datosCompletos)
 
+            //lo lleva a la BD
             fetch('http://localhost:3000/store-clientdata', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
                 },
-                // We convert the React state to JSON and send it as the POST body
                 body: myClient
             }).then(function(response) {
                 return response.json();

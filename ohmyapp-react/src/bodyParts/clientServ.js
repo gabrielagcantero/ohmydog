@@ -23,7 +23,7 @@ function ClientServ({log, veter}){
         </section>
     )
 
-    return ((log && !veter) && clientSec);
+    return (((log && !veter) || (localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "false")) && clientSec);
 }
 
 export default ClientServ;

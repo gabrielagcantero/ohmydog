@@ -1,7 +1,7 @@
 import Header from './headerParts/header';
 import Footer from './footerParts/footer';
 import Body from './bodyParts/body';
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import LoginForm from './LoginForm';
 
 import './assets/bootstrap/css/bootstrap.min.css';
@@ -40,7 +40,8 @@ function App() {
   const [showForm, setShowForm] = useState(false); //true si muestra el formulario de login
 
   const handleLog = (event) => {
-    event.preventDefault();
+    localStorage.setItem("logged", false);
+    localStorage.setItem("veter", false);
     alert("La sesión ha sido cerrada");
     setLog(false);
   };

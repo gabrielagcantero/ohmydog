@@ -21,8 +21,8 @@ function NavBar({ log, veter, handleLog, handleShowForm }){
                 <li className="nav-item">
                     <a className="nav-link link text-info text-primary display-4" href="index.html#contacts3-x">Contacto</a>
                 </li>
-                {(log && veter) && veteLink /*si es veterinario y está logueado muestra el link para veterinarios*/}
-                {(log && !veter) && clientLink}
+                {((log && veter )|| (localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "true")) && veteLink /*si es veterinario y está logueado muestra el link para veterinarios*/}
+                {((log && !veter) || (localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "false")) && clientLink}
             </ul>
             <LoginBtns 
                 log={log} 

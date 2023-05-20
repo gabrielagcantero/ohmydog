@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
-import { Data } from '../../data';
 
-//guarda en "myClient" los datos del cliente en formato Json. hay que pasarlos a la BD
+//trae los mails de los clientes y los devuelve en un array
+function getMails(){
+    const mails= [];
+
+    fetch('http://localhost:3000/get-clientdata')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => mails.push(e.mail));
+        });
+
+    return mails;
+}
+
+let mails = getMails();
+
+//guarda en "myClient" los datos del cliente en formato Json y los pasa a la BD
 //hay que hacer que mande el mail para la contraseña
 function exportCli(event){
     const datos = new FormData(event.target); //toma los datos del formulario
@@ -13,8 +26,7 @@ function exportCli(event){
         alert("La fecha de nacimiento debe ser anterior a la fecha actual")
     } else {
         //ver si el mail ya está registrado
-        const myData = Data.personas.filter(p => p.mail === datosCompletos.mail); //busco en el archivo una persona que tenga ese mail
-        if (myData.length > 0)//(registrado)
+        if (mails.includes(datosCompletos.mail))
             alert("El mail que ingresó ya se encuentra registrado en el sistema")
         else {//(si está todo bién)
             let myClient = JSON.stringify(datosCompletos)
@@ -31,6 +43,7 @@ function exportCli(event){
             });
 
             alert("Los datos del nuevo cliente han sido guardados");
+            mails = getMails();
             guardado = true;
         }
     }

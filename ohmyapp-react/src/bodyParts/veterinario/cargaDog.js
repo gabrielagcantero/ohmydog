@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 function getMails(){
     const mails= [];
 
-fetch('http://localhost:3000/get-clientdata')
-    .then((response) => response.json())
-    .then((results) => {results.map((e) => mails.push(e.mail));
-    });
+    fetch('http://localhost:3000/get-clientdata')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => mails.push(e.mail));
+        });
 
     return mails;
 }

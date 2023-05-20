@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from "react";
 
 export function LoginBtns({ log, handleLog, handleShowForm }){
 
@@ -8,7 +8,7 @@ export function LoginBtns({ log, handleLog, handleShowForm }){
 
     return (
         <div className="navbar-buttons mbr-section-btn">
-            {log? btnLogOut : btnLogIn }
+            {(log || localStorage.getItem("logged") === "true")? btnLogOut : btnLogIn }
         </div>
     )
 }

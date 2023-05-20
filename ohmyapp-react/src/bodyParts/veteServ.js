@@ -24,7 +24,7 @@ function VeteServ({log, veter}){
         </section>
     )
 
-    return ((log && veter) && veteSec);
+    return (((log && veter) || (localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "true")) && veteSec);
 }
 
 export default VeteServ;

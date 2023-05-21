@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 //trae los mails de los clientes y los devuelve en un array
 function getMails(){
@@ -14,8 +15,35 @@ function getMails(){
 
 let mails = getMails();
 
+//genera una pass aleatoria de 8 carácteres
+function generatePass() {
+    var pass = '';
+    var str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + 
+            'abcdefghijklmnopqrstuvwxyz0123456789@#$';
+      
+    for (let i = 1; i <= 8; i++) {
+        var char = Math.floor(Math.random()
+                    * str.length + 1);
+          
+        pass += str.charAt(char)
+    }
+      
+    return pass;
+}
+
+//envía el mail con el usuario y la contraseña
+function sendMail(datos){
+    const templateParams = {
+        to_mail: datos.mail,
+        to_name: datos.name,
+        message: "Hola! Nos alegra que te hayas registrado. A coontinuación te dejamos tus datos de registro:",
+        message2: "Usiario: " + datos.mail + "\nContraseña: " + datos.pass
+    };
+    emailjs.init('zH503YKcv1sGAlHMu');
+    emailjs.send("service_xtovo5k", "template_n7u8keb", templateParams , "zH503YKcv1sGAlHMu");
+}
+
 //guarda en "myClient" los datos del cliente en formato Json y los pasa a la BD
-//hay que hacer que mande el mail para la contraseña
 function exportCli(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
@@ -28,7 +56,8 @@ function exportCli(event){
         //ver si el mail ya está registrado
         if (mails.includes(datosCompletos.mail))
             alert("El mail que ingresó ya se encuentra registrado en el sistema")
-        else {//(si está todo bién)
+        else {//si está todo bien
+            datosCompletos.pass = generatePass();
             let myClient = JSON.stringify(datosCompletos)
 
             //lo lleva a la BD
@@ -41,6 +70,8 @@ function exportCli(event){
             }).then(function(response) {
                 return response.json();
             });
+
+            sendMail(datosCompletos);
 
             alert("Los datos del nuevo cliente han sido guardados");
             mails = getMails();
@@ -55,12 +86,12 @@ function CargaCli(){
     let [showCargaCli, setShowCargaCli] = useState(false); 
 
     const CargaCliente = () => {setShowCargaCli(!showCargaCli)}; //muestra/oculta el formulario
+
     const guardar = (event) => {
             event.preventDefault(); //para que no refresque por defecto
             if(exportCli(event))
                 setShowCargaCli(!showCargaCli); //si se guardó oculta el formulario
         };
-
 
     // formulario para carga de cliente
     const formCargaCli = (

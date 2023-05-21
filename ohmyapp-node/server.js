@@ -27,7 +27,7 @@ conn.connect((err) =>{
 //add new client
 app.post('/store-clientdata',(req, res) => {
     let d = req.body;
-    let data = [d.mail, "111111", d.name, d.lastName, d.nac, false, d.tel];
+    let data = [d.mail, d.pass, d.name, d.lastName, d.nac, false, d.tel];
     let sql = "INSERT INTO personas(mail, pass, firstName, lastName, nac, veter, tel) VALUES(?,?,?,?,?,?,?)";
     conn.query(sql, data,(err, results) => {
       if(err) throw err;

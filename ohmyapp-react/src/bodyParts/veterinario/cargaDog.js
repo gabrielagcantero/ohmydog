@@ -54,7 +54,7 @@ function exportDog(event){
 
             alert("Los datos del nuevo perro han sido guardados");
             dogs = getDogs();
-            guardado = true;
+            window.location.href = window.location.href;
         }
     }
     return guardado;
@@ -76,8 +76,7 @@ function CargaDog(){
 
     const guardar = (event) => {
             event.preventDefault(); //para que no refresque por defecto
-            if(exportDog(event))
-                setShowCargaDog(!showCargaDog); //si se guardó oculta el formulario
+            exportDog(event);  
         };
 
     // formulario para carga de perro (hay que trer los id de cliente de la BD)

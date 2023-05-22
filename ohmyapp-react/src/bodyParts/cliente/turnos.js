@@ -1,6 +1,20 @@
 import React, { useState } from "react";
 
-//guarda en "myTurn" los datos del turno en formato Json. hay que pasarlos a la BD
+//trae los perros y los devuelve en un array
+function getDogs(){
+    const dogs = [];
+
+    fetch('http://localhost:3000/get-ownerdata')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => dogs.push(e))});
+
+    return dogs;
+}
+
+let dogs = getDogs();
+
+//guarda en "myTurn" los datos del turno en formato Json y los manda a la BD
+//ya no controlamos disponobilidad. despues el vete lo va a aceptar o rechazar
 //hay que hacer que mande el mail para aceptar al vete
 function exportTurn(event){
     const datos = new FormData(event.target); //toma los datos del formulario
@@ -11,15 +25,38 @@ function exportTurn(event){
     if (new Date(datosCompletos.day).getTime() < new Date().getTime()){ //controla la fecha
         alert("La fecha del turno debe ser posterior a la fecha actual");
     } else {
-        //ver si hay disponibilidad de turno en en día y franja solicitados
-        //if (no está disponible)
-            //alert("El horario solicitado se encuentra completo. Por favor elija otro")
-        //else (si está todo bién)
+            //traigo el mail del dueño y lo agrego a los datos
+            let user = localStorage.getItem("user");
+            let jsonUser = JSON.parse(user);
+            let userMail = jsonUser.mail;
+            datosCompletos.client = userMail;
             let myTurn = JSON.stringify(datosCompletos) //lo paso a JSON
+
+            //lo mando a la BD
+            fetch('http://localhost:3000/store-turndata', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: myTurn
+            }).then(function(response) {
+                return response.json();
+            });
+
             alert("El turno ha sido solicitado.");
-            guardado = true;
+            window.location.href = window.location.href;
     }
     return guardado;
+}
+
+//crea las opciones del select con los nombres de los perros del usuarrio
+function options() {
+    let user = localStorage.getItem("user");
+    let jsonUser = JSON.parse(user);
+    let userMail = jsonUser.mail;
+    const children = dogs.filter((e) => e.owner === userMail).map((d) => (
+        React.createElement("option", {value: d.id}, d.name)))
+    return children;
 }
 
 function Turnos(){
@@ -28,8 +65,7 @@ function Turnos(){
     const CargaTurno = () => {setShowTurnoForm(!showTurnoForm)}; //muestra/oculta el formulario
     const guardar = (event) => {
             event.preventDefault(); //para que no refresque por defecto
-            if(exportTurn(event))
-                setShowTurnoForm(!showTurnoForm); //si se guardó oculta el formulario
+            exportTurn(event);
         };
 
     // formulario para solicitud de turno (hay que trer los perros del cliente de la BD)
@@ -49,9 +85,7 @@ function Turnos(){
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <select name="dog" class="form-control" required>
                                         <option value="" selected disabled>Seleccione el perro que desea atender</option>
-                                        <option value="1">perro 1</option>
-                                        <option value="2">perro 2</option>
-                                        <option value="3">perro 3</option>
+                                        {options()}
                                     </select>  
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
@@ -61,19 +95,19 @@ function Turnos(){
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <select name="time" class="form-control" required>
                                         <option value="" selected disabled>Seleccione la franja horaria</option>
-                                        <option value="1">mañana (8 a 13hs)</option>
-                                        <option value="2">tarde (15 a 17.30hs)</option>
-                                        <option value="3">noche (17.30 a 20hs)</option>
+                                        <option value="mañana">mañana (8 a 13hs)</option>
+                                        <option value="tarde">tarde (15 a 17.30hs)</option>
+                                        <option value="noche">noche (17.30 a 20hs)</option>
                                     </select> 
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <select name="motive" class="form-control" required>
                                         <option value="" selected disabled>Seleccione el motivo del turno</option>
-                                        <option value="1">Consulta</option>
-                                        <option value="2">Vacuna tipo A (prevención)</option>
-                                        <option value="3">Vacuna tipo B (antirrábica)</option>
-                                        <option value="4">Desparasitación</option>
-                                        <option value="5">Castración</option>
+                                        <option value="Consulta">Consulta</option>
+                                        <option value="Vacuna tipo A">Vacuna tipo A (prevención)</option>
+                                        <option value="Vacuna tipo B">Vacuna tipo B (antirrábica)</option>
+                                        <option value="Desparasitación">Desparasitación</option>
+                                        <option value="Castración">Castración</option>
                                     </select> 
                                 </div>
 

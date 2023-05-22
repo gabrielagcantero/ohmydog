@@ -9,8 +9,7 @@ function Adopciones(){
                         <span className="mbr-iconfont mobi-mbri-hearth mobi-mbri"></span>
                     </div>
                     <h5 className="card-title mbr-fonts-style display-7"><strong>Adopciones</strong></h5>
-                    <p className="card-text mbr-fonts-style display-7">Select the theme that suits you. Each theme in the Mobirise
-                        site builder contains a set of unique blocks.</p>
+                    <p className="card-text mbr-fonts-style display-7">Esta es una tarjeta de muestra. No tiene funcionalidad aún</p>
                 </div>
             </div>
         </div>

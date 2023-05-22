@@ -42,8 +42,10 @@ function App() {
   const handleLog = (event) => {
     localStorage.setItem("logged", false);
     localStorage.setItem("veter", false);
+    localStorage.setItem("user", "");
     alert("La sesión ha sido cerrada");
     setLog(false);
+    window.location.href = window.location.href;
   };
 
   const handleShowForm = (event) => {

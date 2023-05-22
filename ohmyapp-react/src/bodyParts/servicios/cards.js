@@ -6,6 +6,7 @@ function Cards(){
         <div className="row">  
             <Adopciones />
             <Urgencias />
+            <Adopciones />
         </div>
     )
 }

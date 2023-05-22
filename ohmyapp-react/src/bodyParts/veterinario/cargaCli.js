@@ -36,8 +36,8 @@ function sendMail(datos){
     const templateParams = {
         to_mail: datos.mail,
         to_name: datos.name,
-        message: "Hola! Nos alegra que te hayas registrado. A coontinuación te dejamos tus datos de registro:",
-        message2: "Usiario: " + datos.mail + "\nContraseña: " + datos.pass
+        message: "Nos alegra que te hayas registrado. A coontinuación te dejamos tus datos de registro:",
+        message2: "Usuario: " + datos.mail + "\nContraseña: " + datos.pass
     };
     emailjs.init('zH503YKcv1sGAlHMu');
     emailjs.send("service_xtovo5k", "template_n7u8keb", templateParams , "zH503YKcv1sGAlHMu");
@@ -75,7 +75,7 @@ function exportCli(event){
 
             alert("Los datos del nuevo cliente han sido guardados");
             mails = getMails();
-            guardado = true;
+            window.location.href = window.location.href;
         }
     }
     return guardado;
@@ -89,8 +89,7 @@ function CargaCli(){
 
     const guardar = (event) => {
             event.preventDefault(); //para que no refresque por defecto
-            if(exportCli(event))
-                setShowCargaCli(!showCargaCli); //si se guardó oculta el formulario
+            exportCli(event);
         };
 
     // formulario para carga de cliente

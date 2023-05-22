@@ -46,6 +46,27 @@ app.post('/store-dogdata',(req, res) => {
   });
 });
 
+//add new turn
+app.post('/store-turndata',(req, res) => {
+  let d = req.body;
+  let data = [d.client, d.dog, d.day, d.time, d.motive];
+  let sql = "INSERT INTO turnos(client, dog, day, hour, motive) VALUES(?,?,?,?,?)";
+  conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+//delete turn
+app.post('/delete-turndata',(req, res) => {
+  let id = req.body.value;
+  let sql = 'DELETE FROM turnos where id="' + id + '"';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
+
 //get clients
 app.get('/get-clientdata',(req, res) => {
     let sql = 'SELECT * FROM personas';
@@ -61,6 +82,17 @@ app.get('/get-ownerdata',(req, res) => {
     if(err) throw err;
     res.json(results);
   })});
+
+//get turns
+app.get('/get-turndata',(req, res) => {
+  let sql = 'SELECT * FROM turnos';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })});
+
+
+
  
 app.listen(3000, () => {
   console.log("Server running successfully on 3000");

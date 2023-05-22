@@ -1,5 +1,6 @@
 import React from "react";
 
+//trae los clientes registrados
 function getClients(){
     const clients= [];
 
@@ -39,7 +40,10 @@ function LoginForm({ setLog, setVeter, setShowForm, handleShowForm }){
                     setVeter(false);
                     localStorage.setItem("veter", "false");
                 }
+                
                 localStorage.setItem("logged", "true");
+                //guardo el usuario actual en localStorage
+                localStorage.setItem("user", JSON.stringify(clients.filter((c) => c.mail === datosCompletos.user)[0]));
                 alert("sesion iniciada correctamente");
                 setLog(true);
                 setShowForm(false);

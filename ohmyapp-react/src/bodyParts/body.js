@@ -12,4 +12,4 @@ function Body({log, veter}){
     )
 }
 
-export default Body;
+export default Body; 

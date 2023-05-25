@@ -113,6 +113,9 @@ function CargaDog(){
                                     <input type="date" name="nac" class="form-control" required />
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                    <input name="image" class="form-control" placeholder='Si desea agregar una foto ingrese aquí la url'/>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <label for="obs">Observaciones:</label><br/>
                                     <textarea id="obs" name="obs" rows="5" class="form-control"></textarea>
                                 </div>

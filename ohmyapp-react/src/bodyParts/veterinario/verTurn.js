@@ -83,7 +83,7 @@ function Turnos(){
             <div className="card-wrapper">
                 <div className="card-box align-center">
                     <div className="iconfont-wrapper">
-                        <span className="mbr-iconfont mobi-mbri-code mobi-mbri" onClick={muestraTurnos}></span>
+                        <span className="mbr-iconfont mobi-mbri-clock mobi-mbri" onClick={muestraTurnos}></span>
                     </div>
                     <h5 className="card-title mbr-fonts-style display-7"><strong>Ver turnos</strong></h5>
                     <p className="card-text mbr-fonts-style display-7">ver los turnos asignados</p>

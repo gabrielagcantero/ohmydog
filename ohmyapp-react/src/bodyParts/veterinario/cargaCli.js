@@ -36,7 +36,7 @@ function sendMail(datos){
     const templateParams = {
         to_mail: datos.mail,
         to_name: datos.name,
-        message: "Nos alegra que te hayas registrado. A coontinuación te dejamos tus datos de registro:",
+        message: "Nos alegra que te hayas registrado. A continuación te dejamos tus datos de registro:",
         message2: "Usuario: " + datos.mail + "\nContraseña: " + datos.pass
     };
     emailjs.init('zH503YKcv1sGAlHMu');

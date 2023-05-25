@@ -11,7 +11,19 @@ function getDogs(){
     return dogs;
 }
 
+function getTurns(){
+    const turns= [];
+
+    fetch('http://localhost:3000/get-turndata')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => turns.push(e));
+        });
+
+    return turns;
+}
+
 let dogs = getDogs();
+let turns = getTurns();
 
 //guarda en "myTurn" los datos del turno en formato Json y los manda a la BD
 //ya no controlamos disponobilidad. despues el vete lo va a aceptar o rechazar
@@ -26,25 +38,27 @@ function exportTurn(event){
         alert("La fecha del turno debe ser posterior a la fecha actual");
     } else {
             //traigo el mail del dueño y lo agrego a los datos
-            let user = localStorage.getItem("user");
-            let jsonUser = JSON.parse(user);
-            let userMail = jsonUser.mail;
-            datosCompletos.client = userMail;
+            datosCompletos.client = JSON.parse(localStorage.getItem("user")).mail;
             let myTurn = JSON.stringify(datosCompletos) //lo paso a JSON
 
-            //lo mando a la BD
-            fetch('http://localhost:3000/store-turndata', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: myTurn
-            }).then(function(response) {
-                return response.json();
-            });
+            //controlo que no tenga turno en el mismo dia para el mismo perro
+            if (turns.filter((t) => t.dog = datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
+                alert("El perro elegido ya posee un turno para la fecha solicitada");
+            else {
+                //lo mando a la BD
+                fetch('http://localhost:3000/store-turndata', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: myTurn
+                }).then(function(response) {
+                    return response.json();
+                });
 
-            alert("El turno ha sido solicitado.");
-            window.location.href = window.location.href;
+                alert("El turno ha sido solicitado.");
+                window.location.href = window.location.href;
+            }
     }
     return guardado;
 }
@@ -62,11 +76,15 @@ function options() {
 function Turnos(){
     let [showTurnoForm, setShowTurnoForm] = useState(false); 
 
-    const CargaTurno = () => {setShowTurnoForm(!showTurnoForm)}; //muestra/oculta el formulario
+    const CargaTurno = () => {(dogs.filter(
+        (d) => d.owner === JSON.parse(localStorage.getItem("user")).mail)
+        .length === 0) ? alert("No es posible solicitar turnos ya que no posee perros registrados") 
+        : setShowTurnoForm(!showTurnoForm)}; //muestra/oculta el formulario controlando que tenga perros
+    
     const guardar = (event) => {
-            event.preventDefault(); //para que no refresque por defecto
-            exportTurn(event);
-        };
+        event.preventDefault(); //para que no refresque por defecto
+        exportTurn(event);
+    };
 
     // formulario para solicitud de turno (hay que trer los perros del cliente de la BD)
     const formTurno = (
@@ -112,7 +130,7 @@ function Turnos(){
                                 </div>
 
                                 <div class="col-auto mbr-section-btn align-center">
-                                    <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Guardar</button>
+                                    <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Solicitar</button>
                                 </div>
                             </div>
                         </form>

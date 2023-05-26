@@ -26,7 +26,7 @@ let turns = getTurns();
 let dogs = getDogs();
 
 //elimina un turno al presionar el botón
-const eliminarTurno = (event) => {
+function eliminarTurno(event){
     let myBody = JSON.stringify({"value": event.target.value});
     //lo lleva a la BD
     fetch('http://localhost:3000/delete-turndata', {
@@ -39,6 +39,11 @@ const eliminarTurno = (event) => {
 
     alert ("el turno ha sido eliminado");
     window.location.href = window.location.href;
+}
+
+//pide consirmación antes de eliminar
+const consultar = (event) => {
+    window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
 }
 
 //crea las opciones del select con los mails de los clientes
@@ -55,7 +60,7 @@ function turnList() {
                             <div className="card-box">
                                 <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
                                     <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
-                                    <button value={t.id} className="btn btn-danger" onClick={eliminarTurno}>Cancelar turno</button>
+                                    <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
                                 </h5>
                                 <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                                     <strong>Perro: {dogName}</strong> 

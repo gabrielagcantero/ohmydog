@@ -23,11 +23,12 @@ function getDogs(){
 }
 
 let turns = getTurns();
+let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
 let dogs = getDogs();
 
 //crea las opciones del select con los mails de los clientes
 function turnList() {
-    const children = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime()).map((t) => {
+    const children = filteredTurns.map((t) => {
         let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
         return (
         <div className="container">
@@ -60,7 +61,9 @@ function turnList() {
 function Turnos(){
     let [showTurn, setShowTurn] = useState(false);
 
-    const muestraTurnos = () => {setShowTurn(!showTurn)}; //muestra/oculta el formulario
+    //muestra/oculta el formulario
+    const muestraTurnos = () => {
+        filteredTurns.length > 0 ? setShowTurn(!showTurn) : alert("No hay turnos agendados")}; 
 
     const myTurns = (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">

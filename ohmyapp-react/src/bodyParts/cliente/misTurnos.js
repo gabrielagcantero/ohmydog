@@ -49,7 +49,8 @@ const consultar = (event) => {
 //crea las opciones del select con los mails de los clientes
 function turnList() {
     let user = JSON.parse(localStorage.getItem("user")).mail;
-    const children = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime()).map((t) => {
+let fiteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
+    const children = fiteredTurns.map((t) => {
         let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
         return (
         <div className="container">
@@ -80,8 +81,13 @@ function turnList() {
 function MisTurnos(){
     let [showTurn, setShowTurn] = useState(false); 
 
-    const muestraTurnos = () => {setShowTurn(!showTurn)}; //muestra/oculta el formulario
- 
+    //muestra/oculta el formulario
+    const muestraTurnos = () => {
+        let user = JSON.parse(localStorage.getItem("user")).mail;
+let     fiteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
+        fiteredTurns.length > 0 ? setShowTurn(!showTurn) : alert("Usted no posee turnos solicitados"); 
+    }
+
     //muestra los turnos del cliente
     const myTurns = (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">

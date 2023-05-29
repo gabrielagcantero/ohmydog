@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 27-05-2023 a las 21:04:24
+-- Tiempo de generación: 30-05-2023 a las 01:39:27
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -96,9 +96,9 @@ CREATE TABLE `libreta_sanitaria` (
 --
 
 CREATE TABLE `perro` (
-  `id_perro` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `nac` varchar(50) NOT NULL,
+  `nac` date NOT NULL,
   `breed` varchar(50) NOT NULL,
   `obs` varchar(150) DEFAULT NULL,
   `image` varchar(150) DEFAULT NULL,
@@ -116,6 +116,14 @@ CREATE TABLE `perro` (
   `owner` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `perro`
+--
+
+INSERT INTO `perro` (`id`, `name`, `nac`, `breed`, `obs`, `image`, `zona_perdido`, `fecha_perdido`, `sex`, `comportamiento`, `edad_estimada`, `color`, `origen`, `fecha_celo`, `estado_encontrado`, `estado_adopcion`, `cruza`, `owner`) VALUES
+(1, 'Fatiga', '2022-01-28', 'golden retriever', 'es muy pajoso', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'pepeargento@gmail.com'),
+(2, 'pulgas', '2022-01-27', 'Chihuahua', 'es muy enano', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'pepeargento@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -131,7 +139,7 @@ CREATE TABLE `persona` (
   `tel` varchar(50) DEFAULT NULL,
   `veter` tinyint(1) NOT NULL,
   `bonif_donacion` int(11) DEFAULT NULL,
-  `nac` varchar(50) DEFAULT NULL
+  `nac` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -169,18 +177,25 @@ CREATE TABLE `servicio` (
 
 CREATE TABLE `turno` (
   `id` int(11) NOT NULL,
-  `client` int(11) NOT NULL,
-  `id_libreta_sanitaria` int(11) NOT NULL,
+  `client` varchar(100) NOT NULL,
+  `id_libreta_sanitaria` int(11) DEFAULT NULL,
   `day` date NOT NULL,
   `hour` varchar(50) NOT NULL,
-  `tipo` varchar(25) NOT NULL,
+  `tipo` varchar(25) DEFAULT NULL,
   `monto` int(11) DEFAULT NULL,
   `peso` int(11) DEFAULT NULL,
   `antiparasitario` int(11) DEFAULT NULL,
-  `observaciones` int(11) DEFAULT NULL,
+  `observaciones` varchar(110) DEFAULT NULL,
   `dog` int(11) DEFAULT NULL,
   `motive` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `turno`
+--
+
+INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`) VALUES
+(9, 'pepeargento@gmail.com', NULL, '2023-06-01', 'mañana', NULL, NULL, NULL, NULL, NULL, 1, 'Vacuna tipo A');
 
 -- --------------------------------------------------------
 
@@ -232,7 +247,7 @@ ALTER TABLE `libreta_sanitaria`
 -- Indices de la tabla `perro`
 --
 ALTER TABLE `perro`
-  ADD PRIMARY KEY (`id_perro`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `persona`
@@ -290,7 +305,7 @@ ALTER TABLE `libreta_sanitaria`
 -- AUTO_INCREMENT de la tabla `perro`
 --
 ALTER TABLE `perro`
-  MODIFY `id_perro` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
@@ -308,7 +323,7 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `vacuna`

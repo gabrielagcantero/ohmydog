@@ -7,7 +7,7 @@ function getTurns(){
         .then((response) => response.json())
         .then((results) => {results.map((e) => turns.push(e));
         });
-
+    
     return turns;
 }
 
@@ -23,11 +23,14 @@ function getDogs(){
 }
 
 let turns = getTurns();
-let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
 let dogs = getDogs();
+
 
 //crea las opciones del select con los mails de los clientes
 function turnList() {
+    //let turns = getTurns();
+    let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+
     const children = filteredTurns.map((t) => {
         let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
         return (
@@ -59,6 +62,14 @@ function turnList() {
 }
 
 function Turnos(){
+    
+
+    let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    //let filteredT = turns.filter(t => new Date("2023-06-01").getTime() >= new Date().getTime())
+    console.log(turns);
+    console.log('filter', filteredTurns);
+    //console.log('hoy ', new Date());
+
     let [showTurn, setShowTurn] = useState(false);
 
     //muestra/oculta el formulario

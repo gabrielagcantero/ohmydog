@@ -23,7 +23,7 @@ conn.connect((err) =>{
         console.error('la base de datos tiene muchas conexiones');
     }
     if (err.code === 'ECONNREFUSED') {
-        console.error('conexion de la base de datos rechazada');
+        console.error('levanta la base jajaj');
     }
   }
   console.log('BD conectada');
@@ -103,6 +103,8 @@ conn.query(sql, [0], (err, results) => {
   if(err) throw err;
   res.json(results);
 })});
+
+
 
 
 //settings

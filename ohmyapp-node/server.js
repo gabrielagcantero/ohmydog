@@ -77,6 +77,21 @@ conn.query(sql, [0], (err, results) => {
 });
 
 
+//Modificar turno
+//campos: hora del turno y fecha del mismo
+//consulta: UPDATE turno set day = "fecha" , hour = "horario"  WHERE id = "id_turn"
+app.post('/update-turndata', (req, res) =>{
+  let id_turn = req.body.id;
+  let horario = req.body.hour;
+  let fecha = req.body.day;
+  let sql = 'UPDATE turno set day = "'+fecha+'" , hour = "'+horario+'"  WHERE id = "'+id_turn+'"';
+  conn.query(sql, (err, results) => {
+    if(err) throw err;  
+    res.json(results);
+
+  })
+})
+
 
 //get clients
 app.get('/get-clientdata',(req, res) => {

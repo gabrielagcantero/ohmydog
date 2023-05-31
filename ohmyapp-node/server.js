@@ -92,6 +92,20 @@ app.post('/update-turndata', (req, res) =>{
   })
 })
 
+/*
+  Modificar turno a aceptado
+  campos: aceptar
+  consulta: UPDATE turno set aceptar = "1"  WHERE id = "id_turn"
+*/
+app.post('/accept-tun', (req, res) => {
+  let id_turn = req.body.id;
+  let sql = 'UPDATE turno set aceptar = "1"  WHERE id = "'+id_turn+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
 
 //get clients
 app.get('/get-clientdata',(req, res) => {

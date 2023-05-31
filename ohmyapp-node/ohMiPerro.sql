@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 30-05-2023 a las 01:39:27
+-- Tiempo de generación: 01-06-2023 a las 00:32:13
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -187,15 +187,16 @@ CREATE TABLE `turno` (
   `antiparasitario` int(11) DEFAULT NULL,
   `observaciones` varchar(110) DEFAULT NULL,
   `dog` int(11) DEFAULT NULL,
-  `motive` varchar(100) DEFAULT NULL
+  `motive` varchar(100) DEFAULT NULL,
+  `aceptar` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `turno`
 --
 
-INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`) VALUES
-(9, 'pepeargento@gmail.com', NULL, '2023-06-01', 'mañana', NULL, NULL, NULL, NULL, NULL, 1, 'Vacuna tipo A');
+INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`, `aceptar`) VALUES
+(9, 'pepeargento@gmail.com', NULL, '2023-06-01', 'mañana', NULL, NULL, NULL, NULL, NULL, 1, 'Vacuna tipo A', NULL);
 
 -- --------------------------------------------------------
 

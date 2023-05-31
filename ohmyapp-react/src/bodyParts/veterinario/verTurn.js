@@ -26,6 +26,65 @@ function getDogs(){
 let turns = getTurns();
 let dogs = getDogs();
 
+/*
+    Elimina el turno seleccionado
+*/
+function rechazarTurno(event){
+
+    const datos = new FormData(event.target); //toma los datos del formulario
+    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+
+    let turnoElim = JSON.stringify(datosCompletos);
+    //lo elimino de la BD
+    fetch('http://localhost:3000/delete-turndata', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: turnoElim
+    }).then(function(response) {
+        return response.json();
+    });
+
+    //tiro alerta para visualizar la confirmacion del la eliminacion del turno
+    alert("El turno ha sido eliminado correctamente");
+    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
+    turns = getTurns();
+    window.location.href = window.location.href; 
+}
+
+/*
+    Aceptar turno
+*/
+function aceptarTurno(event){
+
+    const datos = new FormData(event.target); //toma los datos del formulario
+    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+
+    let acceptTurn = JSON.stringify(datosCompletos);
+
+    //seteo "aceptar" en 1 -> true
+    //lo implemento con u UPDATE en el back
+    fetch('http://localhost:3000/accept-tun', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: acceptTurn
+    }).then(function(response) {
+        return response.json();
+    });
+
+    //tiro alerta para visualizar la confirmacion del la aceptacion del turno
+    alert("El turno ha sido aceptado correctamente");
+    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
+    turns = getTurns();
+    window.location.href = window.location.href; 
+
+}
+
+
+
 
 //arma la lista de turnos
 function turnList() {

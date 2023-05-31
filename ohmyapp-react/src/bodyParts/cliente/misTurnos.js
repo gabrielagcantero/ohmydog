@@ -47,6 +47,72 @@ const consultar = (event) => {
     window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
 }
 
+/*actualizo los turnos eliminando y agregarndo
+cuando se elige modificar, elimino el turno automaticamente, se muestra el nuevo formulario 
+y guardo el nuevo turno ingresado*/ 
+function updateTurnsElim(event){
+
+    //elimino el turno
+    eliminarTurno();
+
+    //muestra el formulario para el nuevo turno
+    // -> nose como hacer que muestre el formulario desde turnos jeje
+    //turnos(); //nose si esto estara bien o funciona 
+    const datos = new FormData(event.target); //toma los datos del formulario
+    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+    
+
+    //llevo los datos modificados a la BD
+    let update_turn = JSON.stringify(datosCompletos); //convierto lo del formulario a un JaSON
+
+    fetch('http://localhost:3000/store-turndata', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: update_turn
+        }   
+    ).then(function(response) {
+        return response.json();
+        });
+
+    //tiro alerta para visualizar la confirmacion del la modificacion del turno
+    alert("El turno ha sido modificado correctamente");
+    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
+    turns = getTurns();
+    window.location.href = window.location.href; 
+}
+
+
+//actualizo los turnos con metodo update 
+function updateTurnsUpdate(event){
+    const datos = new FormData(event.target); //toma los datos del formulario
+    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+
+    //llevo los datos modificados a la BD
+    let update_turn = JSON.stringify(datosCompletos); //convierto lo del formulario a un JaSON
+
+    fetch('http://localhost:3000/update-turndata', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: update_turn
+        }   
+    ).then(function(response) {
+        return response.json();
+        });
+
+    //tiro alerta para visualizar la confirmacion del la modificacion del turno
+    alert("El turno ha sido modificado correctamente");
+    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
+    turns = getTurns();
+    window.location.href = window.location.href; 
+}
+
+
+
+
 //arma la lista de turnos
 function turnList() {
     let user = JSON.parse(localStorage.getItem("user")).mail;

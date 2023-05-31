@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import {Turnos} from "./turnos";
 
+//trae los turnos y los guarda en un array
 function getTurns(){
     const turns= [];
 
@@ -23,11 +23,10 @@ function getDogs(){
     return dogs;
 }
 
-
 let turns = getTurns();
 let dogs = getDogs();
 
-//elimina un turno al presionar el botón
+//elimina un turno
 function eliminarTurno(event){
     let myBody = JSON.stringify({"value": event.target.value});
     //lo lleva a la BD
@@ -43,104 +42,62 @@ function eliminarTurno(event){
     window.location.href = window.location.href;
 }
 
-
-/*actualizo los turnos eliminando y agregarndo
-cuando se elige modificar, elimino el turno automaticamente, se muestra el nuevo formulario 
-y guardo el nuevo turno ingresado*/ 
-function updateTurnsElim(event){
-
-    //elimino el turno
-    eliminarTurno();
-
-    //muestra el formulario para el nuevo turno
-    // -> nose como hacer que muestre el formulario desde turnos jeje
-    Turnos(); //nose si esto estara bien o funciona 
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-    
-
-    //llevo los datos modificados a la BD
-    let update_turn = JSON.stringify(datosCompletos); //convierto lo del formulario a un JaSON
-
-    fetch('http://localhost:3000/store-turndata', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: update_turn
-        }   
-    ).then(function(response) {
-        return response.json();
-        });
-
-    //tiro alerta para visualizar la confirmacion del la modificacion del turno
-    alert("El turno ha sido modificado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
-}
-
-//actualizo los turnos con metodo update 
-function updateTurnsUpdate(event){
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-
-    //llevo los datos modificados a la BD
-    let update_turn = JSON.stringify(datosCompletos); //convierto lo del formulario a un JaSON
-
-    fetch('http://localhost:3000/update-turndata', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: update_turn
-        }   
-    ).then(function(response) {
-        return response.json();
-        });
-
-    //tiro alerta para visualizar la confirmacion del la modificacion del turno
-    alert("El turno ha sido modificado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
-}
-
-
-//pide consirmación antes de eliminar
+//pide confirmación antes de eliminar
 const consultar = (event) => {
     window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
 }
 
-//crea las opciones del select con los mails de los clientes
+//arma la lista de turnos
 function turnList() {
     let user = JSON.parse(localStorage.getItem("user")).mail;
-    let fiteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
-    const children = fiteredTurns.map((t) => {
-        let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
-        return (
-        <div className="container">
+    let filteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
+    let children;
+    //si hay turnos devuelve la lista
+    if (filteredTurns.length > 0){ 
+        children = filteredTurns.map((t) => {
+            let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
+            return ( 
+                <div className="container">
+                    <div className="card">
+                        <div className="card-wrapper">
+                            <div className="row align-items-center">
+                                <div className="col-10 col-md">
+                                    <div className="card-box">
+                                        <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
+                                            <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
+                                            <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
+                                        </h5>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>Perro: {dogName}</strong> 
+                                        </h6>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>Motivo: {t.motive} </strong> 
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>)})}
+    //si no hay turnos devuelve mensaje
+    else{ 
+        children = (<div className="container">
             <div className="card">
                 <div className="card-wrapper">
                     <div className="row align-items-center">
                         <div className="col-10 col-md">
                             <div className="card-box">
                                 <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
-                                    <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
-                                    <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
+                                    <strong>Usted no posee turnos solicitados</strong> 
                                 </h5>
-                                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                    <strong>Perro: {dogName}</strong> 
-                                </h6>
-                                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                    <strong>Motivo: {t.motive} </strong> 
-                                </h6>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>)})
+        </div>)
+    }
+    
     return children;
 }
 
@@ -149,9 +106,7 @@ function MisTurnos(){
 
     //muestra/oculta el formulario
     const muestraTurnos = () => {
-        let user = JSON.parse(localStorage.getItem("user")).mail;
-let     fiteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
-        fiteredTurns.length > 0 ? setShowTurn(!showTurn) : alert("Usted no posee turnos solicitados"); 
+        setShowTurn(!showTurn);         
     }
 
     //muestra los turnos del cliente

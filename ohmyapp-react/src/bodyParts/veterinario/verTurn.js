@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+//trae los turnos y los guarda en un array
 function getTurns(){
     const turns= [];
 
@@ -26,55 +27,66 @@ let turns = getTurns();
 let dogs = getDogs();
 
 
-//crea las opciones del select con los mails de los clientes
+//arma la lista de turnos
 function turnList() {
-    //let turns = getTurns();
     let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
-
-    const children = filteredTurns.map((t) => {
-        let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
-        return (
-        <div className="container">
-            <div className="card">
-                <div className="card-wrapper">
-                    <div className="row align-items-center">
-                        <div className="col-10 col-md">
-                            <div className="card-box">
-                                <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
-                                    <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
-                                </h5>
-                                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                    <strong>cliente: {t.client}</strong> 
-                                </h6>
-                                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                    <strong>Perro: {dogName}</strong> 
-                                </h6>
-                                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                    <strong>Motivo: {t.motive} </strong> 
-                                </h6>
+    let children;
+    //si hay turnos devuelve la lista
+    if (filteredTurns.length > 0){
+        children = filteredTurns.map((t) => {
+            let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
+            return (
+                <div className="container">
+                    <div className="card">
+                        <div className="card-wrapper">
+                            <div className="row align-items-center">
+                                <div className="col-10 col-md">
+                                    <div className="card-box">
+                                        <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
+                                            <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
+                                        </h5>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>cliente: {t.client}</strong> 
+                                        </h6>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>Perro: {dogName}</strong> 
+                                        </h6>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>Motivo: {t.motive} </strong> 
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>)})}
+    //si no hay turnos devuelve mensaje
+    else{ 
+        children = (
+            <div className="container">
+                <div className="card">
+                    <div className="card-wrapper">
+                        <div className="row align-items-center">
+                            <div className="col-10 col-md">
+                                <div className="card-box">
+                                    <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
+                                        <strong>En este momento no hay turnos solicitados</strong> 
+                                    </h5>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>)})
+            </div>)
+    }
     return children;
 }
 
 function Turnos(){
-    
-
-    let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
-    //let filteredT = turns.filter(t => new Date("2023-06-01").getTime() >= new Date().getTime())
-    console.log(turns);
-    console.log('filter', filteredTurns);
-    //console.log('hoy ', new Date());
-
     let [showTurn, setShowTurn] = useState(false);
 
     //muestra/oculta el formulario
-    const muestraTurnos = () => {
-        filteredTurns.length > 0 ? setShowTurn(!showTurn) : alert("No hay turnos agendados")}; 
+    const muestraTurnos = () => {setShowTurn(!showTurn)}; 
 
     const myTurns = (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">

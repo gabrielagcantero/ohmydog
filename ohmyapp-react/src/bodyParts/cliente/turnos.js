@@ -86,7 +86,7 @@ function Turnos(){
         exportTurn(event);
     };
 
-    // formulario para solicitud de turno (hay que trer los perros del cliente de la BD)
+    // formulario para solicitud de turno
     const formTurno = (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">
             <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={CargaTurno}></span> 

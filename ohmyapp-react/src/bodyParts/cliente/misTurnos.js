@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ModifTurno from "./modifTurno";
 
 //trae los turnos y los guarda en un array
 function getTurns(){
@@ -49,7 +50,7 @@ const consultar = (event) => {
 
 /*actualizo los turnos eliminando y agregarndo
 cuando se elige modificar, elimino el turno automaticamente, se muestra el nuevo formulario 
-y guardo el nuevo turno ingresado*/ 
+y guardo el nuevo turno ingresado 
 function updateTurnsElim(event){
 
     //elimino el turno
@@ -79,8 +80,8 @@ function updateTurnsElim(event){
     //tiro alerta para visualizar la confirmacion del la modificacion del turno
     alert("El turno ha sido modificado correctamente");
     //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
+    turns = getTurns(); //esta línea hace que vuelva a hacer fetch para que el array de turnos se actualice
+    window.location.href = window.location.href; //esta línea refresca la página
 }
 
 
@@ -108,9 +109,7 @@ function updateTurnsUpdate(event){
     //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
     turns = getTurns();
     window.location.href = window.location.href; 
-}
-
-
+}*/
 
 
 //arma la lista de turnos
@@ -120,8 +119,10 @@ function turnList() {
     let children;
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){ 
+
         children = filteredTurns.map((t) => {
             let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
+            let show = true;
             return ( 
                 <div className="container">
                     <div className="card">
@@ -131,6 +132,7 @@ function turnList() {
                                     <div className="card-box">
                                         <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
                                             <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
+                                            <button value={t.id} className="btn btn-success" onClick={() => console.log("no ando")} >Modificar turno</button>
                                             <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
                                         </h5>
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
@@ -141,6 +143,7 @@ function turnList() {
                                         </h6>
                                     </div>
                                 </div>
+                                {/*<ModifTurno switch={show} />*/}
                             </div>
                         </div>
                     </div>
@@ -169,6 +172,7 @@ function turnList() {
 
 function MisTurnos(){
     let [showTurn, setShowTurn] = useState(false); 
+
 
     //muestra/oculta el formulario
     const muestraTurnos = () => {

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ModifTurno from "./modifTurno";
 
 //trae los turnos y los guarda en un array
 function getTurns(){
@@ -112,14 +111,58 @@ function updateTurnsUpdate(event){
 }*/
 
 
+
 //arma la lista de turnos
-function turnList() {
+function turnList(showForm, setShowForm) {
     let user = JSON.parse(localStorage.getItem("user")).mail;
     let filteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
     let children;
+
+    //muestra/oculta el formulario para modificar turno
+    const mostrarModif = (event) => {
+        //let turn = turns.filter((e) => e.id == event.target.value);
+        setShowForm(!showForm);
+    }
+
+    //formulario para modificar el turno
+    const modifForm = (
+        <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">
+            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={mostrarModif}></span> 
+            <div class="container">
+                <div class="mbr-section-head">
+                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>Modificación de turno</strong>
+                    </h3>
+                </div>
+                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
+                    <div class="col-lg-12 mx-auto mbr-form">
+                        <form onSubmit="" class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
+                            <div class="dragArea row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                    <label for="day" >Seleccione la nueva fecha</label>
+                                    <input type="date" name="day" class="form-control" required />
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                    <select name="time" class="form-control" required>
+                                        <option value="" selected disabled>Seleccione la nueva franja horaria</option>
+                                        <option value="mañana">mañana (8 a 13hs)</option>
+                                        <option value="tarde">tarde (15 a 17.30hs)</option>
+                                        <option value="noche">noche (17.30 a 20hs)</option>
+                                    </select> 
+                                </div>
+                                <div class="col-auto mbr-section-btn align-center">
+                                    <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Modificar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    )
+
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){ 
-
         children = filteredTurns.map((t) => {
             let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
             let show = true;
@@ -132,7 +175,7 @@ function turnList() {
                                     <div className="card-box">
                                         <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
                                             <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
-                                            <button value={t.id} className="btn btn-success" onClick={() => console.log("no ando")} >Modificar turno</button>
+                                            <button value={t.id} className="btn btn-success" onClick={mostrarModif} >Modificar turno</button>
                                             <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
                                         </h5>
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
@@ -143,7 +186,7 @@ function turnList() {
                                         </h6>
                                     </div>
                                 </div>
-                                {/*<ModifTurno switch={show} />*/}
+                                {showForm && modifForm}
                             </div>
                         </div>
                     </div>
@@ -172,6 +215,7 @@ function turnList() {
 
 function MisTurnos(){
     let [showTurn, setShowTurn] = useState(false); 
+    let [showForm, setShowForm] = useState(false);
 
 
     //muestra/oculta el formulario
@@ -190,7 +234,7 @@ function MisTurnos(){
                     </h3>
                 </div>
                 <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
-                        {turnList()}
+                        {turnList(showForm, setShowForm)}
                 </div>
             </div>
         </section>

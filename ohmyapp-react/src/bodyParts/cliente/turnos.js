@@ -79,7 +79,8 @@ function Turnos(){
     const CargaTurno = () => {(dogs.filter(
         (d) => d.owner === JSON.parse(localStorage.getItem("user")).mail)
         .length === 0) ? alert("No es posible solicitar turnos ya que no posee perros registrados") 
-        : setShowTurnoForm(!showTurnoForm)}; //muestra/oculta el formulario controlando que tenga perros
+        : setShowTurnoForm(!showTurnoForm) //muestra/oculta el formulario controlando que tenga perros
+    }; 
     
     const guardar = (event) => {
         event.preventDefault(); //para que no refresque por defecto

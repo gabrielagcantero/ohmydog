@@ -112,22 +112,28 @@ function updateTurnsUpdate(event){
 
 
 
-//arma la lista de turnos
+//arma la lista de turnos con los botones de cancelar y modificar
 function turnList(showForm, setShowForm) {
     let user = JSON.parse(localStorage.getItem("user")).mail;
     let filteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
     let children;
 
-    //muestra/oculta el formulario para modificar turno
+    //muestra el formulario para modificar turno
     const mostrarModif = (event) => {
         //let turn = turns.filter((e) => e.id == event.target.value);
-        setShowForm(!showForm);
+        setShowForm(event.target.value);
+    }
+
+    //oculta el formulario para modificar turno
+    const ocultarModif = (event) => {
+        //let turn = turns.filter((e) => e.id == event.target.value);
+        setShowForm(null);
     }
 
     //formulario para modificar el turno
     const modifForm = (
-        <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">
-            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={mostrarModif}></span> 
+        <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
+            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={ocultarModif} ></span> 
             <div class="container">
                 <div class="mbr-section-head">
                     <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
@@ -159,13 +165,12 @@ function turnList(showForm, setShowForm) {
                 </div>
             </div>
         </section>
-    )
+    );
 
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){ 
         children = filteredTurns.map((t) => {
             let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
-            let show = true;
             return ( 
                 <div className="container">
                     <div className="card">
@@ -186,7 +191,7 @@ function turnList(showForm, setShowForm) {
                                         </h6>
                                     </div>
                                 </div>
-                                {showForm && modifForm}
+                                {String(t.id) === showForm && modifForm}
                             </div>
                         </div>
                     </div>
@@ -215,15 +220,14 @@ function turnList(showForm, setShowForm) {
 
 function MisTurnos(){
     let [showTurn, setShowTurn] = useState(false); 
-    let [showForm, setShowForm] = useState(false);
+    let [showForm, setShowForm] = useState(null);
 
-
-    //muestra/oculta el formulario
+    //muestra/oculta los turnos
     const muestraTurnos = () => {
         setShowTurn(!showTurn);         
     }
 
-    //muestra los turnos del cliente
+    //turnos del cliente
     const myTurns = (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo" id="form7-t">
             <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={muestraTurnos}></span> 

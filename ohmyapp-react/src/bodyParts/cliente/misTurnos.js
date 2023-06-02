@@ -26,6 +26,32 @@ function getDogs(){
 let turns = getTurns();
 let dogs = getDogs();
 
+//guarda el turno modificado en la BD
+function exportTurn(datosCompletos){
+
+    //controles
+    if (new Date(datosCompletos.day).getTime() < new Date().getTime()){ //controla la fecha
+        alert("La fecha del turno debe ser posterior a la fecha actual");
+    } else {
+        let myTurn = JSON.stringify(datosCompletos) //lo paso a JSON
+        //controlo que no tenga turno en el mismo dia para el mismo perro
+        if (turns.filter((t) => t.dog == datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
+            alert("El perro elegido ya posee un turno para la fecha solicitada");
+        else {
+            //lo mando a la BD
+            fetch('http://localhost:3000/store-turndata', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: myTurn
+            }).then(function(response) {
+                return response.json();
+            });
+        }
+    }
+}
+
 //elimina un turno
 function eliminarTurno(event){
     let myBody = JSON.stringify({"value": event.target.value});
@@ -42,75 +68,23 @@ function eliminarTurno(event){
     window.location.href = window.location.href;
 }
 
+//elimina un turno modificado
+function eliminarTurnoModif(id){
+    let myBody = JSON.stringify({"value": id});
+    //lo lleva a la BD
+    fetch('http://localhost:3000/delete-turndata', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: myBody})
+        .then(function(response) {return response.json();});
+}
+
 //pide confirmación antes de eliminar
 const consultar = (event) => {
     window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
 }
-
-/*actualizo los turnos eliminando y agregarndo
-cuando se elige modificar, elimino el turno automaticamente, se muestra el nuevo formulario 
-y guardo el nuevo turno ingresado 
-function updateTurnsElim(event){
-
-    //elimino el turno
-    eliminarTurno();
-
-    //muestra el formulario para el nuevo turno
-    // -> nose como hacer que muestre el formulario desde turnos jeje
-    //turnos(); //nose si esto estara bien o funciona 
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-    
-
-    //llevo los datos modificados a la BD
-    let update_turn = JSON.stringify(datosCompletos); //convierto lo del formulario a un JaSON
-
-    fetch('http://localhost:3000/store-turndata', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: update_turn
-        }   
-    ).then(function(response) {
-        return response.json();
-        });
-
-    //tiro alerta para visualizar la confirmacion del la modificacion del turno
-    alert("El turno ha sido modificado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns(); //esta línea hace que vuelva a hacer fetch para que el array de turnos se actualice
-    window.location.href = window.location.href; //esta línea refresca la página
-}
-
-
-//actualizo los turnos con metodo update 
-function updateTurnsUpdate(event){
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-
-    //llevo los datos modificados a la BD
-    let update_turn = JSON.stringify(datosCompletos); //convierto lo del formulario a un JaSON
-
-    fetch('http://localhost:3000/update-turndata', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: update_turn
-        }   
-    ).then(function(response) {
-        return response.json();
-        });
-
-    //tiro alerta para visualizar la confirmacion del la modificacion del turno
-    alert("El turno ha sido modificado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
-}*/
-
-
 
 //arma la lista de turnos con los botones de cancelar y modificar
 function turnList(showForm, setShowForm) {
@@ -119,19 +93,29 @@ function turnList(showForm, setShowForm) {
     let children;
 
     //muestra el formulario para modificar turno
-    const mostrarModif = (event) => {
-        //let turn = turns.filter((e) => e.id == event.target.value);
-        setShowForm(event.target.value);
-    }
+    const mostrarModif = (event) => {setShowForm(event.target.value)};
 
     //oculta el formulario para modificar turno
-    const ocultarModif = (event) => {
-        //let turn = turns.filter((e) => e.id == event.target.value);
-        setShowForm(null);
+    const ocultarModif = () => {setShowForm(null)};
+
+    //cuadro de confirmación
+    const consultarModif = (event) => {window.confirm("Tenga en cuenta que el veterinario debe aceptar la modificación. \nDesea continuar?") && mostrarModif(event)};
+
+    //agenda el nuevo turno y elimina el viejo. mantiene dueño, perro y motivo del turno viejo
+    const modificarTurno = (event) =>{
+        event.preventDefault();
+        const datos = new FormData(event.target); //toma los datos del formulario
+        const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+        exportTurn(datosCompletos); //agenda el nuevo turno
+        eliminarTurnoModif(datosCompletos.idTurnoViejo); //elimina el turno viejo
+        alert("la solicitud ha sido enviada");
+        turns = getTurns();
+        window.location.href = window.location.href;
     }
 
     //formulario para modificar el turno
-    const modifForm = (
+    const modifForm = (t) => {
+        return (
         <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
             <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={ocultarModif} ></span> 
             <div class="container">
@@ -142,7 +126,7 @@ function turnList(showForm, setShowForm) {
                 </div>
                 <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                     <div class="col-lg-12 mx-auto mbr-form">
-                        <form onSubmit="" class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
+                        <form onSubmit={modificarTurno} class="mbr-form form-with-styler mx-auto">
                             <div class="dragArea row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <label for="day" >Seleccione la nueva fecha</label>
@@ -155,6 +139,10 @@ function turnList(showForm, setShowForm) {
                                         <option value="tarde">tarde (15 a 17.30hs)</option>
                                         <option value="noche">noche (17.30 a 20hs)</option>
                                     </select> 
+                                    <input name="idTurnoViejo" type="hidden" value={t.id} />
+                                    <input name="client" type="hidden" value={t.client} />
+                                    <input name="dog" type="hidden" value={t.dog} />
+                                    <input name="motive" type="hidden" value={t.motive} />
                                 </div>
                                 <div class="col-auto mbr-section-btn align-center">
                                     <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Modificar</button>
@@ -165,7 +153,7 @@ function turnList(showForm, setShowForm) {
                 </div>
             </div>
         </section>
-    );
+    )};
 
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){ 
@@ -180,7 +168,7 @@ function turnList(showForm, setShowForm) {
                                     <div className="card-box">
                                         <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
                                             <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
-                                            <button value={t.id} className="btn btn-success" onClick={mostrarModif} >Modificar turno</button>
+                                            <button value={t.id} className="btn btn-success" onClick={consultarModif} >Modificar turno</button>
                                             <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
                                         </h5>
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
@@ -191,7 +179,7 @@ function turnList(showForm, setShowForm) {
                                         </h6>
                                     </div>
                                 </div>
-                                {String(t.id) === showForm && modifForm}
+                                {String(t.id) === showForm && modifForm(t)}
                             </div>
                         </div>
                     </div>

@@ -31,7 +31,6 @@ let turns = getTurns();
 function exportTurn(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-    let guardado = false;
     
     //controles
     if (new Date(datosCompletos.day).getTime() < new Date().getTime()){ //controla la fecha
@@ -60,7 +59,6 @@ function exportTurn(event){
                 window.location.href = window.location.href;
             }
     }
-    return guardado;
 }
 
 //crea las opciones del select con los nombres de los perros del usuarrio

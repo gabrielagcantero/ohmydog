@@ -77,6 +77,7 @@ conn.query(sql, [0], (err, results) => {
 });
 
 
+/* comento porque no se usa por ahora
 //Modificar turno
 //campos: hora del turno y fecha del mismo
 //consulta: UPDATE turno set day = "fecha" , hour = "horario"  WHERE id = "id_turn"
@@ -90,14 +91,14 @@ app.post('/update-turndata', (req, res) =>{
     res.json(results);
 
   })
-})
+})*/
 
 /*
   Modificar turno a aceptado
   campos: aceptar
   consulta: UPDATE turno set aceptar = "1"  WHERE id = "id_turn"
 */
-app.post('/accept-tun', (req, res) => {
+app.post('/accept-turn', (req, res) => {
   let id_turn = req.body.id;
   let sql = 'UPDATE turno set aceptar = "1"  WHERE id = "'+id_turn+'"';
   conn.query(sql, (err, result) => {

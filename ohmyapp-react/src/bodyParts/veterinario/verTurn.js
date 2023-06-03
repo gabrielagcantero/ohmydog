@@ -26,69 +26,9 @@ function getDogs(){
 let turns = getTurns();
 let dogs = getDogs();
 
-/*
-    Elimina el turno seleccionado
-*/
-function rechazarTurno(event){
-
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-
-    let turnoElim = JSON.stringify(datosCompletos);
-    //lo elimino de la BD
-    fetch('http://localhost:3000/delete-turndata', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: turnoElim
-    }).then(function(response) {
-        return response.json();
-    });
-
-    //tiro alerta para visualizar la confirmacion del la eliminacion del turno
-    alert("El turno ha sido eliminado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
-}
-
-/*
-    Aceptar turno
-*/
-function aceptarTurno(event){
-
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-
-    let acceptTurn = JSON.stringify(datosCompletos);
-
-    //seteo "aceptar" en 1 -> true
-    //lo implemento con u UPDATE en el back
-    fetch('http://localhost:3000/accept-tun', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: acceptTurn
-    }).then(function(response) {
-        return response.json();
-    });
-
-    //tiro alerta para visualizar la confirmacion del la aceptacion del turno
-    alert("El turno ha sido aceptado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
-
-}
-
-
-
-
 //arma la lista de turnos
 function turnList() {
-    let filteredTurns = turns.filter((e) => new Date(e.day).getTime() >= new Date().getTime()).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    let filteredTurns = turns.filter((e) => (e.aceptar === 1 && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){
@@ -129,7 +69,7 @@ function turnList() {
                             <div className="col-10 col-md">
                                 <div className="card-box">
                                     <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
-                                        <strong>En este momento no hay turnos solicitados</strong> 
+                                        <strong>En este momento no hay turnos pendientes</strong> 
                                     </h5>
                                 </div>
                             </div>
@@ -171,7 +111,7 @@ function Turnos(){
                         <span className="mbr-iconfont mobi-mbri-clock mobi-mbri" onClick={muestraTurnos}></span>
                     </div>
                     <h5 className="card-title mbr-fonts-style display-7"><strong>Ver turnos</strong></h5>
-                    <p className="card-text mbr-fonts-style display-7">ver los turnos asignados</p>
+                    <p className="card-text mbr-fonts-style display-7">Ver los turnos asignados</p>
                 </div>
             </div>
         </div>

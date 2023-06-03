@@ -117,6 +117,21 @@ app.get('/get-clientdata',(req, res) => {
   })}
 );
 
+/*
+  Obetener datos del cliente
+  requiere el ID del cliente
+  consulta: SELECT * FROM persona WHERE id_persona = "id_cli"
+*/
+app.post('/get-clientdataID', (req,res) => {
+  let id_cli = req.body.id;
+  let sql = 'SELECT * FROM persona WHERE id_persona = "'+id_cli+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+
 
 //get dogs
 app.get('/get-ownerdata',(req, res) => {

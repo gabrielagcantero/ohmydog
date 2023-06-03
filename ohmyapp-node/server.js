@@ -100,7 +100,6 @@ app.post('/update-turndata', (req, res) =>{
 */
 app.post('/accept-turn', (req, res) => {
   let id_turn = req.body.id;
-  console.log(req.body);
   let sql = 'UPDATE turno set aceptar = "1"  WHERE id = "'+id_turn+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;

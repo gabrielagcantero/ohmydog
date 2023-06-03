@@ -28,7 +28,7 @@ let dogs = getDogs();
 
 //guarda el turno modificado en la BD
 function exportTurn(datosCompletos){
-
+    let exported = false;
     //controles
     if (new Date(datosCompletos.day).getTime() < new Date().getTime()){ //controla la fecha
         alert("La fecha del turno debe ser posterior a la fecha actual");
@@ -48,8 +48,10 @@ function exportTurn(datosCompletos){
             }).then(function(response) {
                 return response.json();
             });
+            exported = true;
         }
     }
+    return exported;
 }
 
 //elimina un turno
@@ -89,7 +91,7 @@ const consultar = (event) => {
 //arma la lista de turnos con los botones de cancelar y modificar
 function turnList(showForm, setShowForm) {
     let user = JSON.parse(localStorage.getItem("user")).mail;
-    let filteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime()));
+    let filteredTurns = turns.filter((e) => (e.client === user && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
 
     //muestra el formulario para modificar turno
@@ -106,11 +108,12 @@ function turnList(showForm, setShowForm) {
         event.preventDefault();
         const datos = new FormData(event.target); //toma los datos del formulario
         const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-        exportTurn(datosCompletos); //agenda el nuevo turno
-        eliminarTurnoModif(datosCompletos.idTurnoViejo); //elimina el turno viejo
-        alert("la solicitud ha sido enviada");
-        turns = getTurns();
-        window.location.href = window.location.href;
+        if (exportTurn(datosCompletos)){ 
+            alert("la solicitud ha sido enviada"); //agenda el nuevo turno
+            eliminarTurnoModif(datosCompletos.idTurnoViejo); //elimina el turno viejo
+            turns = getTurns();
+            window.location.href = window.location.href;
+        }
     }
 
     //formulario para modificar el turno
@@ -171,6 +174,9 @@ function turnList(showForm, setShowForm) {
                                             <button value={t.id} className="btn btn-success" onClick={consultarModif} >Modificar turno</button>
                                             <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
                                         </h5>
+                                        <h6 className=" card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                                            <strong>{t.aceptar === 0 && "(Pendiente de aprobación)"}</strong>
+                                        </h6>
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                                             <strong>Perro: {dogName}</strong> 
                                         </h6>

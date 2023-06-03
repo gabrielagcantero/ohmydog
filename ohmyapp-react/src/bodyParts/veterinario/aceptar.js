@@ -57,15 +57,10 @@ function rechazarTurno(event){
 Aceptar turno
 */
 function aceptarTurno(event){
-
-    const datos = new FormData(event.target); //toma los datos del formulario
-    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-
-    let acceptTurn = JSON.stringify(datosCompletos);
-
+    let acceptTurn = JSON.stringify({id: event.target.value});
     //seteo "aceptar" en 1 -> true
     //lo implemento con u UPDATE en el back
-    fetch('http://localhost:3000/accept-tun', {
+    fetch('http://localhost:3000/accept-turn', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
@@ -74,12 +69,10 @@ function aceptarTurno(event){
     }).then(function(response) {
         return response.json();
     });
-
     //tiro alerta para visualizar la confirmacion del la aceptacion del turno
     alert("El turno ha sido aceptado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
-    turns = getTurns();
-    window.location.href = window.location.href; 
+    turns = getTurns(); // vuelve a pedir los turnos para que se agreguen las modificaciones
+    window.location.href = window.location.href; //refresca la página
 
 }
 
@@ -100,7 +93,7 @@ if (filteredTurns.length > 0){
                                 <div className="card-box">
                                     <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
                                         <strong>{t.day.substring(0,10)} por la {t.hour} </strong>
-                                        <button value={t.id} className="btn btn-success" >Aceptar turno</button>
+                                        <button value={t.id} className="btn btn-success" onClick={aceptarTurno} >Aceptar turno</button>
                                         <button value={t.id} className="btn btn-danger" >Rechazar turno</button> 
                                     </h5>
                                     <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">

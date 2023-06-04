@@ -35,7 +35,7 @@ function exportTurn(datosCompletos){
     } else {
         let myTurn = JSON.stringify(datosCompletos) //lo paso a JSON
         //controlo que no tenga turno en el mismo dia para el mismo perro
-        if (turns.filter((t) => t.dog == datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
+        if (turns.filter((t) => t.dog === datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
             alert("El perro elegido ya posee un turno para la fecha solicitada");
         else {
             //lo mando a la BD
@@ -436,7 +436,7 @@ function MisTurnos(){
                         <span className="mbr-iconfont mobi-mbri-clock mobi-mbri" onClick={muestraTurnos}></span>
                     </div>
                     <h5 className="card-title mbr-fonts-style display-7"><strong>Mis turnos</strong></h5>
-                    <p className="card-text mbr-fonts-style display-7">Vea o cancele sus turnos.</p>
+                    <p className="card-text mbr-fonts-style display-7">Vea, modifique o cancele sus turnos.</p>
                 </div>
             </div>
         </div>

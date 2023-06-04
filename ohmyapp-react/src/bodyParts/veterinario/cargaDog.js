@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 //trae los mails de los clientes y los devuelve en un array
 function getMails(){
-    const mails= [];
+    let mails= [];
 
     fetch('http://localhost:3000/get-clientdata')
         .then((response) => response.json())
@@ -11,6 +11,7 @@ function getMails(){
 
     return mails;
 }
+
 
 //trae los perros y los devuelve en un array
 function getDogs(){
@@ -62,7 +63,7 @@ function exportDog(event){
 
 //crea las opciones del select con los mails de los clientes
 function options() {
-    const children = mails.map((m) => (
+    const children = mails.filter((e) => e.veter !== 1).map((m) => (
         React.createElement("option", {value: m}, m)))
     return children;
 }

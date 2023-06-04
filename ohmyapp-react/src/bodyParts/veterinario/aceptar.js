@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from 'emailjs-com';
 
 //trae los turnos y los guarda en un array
 function getTurns(){
@@ -23,18 +24,46 @@ function getDogs(){
     return dogs;
 }
 
+//trae los clientes y los devuelve en un array
+function getClients(){
+    const clients= [];
+
+    fetch('http://localhost:3000/get-clientdata')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => clients.push(e));
+        });
+
+    return clients;
+}
+
 let turns = getTurns();
 let dogs = getDogs();
+let clients = getClients();
+
+//envía el mail con rechazo
+function sendMail(datos){
+    const templateParams = {
+        to_email: datos.client,
+        to_name: clients.find((c) => c.mail === datos.client).frist_name,
+        motive: datos.motive,
+        dog: dogs.find((d) => String(d.id) === datos.dog).name,
+        day: datos.day.substring(0, 10),
+        hour: datos.hour,
+        rechazo: datos.rechazo
+    };
+    emailjs.send("service_xtovo5k", "template_lwrmzdk", templateParams , "zH503YKcv1sGAlHMu");
+}
 
 /*
 Elimina el turno seleccionado
 */
 function rechazarTurno(event){
-
+    event.preventDefault();
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+    sendMail(datosCompletos);
 
-    let turnoElim = JSON.stringify(datosCompletos);
+    let turnoElim = JSON.stringify({value: datosCompletos.id});
     //lo elimino de la BD
     fetch('http://localhost:3000/delete-turndata', {
         method: 'POST',
@@ -46,11 +75,9 @@ function rechazarTurno(event){
         return response.json();
     });
 
-    //tiro alerta para visualizar la confirmacion del la eliminacion del turno
-    alert("El turno ha sido eliminado correctamente");
-    //no entiendo bien para que sirven estas ultimas 2 lineas pero como estan en las otras altas/modificaciones las dejo
+    alert("Se ha enviado un mail al cliente informando el motivo de rechazo");
     turns = getTurns();
-    window.location.href = window.location.href; 
+    window.location.href = window.location.href;
 }
 
 /*
@@ -76,10 +103,52 @@ function aceptarTurno(event){
 
 }
 
+const formRachaz = (t) => {
+    return(
+        <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
+            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick="" ></span> 
+            <div class="container">
+                <div class="mbr-section-head">
+                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>Rechazo de turno</strong>
+                    </h3>
+                </div>
+                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
+                    <div class="col-lg-12 mx-auto mbr-form">
+                        <form onSubmit={rechazarTurno} class="mbr-form form-with-styler mx-auto">
+                            <div class="dragArea row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                    <label for="obs">Por favor escriba el motivo de rechazo:</label><br/>
+                                    <textarea name="rechazo" rows="5" class="form-control" required></textarea>
+                                </div>
+                                    <input name="id" type="hidden" value={t.id} />
+                                    <input name="client" type="hidden" value={t.client} />
+                                    <input name="dog" type="hidden" value={t.dog} />
+                                    <input name="motive" type="hidden" value={t.motive} />
+                                    <input name="day" type="hidden" value={t.day} />
+                                    <input name="hour" type="hidden" value={t.hour} />
+                                </div>
+                                <div class="col-auto mbr-section-btn align-center">
+                                    <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Enviar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
 //arma la lista de turnos
-function turnList() {
+function turnList(showForm, setShowForm) {
 let filteredTurns = turns.filter((e) => (e.aceptar !== 1 && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
 let children;
+
+//muestra el formulario para modificar turno
+const mostrarForm = (event) => {setShowForm(event.target.value)};
+
 //si hay turnos devuelve la lista
 if (filteredTurns.length > 0){
     children = filteredTurns.map((t) => {
@@ -94,7 +163,7 @@ if (filteredTurns.length > 0){
                                     <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
                                         <strong>{t.day.substring(0,10)} por la {t.hour} </strong>
                                         <button value={t.id} className="btn btn-success" onClick={aceptarTurno} >Aceptar turno</button>
-                                        <button value={t.id} className="btn btn-danger" >Rechazar turno</button> 
+                                        <button value={t.id} className="btn btn-danger" onClick={mostrarForm}>Rechazar turno</button> 
                                     </h5>
                                     <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                                         <strong>cliente: {t.client}</strong> 
@@ -107,6 +176,7 @@ if (filteredTurns.length > 0){
                                     </h6>
                                 </div>
                             </div>
+                            {String(t.id) === showForm && formRachaz(t)}
                         </div>
                     </div>
                 </div>
@@ -135,6 +205,7 @@ return children;
 
 function Aceptar(){
 let [showTurn, setShowTurn] = useState(false);
+let [showForm, setShowForm] = useState(null);
 
 //muestra/oculta el formulario
 const muestraTurnos = () => {setShowTurn(!showTurn)}; 
@@ -149,7 +220,7 @@ const myTurns = (
                 </h3>
             </div>
             <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
-                    {turnList()}
+                {turnList(showForm, setShowForm)}
             </div>
         </div>
     </section>

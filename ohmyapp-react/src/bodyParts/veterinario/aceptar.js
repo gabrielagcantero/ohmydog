@@ -103,57 +103,91 @@ function aceptarTurno(event){
 
 }
 
-const formRachaz = (t) => {
-    return(
-        <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
-            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick="" ></span> 
-            <div class="container">
-                <div class="mbr-section-head">
-                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                        <strong>Rechazo de turno</strong>
-                    </h3>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
-                    <div class="col-lg-12 mx-auto mbr-form">
-                        <form onSubmit={rechazarTurno} class="mbr-form form-with-styler mx-auto">
-                            <div class="dragArea row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <label for="obs">Por favor escriba el motivo de rechazo:</label><br/>
-                                    <textarea name="rechazo" rows="5" class="form-control" required></textarea>
-                                </div>
-                                    <input name="id" type="hidden" value={t.id} />
-                                    <input name="client" type="hidden" value={t.client} />
-                                    <input name="dog" type="hidden" value={t.dog} />
-                                    <input name="motive" type="hidden" value={t.motive} />
-                                    <input name="day" type="hidden" value={t.day} />
-                                    <input name="hour" type="hidden" value={t.hour} />
-                                </div>
-                                <div class="col-auto mbr-section-btn align-center">
-                                    <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Enviar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
 //arma la lista de turnos
 function turnList(showForm, setShowForm) {
-let filteredTurns = turns.filter((e) => (e.aceptar !== 1 && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
-let children;
+    let filteredTurns = turns.filter((e) => (e.aceptar !== 1 && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    let children;
 
-//muestra el formulario para modificar turno
-const mostrarForm = (event) => {setShowForm(event.target.value)};
+    //muestra el formulario para rechazar turno
+    const mostrarForm = (event) => {setShowForm(event.target.value)};
 
-//si hay turnos devuelve la lista
-if (filteredTurns.length > 0){
-    children = filteredTurns.map((t) => {
-        let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
-        return (
+    //oculta el formulario para rechazar turno
+    const ocultarForm = () => {setShowForm(null)};
+
+    //formulario para rechazar turno
+    const formRachaz = (t) => {
+        return(
+            <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
+                <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={ocultarForm} ></span> 
+                <div class="container">
+                    <div class="mbr-section-head">
+                        <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                            <strong>Rechazo de turno</strong>
+                        </h3>
+                    </div>
+                    <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
+                        <div class="col-lg-12 mx-auto mbr-form">
+                            <form onSubmit={rechazarTurno} class="mbr-form form-with-styler mx-auto">
+                                <div class="dragArea row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                    <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                        <label for="obs">Por favor escriba el motivo de rechazo:</label><br/>
+                                        <textarea name="rechazo" rows="5" class="form-control" required></textarea>
+                                    </div>
+                                        <input name="id" type="hidden" value={t.id} />
+                                        <input name="client" type="hidden" value={t.client} />
+                                        <input name="dog" type="hidden" value={t.dog} />
+                                        <input name="motive" type="hidden" value={t.motive} />
+                                        <input name="day" type="hidden" value={t.day} />
+                                        <input name="hour" type="hidden" value={t.hour} />
+                                    </div>
+                                    <div class="col-auto mbr-section-btn align-center">
+                                        <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Enviar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    //si hay turnos devuelve la lista
+    if (filteredTurns.length > 0){
+        children = filteredTurns.map((t) => {
+            let dogName = dogs.filter((d) => d.id === t.dog).map((n) => n.name);
+            return (
+                <div className="container">
+                    <div className="card">
+                        <div className="card-wrapper">
+                            <div className="row align-items-center">
+                                <div className="col-10 col-md">
+                                    <div className="card-box">
+                                        <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
+                                            <strong>{t.day.substring(0,10)} por la {t.hour} </strong>
+                                            <button value={t.id} className="btn btn-success" onClick={aceptarTurno} >Aceptar turno</button>
+                                            <button value={t.id} className="btn btn-danger" onClick={mostrarForm}>Rechazar turno</button> 
+                                        </h5>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>cliente: {t.client}</strong> 
+                                        </h6>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>Perro: {dogName}</strong> 
+                                        </h6>
+                                        <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                                            <strong>Motivo: {t.motive} </strong> 
+                                        </h6>
+                                    </div>
+                                </div>
+                                {String(t.id) === showForm && formRachaz(t)}
+                            </div>
+                        </div>
+                    </div>
+                </div>)})}
+    //si no hay turnos devuelve mensaje
+    else{ 
+        children = (
             <div className="container">
                 <div className="card">
                     <div className="card-wrapper">
@@ -161,46 +195,16 @@ if (filteredTurns.length > 0){
                             <div className="col-10 col-md">
                                 <div className="card-box">
                                     <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
-                                        <strong>{t.day.substring(0,10)} por la {t.hour} </strong>
-                                        <button value={t.id} className="btn btn-success" onClick={aceptarTurno} >Aceptar turno</button>
-                                        <button value={t.id} className="btn btn-danger" onClick={mostrarForm}>Rechazar turno</button> 
+                                        <strong>En este momento no hay turnos pendientes de aprobación</strong> 
                                     </h5>
-                                    <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                        <strong>cliente: {t.client}</strong> 
-                                    </h6>
-                                    <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                        <strong>Perro: {dogName}</strong> 
-                                    </h6>
-                                    <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                                        <strong>Motivo: {t.motive} </strong> 
-                                    </h6>
                                 </div>
                             </div>
-                            {String(t.id) === showForm && formRachaz(t)}
                         </div>
                     </div>
                 </div>
-            </div>)})}
-//si no hay turnos devuelve mensaje
-else{ 
-    children = (
-        <div className="container">
-            <div className="card">
-                <div className="card-wrapper">
-                    <div className="row align-items-center">
-                        <div className="col-10 col-md">
-                            <div className="card-box">
-                                <h5 className=" card-title2 mbr-fonts-style m-0 mb-3 display-5">
-                                    <strong>En este momento no hay turnos pendientes de aprobación</strong> 
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>)
-}
-return children;
+            </div>)
+    }
+    return children;
 }
 
 function Aceptar(){

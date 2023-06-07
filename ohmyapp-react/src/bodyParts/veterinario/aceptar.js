@@ -80,6 +80,12 @@ function rechazarTurno(event){
     window.location.href = window.location.href;
 }
 
+//pide confirmación antes de elimiar turno
+function rechazarTurnoConf(event){
+    event.preventDefault();
+    window.confirm("Confirma que desea rechazar éste turno?") && rechazarTurno(event);
+}
+
 /*
 Aceptar turno
 */
@@ -127,7 +133,7 @@ function turnList(showForm, setShowForm) {
                     </div>
                     <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                         <div class="col-lg-12 mx-auto mbr-form">
-                            <form onSubmit={rechazarTurno} class="mbr-form form-with-styler mx-auto">
+                            <form onSubmit={rechazarTurnoConf} class="mbr-form form-with-styler mx-auto">
                                 <div class="dragArea row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
@@ -243,9 +249,9 @@ const cardTurns = (
             </div>
         </div>
     </div>
-    );
+);
 
-    return <>{showTurn ? myTurns : cardTurns}</>
+return <>{showTurn ? myTurns : cardTurns}</>
     
 }
 

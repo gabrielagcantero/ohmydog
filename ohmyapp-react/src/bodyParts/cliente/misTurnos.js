@@ -85,13 +85,17 @@ function eliminarTurnoModif(id){
 
 //pide confirmación antes de eliminar
 const consultar = (event) => {
-    window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
+    if ((turns.find((t) => String(t.id) === event.target.value).day.substring(0,10)) === new Date().toString().substring(0, 10))
+        console.log(turns.find((t) => String(t.id) === event.target.value).day.substring(0,10))
+        //window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
 }
 
 //arma la lista de turnos confirmados con los botones de cancelar y modificar
 function turnListConf(showForm, setShowForm) {
     let user = JSON.parse(localStorage.getItem("user")).mail;
-    let filteredTurns = turns.filter((e) => (e.client === user && e.aceptar === 1 && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    let filteredTurns = turns.filter((e) => (e.client === user && e.aceptar === 1 
+        && (new Date(e.day).getTime() >= new Date().getTime() || new Date(e.day).toISOString().substring(0,10) === new Date().toISOString().substring(0,10))))
+    .sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
 
     //muestra el formulario para modificar turno
@@ -101,7 +105,11 @@ function turnListConf(showForm, setShowForm) {
     const ocultarModif = () => {setShowForm(null)};
 
     //cuadro de confirmación
-    const consultarModif = (event) => {window.confirm("Tenga en cuenta que el veterinario debe aceptar la modificación. \nDesea continuar?") && mostrarModif(event)};
+    const consultarModif = (event) => {
+        if (turns.find((t) => String(t.id) === event.target.value).day.substring(0,10) === new Date().toISOString().substring(0,10))
+            alert("No es posible modificar un turno programado para hoy");
+        else
+            window.confirm("Tenga en cuenta que el veterinario debe aceptar la modificación. \nDesea continuar?") && mostrarModif(event)};
 
     //agenda el nuevo turno y elimina el viejo. mantiene dueño, perro y motivo del turno viejo
     const modificarTurno = (event) =>{
@@ -333,7 +341,9 @@ function turnListSinConf(showForm, setShowForm) {
 //arma la lista de turnos viejos sin botones
 function turnListViejo(showForm, setShowForm) {
     let user = JSON.parse(localStorage.getItem("user")).mail;
-    let filteredTurns = turns.filter((e) => (e.client === user && e.aceptar === 1 && new Date(e.day).getTime() < new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    let filteredTurns = turns.filter((e) => (e.client === user && e.aceptar === 1 
+        && new Date(e.day).getTime() < new Date().getTime() && new Date(e.day).toISOString().substring(0,10) !== new Date().toISOString().substring(0,10)))
+    .sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
 
     //si hay turnos devuelve la lista

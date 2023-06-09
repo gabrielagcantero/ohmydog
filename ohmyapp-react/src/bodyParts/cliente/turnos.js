@@ -148,7 +148,7 @@ function Turnos(){
                         <span className="mbr-iconfont mobi-mbri-calendar mobi-mbri" onClick={CargaTurno}></span>
                     </div>
                     <h5 className="card-title mbr-fonts-style display-7"><strong>Solicitar turno</strong></h5>
-                    <p className="card-text mbr-fonts-style display-7">Solicite turnos para sus perros desde la comodidad de su hogar.</p>
+                    <p className="card-text mbr-fonts-style display-7">Solicite turnos para sus perros.</p>
                 </div>
             </div>
         </div>

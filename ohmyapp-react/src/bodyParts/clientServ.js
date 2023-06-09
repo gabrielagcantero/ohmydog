@@ -1,6 +1,7 @@
 import React from 'react';
 import Turnos from './cliente/turnos';
 import MisTurnos from './cliente/misTurnos';
+import Perros from './cliente/perros';
 
 function ClientServ({log, veter}){
 
@@ -16,6 +17,7 @@ function ClientServ({log, veter}){
                     </div>
                 </div>
                     <div className="row">
+                        <Perros/>
                         <Turnos />
                         <MisTurnos />
                     </div>

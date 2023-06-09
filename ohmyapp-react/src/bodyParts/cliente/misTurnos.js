@@ -85,9 +85,7 @@ function eliminarTurnoModif(id){
 
 //pide confirmación antes de eliminar
 const consultar = (event) => {
-    if ((turns.find((t) => String(t.id) === event.target.value).day.substring(0,10)) === new Date().toString().substring(0, 10))
-        console.log(turns.find((t) => String(t.id) === event.target.value).day.substring(0,10))
-        //window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
+        window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
 }
 
 //arma la lista de turnos confirmados con los botones de cancelar y modificar

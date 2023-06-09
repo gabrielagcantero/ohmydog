@@ -58,7 +58,7 @@ conn.query(sql, data,(err, results) => {
 //add new turn
 app.post('/store-turndata',(req, res) => {
 let d = req.body;
-let data = [d.client, d.dog, d.day, d.time, d.motive];
+let data = [d.client, d.dog, d.day, d.hour, d.motive];
 let sql = "INSERT INTO turno(client, dog, day, hour, motive) VALUES(?,?,?,?,?)";
 conn.query(sql, data,(err, results) => {
   if(err) throw err;

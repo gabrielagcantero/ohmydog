@@ -38,17 +38,22 @@ function exportTurn(datosCompletos){
         if (turns.filter((t) => String(t.dog) === datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day.substring(0,10) && String(t.id) !== datosCompletos.idTurnoViejo).length > 0)
             alert("El perro elegido ya posee un turno para la fecha solicitada");
         else {
-            //lo mando a la BD
-            fetch('http://localhost:3000/store-turndata', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: myTurn
-            }).then(function(response) {
-                return response.json();
-            });
-            exported = true;
+            let turnoViejo = turns.find((t) => String(t.id) === datosCompletos.idTurnoViejo);
+            if (turnoViejo.day.substring(0,10) === datosCompletos.day.substring(0,10) && turnoViejo.hour === datosCompletos.hour)
+                alert("El día u horario elegidos deben ser diferentes a los que tiene el turno")
+            else{
+                //lo mando a la BD
+                fetch('http://localhost:3000/store-turndata', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: myTurn
+                }).then(function(response) {
+                    return response.json();
+                });
+                exported = true;
+            }
         }
     }
     return exported;
@@ -142,7 +147,7 @@ function turnListConf(showForm, setShowForm) {
                                     <input type="date" name="day" class="form-control" required />
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <select name="time" class="form-control" required>
+                                    <select name="hour" class="form-control" required>
                                         <option value="" selected disabled>Seleccione la nueva franja horaria</option>
                                         <option value="mañana">mañana (8 a 13hs)</option>
                                         <option value="tarde">tarde (15 a 17.30hs)</option>
@@ -263,7 +268,7 @@ function turnListSinConf(showForm, setShowForm) {
                                     <input type="date" name="day" class="form-control" required />
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <select name="time" class="form-control" required>
+                                    <select name="hour" class="form-control" required>
                                         <option value="" selected disabled>Seleccione la nueva franja horaria</option>
                                         <option value="mañana">mañana (8 a 13hs)</option>
                                         <option value="tarde">tarde (15 a 17.30hs)</option>

@@ -35,7 +35,7 @@ function exportTurn(datosCompletos){
     } else {
         let myTurn = JSON.stringify(datosCompletos) //lo paso a JSON
         //controlo que no tenga turno en el mismo dia para el mismo perro
-        if (turns.filter((t) => t.dog === datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
+        if (turns.filter((t) => String(t.dog) === datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day.substring(0,10) && String(t.id) !== datosCompletos.idTurnoViejo).length > 0)
             alert("El perro elegido ya posee un turno para la fecha solicitada");
         else {
             //lo mando a la BD
@@ -66,7 +66,7 @@ function eliminarTurno(event){
         body: myBody})
         .then(function(response) {return response.json();});
 
-    alert ("el turno ha sido eliminado");
+    alert ("El turno ha sido cancelado");
     window.location.href = window.location.href;
 }
 
@@ -85,7 +85,7 @@ function eliminarTurnoModif(id){
 
 //pide confirmación antes de eliminar
 const consultar = (event) => {
-        window.confirm("Está seguro que desea eliminar éste turno?") && eliminarTurno(event);
+        window.confirm("Está seguro que desea cancelar éste turno?") && eliminarTurno(event);
 }
 
 //arma la lista de turnos confirmados con los botones de cancelar y modificar

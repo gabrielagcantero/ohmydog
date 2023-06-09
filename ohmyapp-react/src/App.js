@@ -1,7 +1,7 @@
 import Header from './headerParts/header';
 import Footer from './footerParts/footer';
 import Body from './bodyParts/body';
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 
 import './assets/bootstrap/css/bootstrap.min.css';
@@ -38,6 +38,7 @@ function App() {
   const [log, setLog] = useState(false); //true si está logueado
   const [veter, setVeter] = useState(false); //true si el logueado es veterinario
   const [showForm, setShowForm] = useState(false); //true si muestra el formulario de login
+  const [showPerfil, setShowPerfil] = useState(false);
 
   const handleLog = (event) => {
     localStorage.setItem("logged", false);
@@ -51,6 +52,11 @@ function App() {
   const handleShowForm = (event) => {
     event.preventDefault();
     setShowForm(!showForm);
+  }
+
+  const handleShowPerfil = (event) => {
+    event.preventDefault();
+    setShowPerfil(!showPerfil);
   }
 
   //formulario de login
@@ -68,9 +74,14 @@ function App() {
         log={log} 
         veter={veter} 
         handleLog={handleLog} 
-        handleShowForm={handleShowForm} 
+        handleShowForm={handleShowForm}
+        handleShowPerfil={handleShowPerfil} 
       />
-      <Body log={log} veter={veter}/>
+      <Body 
+        showPerfil={showPerfil} 
+        handleShowPerfil={handleShowPerfil} 
+        log={log} 
+        veter={veter}/>
       <Footer />
     </>
   );

@@ -1,7 +1,7 @@
 
 import  { LoginBtns } from '../LoginBtns';
 
-function NavBar({ log, veter, handleLog, handleShowForm }){
+function NavBar({ log, veter, handleLog, handleShowForm, handleShowPerfil }){
     const veteLink = (
         <li className="nav-item">
             <a className="nav-link link text-info text-primary display-4" href="index.html#veteSec">Veterinarios</a>
@@ -14,6 +14,12 @@ function NavBar({ log, veter, handleLog, handleShowForm }){
         </li>
     )
 
+    const miPerfil = (
+        <li className="nav-item">
+            <a className="nav-link link text-info text-primary display-4" href="index.html" onClick={handleShowPerfil}>Ver Perfil</a>
+        </li>
+    )
+
 
     return(
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -23,6 +29,7 @@ function NavBar({ log, veter, handleLog, handleShowForm }){
                 </li>
                 {((log && veter )|| (localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "true")) && veteLink /*si es veterinario y está logueado muestra el link para veterinarios*/}
                 {((log && !veter) || (localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "false")) && clientLink}
+                {(localStorage.getItem("logged") === "true" && localStorage.getItem("veter") === "false") && miPerfil}
             </ul>
             <LoginBtns 
                 log={log} 

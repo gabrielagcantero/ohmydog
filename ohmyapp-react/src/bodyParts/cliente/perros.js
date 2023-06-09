@@ -13,6 +13,7 @@ function getDogs(){
 
 let dogs = getDogs();
 
+//arma la lista de perros
 const dogList = () => {
     let children;
     //si hay perros devuelve la lista

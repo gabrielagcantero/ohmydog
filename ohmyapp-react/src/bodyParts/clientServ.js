@@ -2,6 +2,7 @@ import React from 'react';
 import Turnos from './cliente/turnos';
 import MisTurnos from './cliente/misTurnos';
 import Perros from './cliente/perros';
+import CargaAdop from './servicios/cargaAdop';
 
 function ClientServ({log, veter}){
 
@@ -20,6 +21,7 @@ function ClientServ({log, veter}){
                         <Perros/>
                         <Turnos />
                         <MisTurnos />
+                        <CargaAdop />
                     </div>
             </div>
         </section>

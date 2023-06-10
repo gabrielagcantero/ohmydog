@@ -1,4 +1,5 @@
-import Cards from './cards';
+import Adopciones from "./adopciones";
+import Urgencias from "./urgencias";
 
 function Services(){
     return(
@@ -11,9 +12,11 @@ function Services(){
                         </h3>
                     </div>
                 </div>
-
-                <Cards />
-
+                <div className="row">  
+                    <Adopciones />
+                    <Urgencias />
+                    <Adopciones />
+                </div>
             </div>
         </section>
     )

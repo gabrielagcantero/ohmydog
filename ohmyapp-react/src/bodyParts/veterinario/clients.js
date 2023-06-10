@@ -14,35 +14,69 @@ function getClients(){
 
 let clients = getClients();
 
-const clientList = () => {
-    let children;
-    //si hay perros devuelve la lista
-    if (clients.length > 0){ 
-
-        children = clients.filter((c) => c.veter === 0).map((e) => {
-            return( 
-                <h6 className=" card-title2 mbr-fonts-style m-0 mb-3 display-4">
-                    <button value={e.mail} className="btn btn-success">Ver Cliente</button>
-                    <strong>{e.mail}</strong> 
-                </h6>
-            )})}
-    //si no hay clientes devuelve mensaje
-    else{ 
-        children = (
-            <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
-                <strong>En este momento no hay clientes registrados en el sistema</strong> 
-            </h6>
-    )}
-    
-    return children;
-}
-
 function Clients(){
     let[showClients, setShowClients] = useState(false);
+    let[showCLientData, setShowClientData] = useState(null);
 
-    //muestra/oculta los turnos
+    //muestra/oculta los clientes
     const muestraClients = () => {
         setShowClients(!showClients);         
+    }
+
+    const clientData = (mail) => {
+        let c = clients.find((p) => p.mail === mail);
+        return (
+            <div>
+                <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                    <strong>Nombre: {c.frist_name} </strong> 
+                </h6>
+                <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                    <strong>Apellido: {c.last_name} </strong> 
+                </h6>
+                <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                    <strong>Fecha de nacimiento: {(c.nac).substring(0,10)} </strong> 
+                </h6>
+                <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                    <strong>Email: {c.mail} </strong> 
+                </h6>
+                <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                    <strong>Teléfono: {c.tel} </strong> 
+                </h6>
+                <button value={c.mail} className="btn btn-success">Ver perros de {c.frist_name}</button>
+    
+            </div>
+        )
+    }
+    
+    const clientList = (showCLientData, setShowClientData) => {
+        let children;
+    
+        //muestra los datos del cliente
+        const mostrarCliente = (event) => {showCLientData? setShowClientData(null) : setShowClientData(event.target.value)};
+    
+        //si hay perros devuelve la lista
+        if (clients.length > 0){ 
+            children = clients.filter((c) => c.veter === 0).map((e) => {
+                return( 
+                    <div className="col-10 ">
+                        <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                            <button value={e.mail} className="btn btn-success" onClick={mostrarCliente}>Ver Cliente</button>
+                            <strong>{e.mail}</strong> 
+                        </h6>
+                        {e.mail ===  showCLientData && clientData(e.mail)}
+                    </div>
+                )})}
+        //si no hay clientes devuelve mensaje
+        else{ 
+            children = (
+                <div className="col-12 col-md">
+                    <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                        <strong>En este momento no hay clientes registrados en el sistema</strong> 
+                    </h6>
+                </div>
+        )}
+        
+        return children;
     }
 
     const myClients = (
@@ -54,12 +88,10 @@ function Clients(){
                         <strong>Listado de clientes</strong>
                     </h3>
                     <div className="container">
-                        <div className="card">
+                        <div >
                             <div className="card-wrapper">
                                 <div className="row align-items-center">
-                                    <div className="col-10 col-md">
-                                        {clientList()}
-                                    </div>
+                                        {clientList(showCLientData, setShowClientData)}
                                 </div>
                             </div>
                         </div>

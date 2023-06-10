@@ -15,7 +15,6 @@ function Services(){
                 <div className="row">  
                     <Adopciones />
                     <Urgencias />
-                    <Adopciones />
                 </div>
             </div>
         </section>

@@ -61,6 +61,7 @@ function CargaAdop(){
                                 <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <label for="obs">Características adicionales:</label><br/>
                                     <textarea id="obs" name="obs" rows="5" class="form-control"></textarea>
+                                    <input name="owner" type="hidden" value={localStorage.getItem("user").mail} />
                                 </div>
 
                                 <div className="col-auto mbr-section-btn align-center">

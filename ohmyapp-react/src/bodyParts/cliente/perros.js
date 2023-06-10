@@ -23,7 +23,7 @@ function Perros(){
     }
 
     //muestra datos de un perro
-    const myDog = (id, showDogData) => {
+    const myDog = (id) => {
         let d = dogs.find((e) => (e.id) === id);
 
         const myImage = (src) => (
@@ -71,7 +71,7 @@ function Perros(){
                             <button value={e.id} className="btn btn-success" onClick={muestraPerro}>Ver Perro</button>
                             <strong>{e.name}</strong> 
                         </h6>
-                        {String(e.id) ===  showDogData && (myDog(e.id, showDogData))}
+                        {String(e.id) ===  showDogData && (myDog(e.id))}
                     </div>
                 )})}
         //si no hay perros devuelve mensaje

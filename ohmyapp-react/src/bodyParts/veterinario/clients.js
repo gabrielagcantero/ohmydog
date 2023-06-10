@@ -198,7 +198,7 @@ function Clients(){
                         <span className="mbr-iconfont mobi-mbri-user mobi-mbri" onClick={muestraClients}></span>
                     </div>
                     <h5 className="card-title mbr-fonts-style display-7"><strong>Ver Clientes</strong></h5>
-                    <p className="card-text mbr-fonts-style display-7">Seleccione el cliente que desee ver.</p>
+                    <p className="card-text mbr-fonts-style display-7">Ver datos de los clientes y sus perros.</p>
                 </div>
             </div>
         </div>

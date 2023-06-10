@@ -13,35 +13,76 @@ function getDogs(){
 
 let dogs = getDogs();
 
-//arma la lista de perros
-const dogList = () => {
-    let children;
-    //si hay perros devuelve la lista
-    if (dogs.filter((p) => p.owner === JSON.parse(localStorage.getItem("user")).mail).length > 0){ 
-        children = dogs.filter((p) => p.owner === JSON.parse(localStorage.getItem("user")).mail).map((e) => {
-            return( 
-                <h6 className=" card-title2 mbr-fonts-style m-0 mb-3 display-4">
-                    <button value={e.id} className="btn btn-success">Ver Perro</button>
-                    <strong>{e.name}</strong> 
-                </h6>
-            )})}
-    //si no hay perros devuelve mensaje
-    else{ 
-        children = (
-            <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
-                <strong>En este momento Usted no posee perros registrados en el sistema</strong> 
-            </h6>
-    )}
-    
-    return children;
-}
-
 function Perros(){
     let[showDogs, setShowDogs] = useState(false);
+    let[showDogData, setShowDogData] = useState(null);
 
     //muestra/oculta los perros
     const muestraDogs = () => {
         setShowDogs(!showDogs);         
+    }
+
+    //muestra datos de un perro
+    const myDog = (id, showDogData) => {
+        let d = dogs.find((e) => (e.id) === id);
+
+        const myImage = (src) => (
+            <div><img src={src} alt="foto del perro" style={{height: "300px", width:"auto"}} /></div>
+        )
+
+        return (
+            <div>
+                <h6 className="card-title mbr-fonts-style mb-3 display-7">
+                    <strong>Nombre: {d.name} </strong> 
+                </h6>
+                <h6 className="card-title mbr-fonts-style mb-3 display-7">
+                    <strong>Fecha de nacimiento: {d.nac.substring(0,10)} </strong> 
+                </h6>
+                <h6 className="card-title mbr-fonts-style mb-3 display-7">
+                    <strong>Raza: {d.breed} </strong> 
+                </h6>
+                <h6 className="card-title mbr-fonts-style mb-3 display-7">
+                    <strong>Sexo: {d.sex === "m"? "macho" : "hembra"} </strong> 
+                </h6>
+                <h6 className="card-title mbr-fonts-style mb-3 display-7">
+                    <strong>Observaciones: {d.obs? d.obs : "-"} </strong> 
+                </h6>
+                <h6 className="card-title mbr-fonts-style mb-3 display-7">
+                    <strong>Foto: {d.image? myImage(d.image) : "el perro no posee foto"} </strong> 
+                </h6>
+                <br/>
+            </div>
+        )
+    }
+
+    //arma la lista de perros
+    const dogList = (showDogData, setShowDogData) => {
+        let children;
+
+        //muestra/oculta los datos de un perro
+        const muestraPerro = (event) => {showDogData? setShowDogData(null) : setShowDogData(event.target.value)};
+
+        //si hay perros devuelve la lista
+        if (dogs.filter((p) => p.owner === JSON.parse(localStorage.getItem("user")).mail).length > 0){ 
+            children = dogs.filter((p) => p.owner === JSON.parse(localStorage.getItem("user")).mail).map((e) => {
+                return( 
+                    <div className="col-10" style={{marginLeft: "30px"}}>
+                        <h6 className=" card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                            <button value={e.id} className="btn btn-success" onClick={muestraPerro}>Ver Perro</button>
+                            <strong>{e.name}</strong> 
+                        </h6>
+                        {String(e.id) ===  showDogData && (myDog(e.id, showDogData))}
+                    </div>
+                )})}
+        //si no hay perros devuelve mensaje
+        else{ 
+            children = (
+                <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                    <strong>En este momento Usted no posee perros registrados en el sistema</strong> 
+                </h6>
+        )}
+        
+        return children;
     }
 
     //muestra perros del cliente
@@ -58,7 +99,7 @@ function Perros(){
                             <div className="card-wrapper">
                                 <div className="row align-items-center">
                                     <div className="col-10 col-md">
-                                        {dogList()}
+                                        {dogList(showDogData, setShowDogData)}
                                     </div>
                                 </div>
                             </div>

@@ -5,7 +5,11 @@ function exportDog(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
 
+    
+
     let myDog = JSON.stringify(datosCompletos); //lo paso a JSON
+
+    console.log(datosCompletos);
 
     //lo lleva a la BD
     fetch('http://localhost:3000/store-dogAdop', {

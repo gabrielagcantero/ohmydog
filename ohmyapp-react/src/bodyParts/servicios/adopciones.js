@@ -13,6 +13,9 @@ function getDogs(){
 
 let dogs = getDogs();
 
+
+
+
 function Adopciones(){
     let[showDogs, setShowDogs] = useState(false);
 

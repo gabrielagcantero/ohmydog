@@ -55,6 +55,19 @@ conn.query(sql, data,(err, results) => {
 });
 });
 
+//add new dog en adopcion
+app.post('/store-dogAdop',(req, res) => {
+  let d = req.body;
+  let data = [d.name, d.age, d.breed, d.color, d.sex, d.obs, d.origin, d.owner];
+  let sql = "INSERT INTO perro_adopcion(name, age, breed, color, sex, obs, origin, owner) VALUES(?,?,?,?,?,?,?,?)";
+  conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+  });
+
+
+
 //add new turn
 app.post('/store-turndata',(req, res) => {
 let d = req.body;
@@ -135,19 +148,29 @@ app.post('/get-clientdataID', (req,res) => {
 
 //get dogs
 app.get('/get-ownerdata',(req, res) => {
-let sql = 'SELECT * FROM perro';
-conn.query(sql, [0], (err, results) => {
-  if(err) throw err;
-  res.json(results);
+  let sql = 'SELECT * FROM perro';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
 })});
+
+//get dogs en adopcion
+app.get('/get-adopdata',(req, res) => {
+  let sql = 'SELECT * FROM perro_adopcion';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
 
 //get turns
 app.get('/get-turndata',(req, res) => {
-let sql = 'SELECT * FROM turno';
-conn.query(sql, [0], (err, results) => {
-  if(err) throw err;
-  res.json(results);
-})});
+  let sql = 'SELECT * FROM turno';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
 
 
 

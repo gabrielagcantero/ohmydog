@@ -41,7 +41,7 @@ function exportTurn(event){
             let myTurn = JSON.stringify(datosCompletos) //lo paso a JSON
 
             //controlo que no tenga turno en el mismo dia para el mismo perro
-            if (turns.filter((t) => t.dog == datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
+            if (turns.filter((t) => t.dog === datosCompletos.dog && t.day.substring(0,10) === datosCompletos.day).length > 0)
                 alert("El perro elegido ya posee un turno para la fecha solicitada");
             else {
                 //lo mando a la BD
@@ -110,7 +110,7 @@ function Turnos(){
                                     <input type="date" name="day" class="form-control" required />
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <select name="time" class="form-control" required>
+                                    <select name="hour" class="form-control" required>
                                         <option value="" selected disabled>Seleccione la franja horaria</option>
                                         <option value="mañana">mañana (8 a 13hs)</option>
                                         <option value="tarde">tarde (15 a 17.30hs)</option>

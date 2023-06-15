@@ -101,74 +101,6 @@ function turnListConf(showForm, setShowForm) {
     .sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
 
-    //muestra el formulario para modificar turno
-    const mostrarModif = (event) => {setShowForm(event.target.value)};
-
-    //oculta el formulario para modificar turno
-    const ocultarModif = () => {setShowForm(null)};
-
-    //cuadro de confirmación
-    const consultarModif = (event) => {
-        if (turns.find((t) => String(t.id) === event.target.value).day.substring(0,10) === new Date().toISOString().substring(0,10))
-            alert("No es posible modificar un turno programado para hoy");
-        else
-            window.confirm("Tenga en cuenta que el veterinario debe aceptar la modificación. \nDesea continuar?") && mostrarModif(event)};
-
-    //agenda el nuevo turno y elimina el viejo. mantiene dueño, perro y motivo del turno viejo
-    const modificarTurno = (event) =>{
-        event.preventDefault();
-        const datos = new FormData(event.target); //toma los datos del formulario
-        const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
-        if (exportTurn(datosCompletos)){ 
-            alert("la solicitud ha sido enviada"); //agenda el nuevo turno
-            eliminarTurnoModif(datosCompletos.idTurnoViejo); //elimina el turno viejo
-            turns = getTurns();
-            window.location.href = window.location.href;
-        }
-    }
-
-    //formulario para modificar el turno
-    const modifForm = (t) => {
-        return (
-        <section data-bs-version="5.1" class="form7 cid-tCtCU4eUuo">
-            <span className="mbr-iconfont mobi-mbri-left mobi-mbri" onClick={ocultarModif} ></span> 
-            <div class="container">
-                <div class="mbr-section-head">
-                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                        <strong>Modificación de turno</strong>
-                    </h3>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
-                    <div class="col-lg-12 mx-auto mbr-form">
-                        <form onSubmit={modificarTurno} class="mbr-form form-with-styler mx-auto">
-                            <div class="dragArea row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <label for="day" >Seleccione la nueva fecha</label>
-                                    <input type="date" name="day" class="form-control" required />
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <select name="hour" class="form-control" required>
-                                        <option value="" selected disabled>Seleccione la nueva franja horaria</option>
-                                        <option value="mañana">mañana (8 a 13hs)</option>
-                                        <option value="tarde">tarde (15 a 17.30hs)</option>
-                                        <option value="noche">noche (17.30 a 20hs)</option>
-                                    </select> 
-                                    <input name="idTurnoViejo" type="hidden" value={t.id} />
-                                    <input name="client" type="hidden" value={t.client} />
-                                    <input name="dog" type="hidden" value={t.dog} />
-                                    <input name="motive" type="hidden" value={t.motive} />
-                                </div>
-                                <div class="col-auto mbr-section-btn align-center">
-                                    <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Modificar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    )};
-
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){ 
         children = filteredTurns.map((t) => {
@@ -182,7 +114,6 @@ function turnListConf(showForm, setShowForm) {
                                     <div className="card-box">
                                         <h6 className=" card-title2 mbr-fonts-style m-0 mb-3 display-4">
                                             <strong>{t.day.substring(0,10)} por la {t.hour} </strong> 
-                                            <button value={t.id} className="btn btn-success" onClick={consultarModif} >Modificar turno</button>
                                             <button value={t.id} className="btn btn-danger" onClick={consultar}>Cancelar turno</button>
                                         </h6>
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
@@ -193,7 +124,6 @@ function turnListConf(showForm, setShowForm) {
                                         </h6>
                                     </div>
                                 </div>
-                                {String(t.id) === showForm && modifForm(t)}
                             </div>
                         </div>
                     </div>
@@ -273,7 +203,11 @@ function turnListSinConf(showForm, setShowForm) {
                                         <option value="mañana">mañana (8 a 13hs)</option>
                                         <option value="tarde">tarde (15 a 17.30hs)</option>
                                         <option value="noche">noche (17.30 a 20hs)</option>
-                                    </select> 
+                                    </select>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+                                    <label for="why">Ingrese, si lo desea, el motivo del cambio:</label><br/>
+                                    <textarea name="why" rows="5" class="form-control"></textarea>
                                     <input name="idTurnoViejo" type="hidden" value={t.id} />
                                     <input name="client" type="hidden" value={t.client} />
                                     <input name="dog" type="hidden" value={t.dog} />

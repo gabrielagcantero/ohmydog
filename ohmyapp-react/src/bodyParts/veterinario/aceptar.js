@@ -159,6 +159,19 @@ function turnList(showForm, setShowForm) {
         );
     }
 
+    const razonMod = (why) => {
+        return (
+            <>
+                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                    (Éste turno fue modificado)
+                </h6>
+                <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
+                    <strong>Razón: {why} </strong> 
+                </h6>
+            </>
+        )
+    }
+
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){
         children = filteredTurns.map((t) => {
@@ -184,6 +197,7 @@ function turnList(showForm, setShowForm) {
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                                             <strong>Motivo: {t.motive} </strong> 
                                         </h6>
+                                        {t.why && razonMod(t.why)}
                                     </div>
                                 </div>
                                 {String(t.id) === showForm && formRachaz(t)}

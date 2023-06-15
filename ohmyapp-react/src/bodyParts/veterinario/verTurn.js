@@ -28,7 +28,9 @@ let dogs = getDogs();
 
 //arma la lista de turnos
 function turnList() {
-    let filteredTurns = turns.filter((e) => (e.aceptar === 1 && new Date(e.day).getTime() >= new Date().getTime())).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    let d = new Date();
+    let today = d.setHours(0,0,0,0);
+    let filteredTurns = turns.filter((e) => (e.aceptar === 1 && new Date(e.day).getTime() >= today)).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){

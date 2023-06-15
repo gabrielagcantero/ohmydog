@@ -71,8 +71,8 @@ app.post('/store-dogAdop',(req, res) => {
 //add new turn
 app.post('/store-turndata',(req, res) => {
 let d = req.body;
-let data = [d.client, d.dog, d.day, d.hour, d.motive];
-let sql = "INSERT INTO turno(client, dog, day, hour, motive) VALUES(?,?,?,?,?)";
+let data = [d.client, d.dog, d.day, d.hour, d.motive, d.why];
+let sql = "INSERT INTO turno(client, dog, day, hour, motive, why) VALUES(?,?,?,?,?,?)";
 conn.query(sql, data,(err, results) => {
   if(err) throw err;
   res.send(JSON.stringify({"status": 200, "error": null, "response": results}));

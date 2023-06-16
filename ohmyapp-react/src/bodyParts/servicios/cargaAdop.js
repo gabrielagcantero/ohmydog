@@ -1,9 +1,15 @@
 import React, { useState } from "react";
+import SelectRazas from "./selectRazas";
+import SelectColor from "./selectColor";
 
 //guarda en "myDog" los datos del perro en formato Json y los manda a la BD (hay que hacer la conexión)
 function exportDog(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+    if (datosCompletos.color === "personalizada") //si eligió escribirlo
+        datosCompletos.color = datosCompletos.otroColor;
+    if (datosCompletos.breed === "personalizada") 
+        datosCompletos.breed = datosCompletos.otraRaza;
 
     
 
@@ -51,16 +57,18 @@ function CargaAdop(){
                         <form onSubmit={guardar} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
                             <div class="dragArea row">
                                 <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <input type="text" name="name" placeholder="Nombre" class="form-control" required/>
+                                    <input type="text" name="name" placeholder="Nombre (dejar en blanco en caso de que el perro no tenga nombre)" class="form-control"/>
                                     <input type="text" name="age" placeholder="Edad estimada" class="form-control" required />
-                                    <input type="text" pattern="[a-zA-Z ]{2,20}" name="breed" placeholder="Raza" class="form-control" required />
-                                    <input type="text" pattern="[a-zA-Z ]{2,20}" name="color" placeholder="Color" class="form-control" required /> 
+                                </div>
+                                <div>
+                                    {<SelectRazas />}
+                                    {<SelectColor />}
                                     <input type="text" pattern="[a-zA-Z ]{2,20}" name="origin" placeholder="Origen" class="form-control" required /><br/>
                                     <label for="sex">Sexo:</label><br/>
                                     <input type="radio" id="fem" name="sex" value="f" required />
                                     <label for="fem">Femenino</label><br/>
                                     <input type="radio" id="masc" name="sex" value="m" required />
-                                    <label for="masc">Masculino</label><br/>
+                                    <label for="masc">Masculino</label><br/><br/>
                                 </div>
                                 <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <label for="obs">Características adicionales:</label><br/>

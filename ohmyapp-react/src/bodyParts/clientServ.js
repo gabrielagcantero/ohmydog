@@ -3,6 +3,7 @@ import Turnos from './cliente/turnos';
 import MisTurnos from './cliente/misTurnos';
 import Perros from './cliente/perros';
 import CargaAdop from './servicios/cargaAdop';
+import MisAdopciones from './servicios/misAdopciones';
 
 function ClientServ({log, veter}){
 
@@ -22,6 +23,7 @@ function ClientServ({log, veter}){
                         <Turnos />
                         <MisTurnos />
                         <CargaAdop />
+                        <MisAdopciones />
                     </div>
             </div>
         </section>

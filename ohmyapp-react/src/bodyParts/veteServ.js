@@ -4,6 +4,7 @@ import Turnos from './veterinario/verTurn';
 import Aceptar from './veterinario/aceptar';
 import Clients from './veterinario/clients';
 import CargaAdop from './servicios/cargaAdop';
+import MisAdopciones from './servicios/misAdopciones';
 
 function VeteServ({log, veter}){
 
@@ -25,6 +26,7 @@ function VeteServ({log, veter}){
                         <Aceptar />
                         <Clients/>
                         <CargaAdop />
+                        <MisAdopciones />
                     </div>
             </div>
         </section>

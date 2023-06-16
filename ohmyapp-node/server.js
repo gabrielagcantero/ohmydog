@@ -66,8 +66,6 @@ app.post('/store-dogAdop',(req, res) => {
   });
   });
 
-
-
 //add new turn
 app.post('/store-turndata',(req, res) => {
 let d = req.body;
@@ -89,6 +87,15 @@ conn.query(sql, [0], (err, results) => {
 })
 });
 
+//delete dog en adopcion
+app.post('/delete-dogAdop',(req, res) => {
+let id = req.body.value;
+let sql = 'DELETE FROM perro_adopcion where id_perroadop ="' + id + '"';
+conn.query(sql, [0], (err, results) => {
+  if(err) throw err;
+  res.json(results);
+})
+});
 
 /* comento porque no se usa por ahora
 //Modificar turno

@@ -206,8 +206,8 @@ function turnListSinConf(showForm, setShowForm) {
                                     </select>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <label for="why">Ingrese, si lo desea, el motivo del cambio:</label><br/>
-                                    <textarea name="why" rows="5" class="form-control"></textarea>
+                                    <label for="why">Ingrese el motivo de la modificación:</label><br/>
+                                    <textarea name="why" rows="5" class="form-control" required></textarea>
                                     <input name="idTurnoViejo" type="hidden" value={t.id} />
                                     <input name="client" type="hidden" value={t.client} />
                                     <input name="dog" type="hidden" value={t.dog} />

@@ -6,16 +6,14 @@ import SelectColor from "./selectColor";
 function exportDog(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+    
     if (datosCompletos.color === "personalizada") //si eligió escribirlo
         datosCompletos.color = datosCompletos.otroColor;
     if (datosCompletos.breed === "personalizada") 
         datosCompletos.breed = datosCompletos.otraRaza;
-
-    
+    datosCompletos.owner = JSON.parse(localStorage.getItem("user")).mail; //agrego quién publica
 
     let myDog = JSON.stringify(datosCompletos); //lo paso a JSON
-
-    console.log(datosCompletos);
 
     //lo lleva a la BD
     fetch('http://localhost:3000/store-dogAdop', {

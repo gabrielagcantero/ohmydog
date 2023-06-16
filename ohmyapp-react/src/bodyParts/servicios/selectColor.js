@@ -17,7 +17,6 @@ function SelectColor() {
 
   const handleCustomOptionChange = (event) => {
     setCustomOption(event.target.value);
-    console.log(event.target.value)
   };
 
   return (

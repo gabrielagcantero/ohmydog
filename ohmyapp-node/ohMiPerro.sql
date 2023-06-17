@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 11-06-2023 a las 21:24:51
+-- Tiempo de generación: 17-06-2023 a las 21:48:40
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -83,11 +83,19 @@ CREATE TABLE `es_dueno` (
 
 CREATE TABLE `libreta_sanitaria` (
   `id_libreta_sanitaria` int(11) NOT NULL,
-  `id_perro` int(11) NOT NULL,
-  `peso` int(11) NOT NULL,
+  `id_perro` int(11) DEFAULT NULL,
+  `peso` int(11) DEFAULT NULL,
   `enfermedad` varchar(50) DEFAULT NULL,
-  `observaciones` varchar(150) NOT NULL
+  `observaciones` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `libreta_sanitaria`
+--
+
+INSERT INTO `libreta_sanitaria` (`id_libreta_sanitaria`, `id_perro`, `peso`, `enfermedad`, `observaciones`) VALUES
+(1, 43, NULL, NULL, NULL),
+(2, 44, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -121,14 +129,8 @@ CREATE TABLE `perro` (
 --
 
 INSERT INTO `perro` (`id`, `name`, `nac`, `breed`, `obs`, `image`, `zona_perdido`, `fecha_perdido`, `sex`, `comportamiento`, `edad_estimada`, `color`, `origen`, `fecha_celo`, `estado_encontrado`, `estado_adopcion`, `cruza`, `owner`) VALUES
-(1, 'Fatiga', '2022-01-28', 'golden retriever', 'es muy pajoso', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'pepeargento@gmail.com'),
-(2, 'pulgas', '2022-01-27', 'Chihuahua', 'es muy enano', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'pepeargento@gmail.com'),
-(3, 'locrojr', '2023-04-01', 'Pastor aleman', 'le gusta comer locro el 25 de mayo', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'locro@gmail.com'),
-(4, 'chento', '2023-01-01', 'Perdiguero', 'muy activa', '', NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'locro@gmail.com'),
-(5, 'lord', '2023-01-01', 'Manchester terrier', 'manchester city', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com'),
-(6, 'melon', '2023-02-04', 'Alabai', 'come mucho melon, sino muerde', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com'),
-(7, 'craz', '2023-01-04', 'Northern inuit', 'come demasiado, tiene sobrepeso', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com'),
-(8, 'uata', '2022-01-06', 'Shiba Inu', 'esta castrada', '', NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com');
+(43, 'Fatiga', '2023-06-10', 'Pastor aleman', '', '', NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com'),
+(44, 'uata', '2023-06-01', 'Manchester terrier', 'kk', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -138,7 +140,7 @@ INSERT INTO `perro` (`id`, `name`, `nac`, `breed`, `obs`, `image`, `zona_perdido
 
 CREATE TABLE `perro_adopcion` (
   `id_perroadop` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL DEFAULT 'sin nombre',
   `age` varchar(50) NOT NULL,
   `breed` varchar(50) NOT NULL,
   `color` varchar(50) NOT NULL,
@@ -153,9 +155,8 @@ CREATE TABLE `perro_adopcion` (
 --
 
 INSERT INTO `perro_adopcion` (`id_perroadop`, `name`, `age`, `breed`, `color`, `sex`, `obs`, `origin`, `owner`) VALUES
-(1, 'uata', '12', 'Shiba Inu', 'rojo', 'f', 'dfghjk', 'calle', ''),
-(2, 'uata', '12', 'Shiba Inu', 'rojo', 'f', 'dfghjk', 'calle', ''),
-(3, 'jorge', '12', 'Chihuahua', 'rojo', 'f', 'muuu', 'calle', '');
+(18, '', '12', 'Caniche', 'Negro', 'm', '', 'calle', 'checoxis2@gmail.com'),
+(19, 'sin nombre', '12', 'Salchicha', 'Con manchas', 'm', '', 'calle', 'checoxis2@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -182,9 +183,7 @@ CREATE TABLE `persona` (
 INSERT INTO `persona` (`id_persona`, `mail`, `frist_name`, `last_name`, `pass`, `tel`, `veter`, `bonif_donacion`, `nac`) VALUES
 (2, 'philippaeilhartchat@gmail.com', 'Pedro', 'Perrino', '123456', NULL, 1, NULL, '2013-06-07'),
 (3, 'luciagatti@gmail.com', 'Lucia', 'Gatti', '123456', NULL, 1, NULL, '2013-06-18'),
-(4, 'pepeargento@gmail.com', 'Pepe', 'Argento', '666666', NULL, 0, NULL, '2013-06-07'),
-(5, 'santiago.cecconato183401@alumnos.info.unlp.edu.ar', 'jorge', 'locro', 'xuJIzL3o', '2215678899', 0, NULL, '2023-06-01'),
-(6, 'checoxis2@gmail.com', 'Santiago', 'Cecconato', 'aVwsrn1O', '22112345678', 0, NULL, '1998-04-23');
+(7, 'checoxis2@gmail.com', 'santiago', 'cecconato', '123456', '2211234569', 0, NULL, '2013-06-20');
 
 -- --------------------------------------------------------
 
@@ -207,6 +206,21 @@ CREATE TABLE `servicio` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tarjeta`
+--
+
+CREATE TABLE `tarjeta` (
+  `numero` int(16) NOT NULL,
+  `vencimiento` date NOT NULL,
+  `saldo` int(11) NOT NULL,
+  `cod_seg` int(3) NOT NULL,
+  `nom_titular` varchar(50) NOT NULL,
+  `dni_titular` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `turno`
 --
 
@@ -223,22 +237,16 @@ CREATE TABLE `turno` (
   `observaciones` varchar(110) DEFAULT NULL,
   `dog` int(11) DEFAULT NULL,
   `motive` varchar(100) DEFAULT NULL,
-  `aceptar` tinyint(1) DEFAULT 0
+  `aceptar` tinyint(1) DEFAULT 0,
+  `modificacion` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `turno`
 --
 
-INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`, `aceptar`) VALUES
-(9, 'pepeargento@gmail.com', NULL, '2023-06-01', 'mañana', NULL, NULL, NULL, NULL, NULL, 1, 'Vacuna tipo A', NULL),
-(11, 'pepeargento@gmail.com', NULL, '2023-08-23', 'noche', NULL, NULL, NULL, NULL, NULL, 1, 'Vacuna tipo B', 0),
-(12, 'pepeargento@gmail.com', NULL, '2023-07-22', 'tarde', NULL, NULL, NULL, NULL, NULL, 1, 'Desparasitación', 0),
-(20, 'checoxis2@gmail.com', NULL, '2023-09-07', 'mañana', NULL, NULL, NULL, NULL, NULL, 5, 'Vacuna tipo A', 0),
-(21, 'checoxis2@gmail.com', NULL, '2023-09-21', 'mañana', NULL, NULL, NULL, NULL, NULL, 5, 'Vacuna tipo B', 0),
-(23, 'checoxis2@gmail.com', NULL, '2023-08-26', 'mañana', NULL, NULL, NULL, NULL, NULL, 6, 'Vacuna tipo B', 1),
-(27, 'checoxis2@gmail.com', NULL, '2023-08-30', 'noche', NULL, NULL, NULL, NULL, NULL, 8, 'Vacuna tipo B', 0),
-(28, 'checoxis2@gmail.com', NULL, '2023-05-25', '2023-08-30', NULL, NULL, NULL, NULL, NULL, 7, 'Vacuna tipo B', 0);
+INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`, `aceptar`, `modificacion`) VALUES
+(33, 'checoxis2@gmail.com', NULL, '2023-06-20', 'mañana', NULL, NULL, NULL, NULL, NULL, 44, 'Vacuna tipo A', 0, 'no tengo tiempo');
 
 -- --------------------------------------------------------
 
@@ -311,6 +319,12 @@ ALTER TABLE `servicio`
   ADD PRIMARY KEY (`id_servicio`);
 
 --
+-- Indices de la tabla `tarjeta`
+--
+ALTER TABLE `tarjeta`
+  ADD PRIMARY KEY (`numero`);
+
+--
 -- Indices de la tabla `turno`
 --
 ALTER TABLE `turno`
@@ -348,25 +362,25 @@ ALTER TABLE `es_dueno`
 -- AUTO_INCREMENT de la tabla `libreta_sanitaria`
 --
 ALTER TABLE `libreta_sanitaria`
-  MODIFY `id_libreta_sanitaria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_libreta_sanitaria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `perro`
 --
 ALTER TABLE `perro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `perro_adopcion`
 --
 ALTER TABLE `perro_adopcion`
-  MODIFY `id_perroadop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_perroadop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `servicio`
@@ -378,7 +392,7 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `vacuna`

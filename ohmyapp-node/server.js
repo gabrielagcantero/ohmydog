@@ -44,20 +44,52 @@ app.post('/store-clientdata',(req, res) => {
   });
 });
 
-//add new dog
+/*add new dog, creo una nueva libreta sanitaria y le asocio el id del perro
+  PERRO -> sql1 = INSERT INTO perro(owner, name, breed, sex, nac, obs, cruza, image) VALUES(d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true, d.image)
+  LIBRETA -> sql3 = INSERT INTO libreta_sanitaria(id_perro) VALUES (dog.id)
+*/
 app.post('/store-dogdata',(req, res) => {
-let d = req.body;
-let data = [d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true, d.image];
-let sql = "INSERT INTO perro(owner, name, breed, sex, nac, obs, cruza, image) VALUES(?,?,?,?,?,?,?,?)";
-conn.query(sql, data,(err, results) => {
-  if(err) throw err;
-  res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-});
-});
+
+  /*
+    CONSULTA 1: guardo en la tabla perro un nuevo perro
+  */
+  let d = req.body;
+  let data = [d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true, d.image];
+  let sql = "INSERT INTO perro(owner, name, breed, sex, nac, obs, cruza, image) VALUES(?,?,?,?,?,?,?,?)";
+  console.log("hola")
+  conn.query(sql, data,(err, results) => {
+      if(err) throw err;
+
+      /*
+        CONSULTA 2: busco en la tabla perro el perro recien ingresado(busco su id), 
+        uso los daots de la carga xq no tengo el id 
+      */
+      let sql2 = 'SELECT * FROM perro WHERE (owner = "'+ d.owner +'" AND name = "'+d.name+'" AND breed = "'+d.breed+'" AND sex = "'+d.sex+'" AND nac = "'+d.nac+'" AND obs = "'+d.obs+'" AND image = "'+d.image+'")';
+      conn.query(sql2, [0], (err, results2) => {
+          if(err) throw err;
+          
+          /*
+            CONSULTA 3: guardo Libreta NUEVA del perro recien ingresado
+          */
+          let sql3 = 'INSERT INTO libreta_sanitaria(id_perro) VALUES ("'+ results2[0].id+'")';
+          conn.query(sql3, (err, results3) => {
+              if(err) throw err;
+              res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+            });
+
+
+      });
+    });
+  });
 
 //add new dog en adopcion
 app.post('/store-dogAdop',(req, res) => {
   let d = req.body;
+  //verifico si el campo d.name esta vacio 
+  //-> no puede hacerlo directo en la BD xq no tendria que estar ese campo en la consulta y no entendi como se haria de esa forma
+  if(Object.entries(d.name).length === 0){
+    d.name = "sin nombre";
+  }
   let data = [d.name, d.age, d.breed, d.color, d.sex, d.obs, d.origin, d.owner];
   let sql = "INSERT INTO perro_adopcion(name, age, breed, color, sex, obs, origin, owner) VALUES(?,?,?,?,?,?,?,?)";
   conn.query(sql, data,(err, results) => {
@@ -70,7 +102,7 @@ app.post('/store-dogAdop',(req, res) => {
 app.post('/store-turndata',(req, res) => {
 let d = req.body;
 let data = [d.client, d.dog, d.day, d.hour, d.motive, d.why];
-let sql = "INSERT INTO turno(client, dog, day, hour, motive, why) VALUES(?,?,?,?,?,?)";
+let sql = "INSERT INTO turno(client, dog, day, hour, motive, modificacion) VALUES(?,?,?,?,?,?)";
 conn.query(sql, data,(err, results) => {
   if(err) throw err;
   res.send(JSON.stringify({"status": 200, "error": null, "response": results}));

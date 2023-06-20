@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Libreta from "../servicios/libreta";
 
 //trae los turnos y los guarda en un array
 function getTurns(){
@@ -27,7 +28,9 @@ let turns = getTurns();
 let dogs = getDogs();
 
 //arma la lista de turnos
-function turnList() {
+function turnList(showLibreta, setShowLibreta) {
+    const mostrarLibreta = (event) => {showLibreta? setShowLibreta(null) : setShowLibreta(event.target.value)};
+
     let d = new Date();
     let today = d.setHours(0,0,0,0);
     let filteredTurns = turns.filter((e) => (e.aceptar === 1 && new Date(e.day).getTime() >= today)).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
@@ -55,6 +58,8 @@ function turnList() {
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                                             <strong>Motivo: {t.motive} </strong> 
                                         </h6>
+                                        <button value={t.dog} className="btn btn-success" onClick={mostrarLibreta}>Ver libreta de {dogName}</button>
+                                        {(String(t.dog) === showLibreta) && <Libreta dog={t.dog}/>}
                                     </div>
                                 </div>
                             </div>
@@ -85,6 +90,7 @@ function turnList() {
 
 function Turnos(){
     let [showTurn, setShowTurn] = useState(false);
+    let [showLibreta, setShowLibreta] = useState(null);
 
     //muestra/oculta el formulario
     const muestraTurnos = () => {setShowTurn(!showTurn)}; 
@@ -99,7 +105,7 @@ function Turnos(){
                     </h3>
                 </div>
                 <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
-                        {turnList()}
+                        {turnList(showLibreta, setShowLibreta)}
                 </div>
             </div>
         </section>

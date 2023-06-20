@@ -52,10 +52,10 @@ function CargaAdop(){
                 </div>
                 <div className="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                     <div className="col-lg-12 mx-auto mbr-form">
-                        <form onSubmit={guardar} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
+                        <form onSubmit={guardar}  class="mbr-form form-with-styler mx-auto" >
                             <div class="dragArea row">
                                 <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-                                    <input type="text" name="name" placeholder="Nombre (dejar en blanco en caso de que el perro no tenga nombre)" class="form-control"/>
+                                    <input type="text" minlength="2" name="name" placeholder="Nombre (dejar en blanco en caso de que el perro no tenga nombre)" class="form-control"/>
                                     <input type="text" name="age" placeholder="Edad estimada" class="form-control" required />
                                 </div>
                                 <div>

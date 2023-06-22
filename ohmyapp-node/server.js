@@ -183,8 +183,6 @@ app.post('/get-clientdataID', (req,res) => {
   });
 });
 
-
-
 //get dogs
 app.get('/get-ownerdata',(req, res) => {
   let sql = 'SELECT * FROM perro';
@@ -205,6 +203,15 @@ app.get('/get-adopdata',(req, res) => {
 //get turns
 app.get('/get-turndata',(req, res) => {
   let sql = 'SELECT * FROM turno';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
+
+//get libreta
+app.get('/get-libreta',(req, res) => {
+  let sql = 'SELECT * FROM libreta_sanitaria';
   conn.query(sql, [0], (err, results) => {
     if(err) throw err;
     res.json(results);

@@ -209,16 +209,32 @@ app.get('/get-turndata',(req, res) => {
   })
 });
 
-//get libreta
-app.get('/get-libreta',(req, res) => {
-  let sql = 'SELECT * FROM libreta_sanitaria';
+//get enfermedades
+app.get('/get-ills',(req, res) => {
+  let sql = 'SELECT * FROM enfermedad';
   conn.query(sql, [0], (err, results) => {
     if(err) throw err;
     res.json(results);
   })
 });
 
+//get antiparasitario
+app.get('/get-antiP',(req, res) => {
+  let sql = 'SELECT * FROM antiparasitario';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
 
+//get vacuna
+app.get('/get-vacuna',(req, res) => {
+  let sql = 'SELECT * FROM vacuna';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
 
 
 //settings
@@ -228,3 +244,40 @@ app.listen(app.get('port'), () =>{
   console.log('server en puerto', app.get('port'));
 
 })
+
+/*
+comentarios para Checo:
+  en mi tabla perro le agregue un campo "peso" de tipo decimal(10,2)
+  
+  en mi tabla turno le agregue un campo "atendido" de tipo boolean que por default es 0
+  
+  creé la tabla de enfermedad
+    create table enfermedad(
+      id INT not null auto_increment primary key,
+      perro int not null,
+      nombre varchar(100) not null,
+      foreign key (perro) references perro(id)
+    )
+
+  creé la tabla de antiparasitario
+    create table antiparasitario(
+      id INT not null auto_increment primary key,
+      perro int not null,
+      nombre varchar(100) not null,
+      cant DECIMAL(5, 2),
+      fecha date,
+      foreign key (perro) references perro(id)
+    )
+
+  Borré la tabla de vacunas que estaba y creé otra
+    create table vacuna(
+      id int auto_increment primary key not null,
+        perro int not null,
+        nombre varchar(100),
+        dosis varchar(20),
+        fecha date not null,
+        tipo char not null,
+        foreign key (perro) references perro(id)
+    )
+
+*/

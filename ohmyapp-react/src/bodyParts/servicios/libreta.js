@@ -11,17 +11,6 @@ function getDogs(){
     return dogs;
 }
 
-//trae las libretas y las guarda en un array
-function getLibretas(){
-    const libretas = [];
-
-    fetch('http://localhost:3000/get-libreta')
-        .then((response) => response.json())
-        .then((results) => {results.map((e) => libretas.push(e))});
-    
-    return libretas;
-}
-
 //trae los turnos y los guarda en un array
 function getTurns(){
     const turns= [];
@@ -34,29 +23,83 @@ function getTurns(){
     return turns;
 }
 
+//trae las enfermedades y las guarda en un array
+function getIlls(){
+    const ills= [];
+
+    fetch('http://localhost:3000/get-ills')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => ills.push(e));
+        });
+    
+    return ills;
+}
+
+//trae los antiparasitarios y las guarda en un array
+function getAntiP(){
+    const antiP= [];
+
+    fetch('http://localhost:3000/get-antiP')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => antiP.push(e));
+        });
+    
+    return antiP;
+}
+
+//trae las vacunas y las guarda en un array
+function getVacunas(){
+    const vacunas= [];
+
+    fetch('http://localhost:3000/get-vacuna')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => vacunas.push(e));
+        });
+    
+    return vacunas;
+}
+
 let dogs = getDogs();
-let libretas = getLibretas();
 let turns = getTurns();
+let ills = getIlls();
+let antiP = getAntiP();
+let vacunas = getVacunas();
 
 //muestra el peso del perro
-function peso(dog){
-    let perro = libretas.find((e => e.id_perro === dog));
+function peso(peso){
     let children;
-    if (perro)
-        children = perro.peso + " kilos"
-    else
-        children ="Aún no se ha registrado un peso para este perro."
+    peso? children = peso + " kilos" : children ="Aún no se ha registrado un peso para este perro."
     return children;
 }
 
 //muestra las enfermedades del perro
 function enfermedades(dog){
-    let perro = libretas.filter((e => e.id_perro === dog));
+    let ill = ills.filter((e => e.perro === dog));
     let children;
-    if (perro.length > 0)
-        children = (perro.map((p) => <li className="list-group-item card-title2 mbr-fonts-style m-0 mb-3 display-4">{p.enfermedad}</li>))
+    if (ill.length > 0)
+        children = (ill.map((i) => <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">{i.nombre}</li>))
     else
-        children =<p>Aún no se han registrado enfermedades para este perro.</p>
+        children =<p style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">Aún no se han registrado enfermedades para este perro.</p>
+    return children;
+}
+
+//muestra los antiparasitarios del perro
+function antiParasit(dog){
+    let myAntiP = antiP.filter((e => e.perro === dog));
+    let children;
+    if (myAntiP.length > 0){
+        children = myAntiP.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
+            return (
+                    <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                        <strong>Nombre: </strong>{e.nombre} 
+                        <strong>   Cantidad: </strong>{e.cant} ml.  
+                        <strong>   Fecha: </strong>{e.fecha.substring(0,10)}
+                    </li>
+            )
+        })
+    }
+    else
+        children =<p style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">Aún no se han aplicado antiparasitarios a este perro.</p>
     return children;
 }
 
@@ -77,6 +120,44 @@ function Turnos(dog){
     return children;
 }
 
+//muestra las vacunas A del perro
+function vacunasA(dog){
+    let vac = vacunas.filter((e => (e.perro === dog) && (e.tipo === 'A')));
+    let children;
+    if (vac.length > 0){
+        children = vac.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
+            return (
+                    <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
+                        <strong>Nombre: </strong>{e.nombre} 
+                        <strong>   Dosis: </strong>{e.dosis}  
+                        <strong>   Fecha: </strong>{e.fecha.substring(0,10)}
+                    </li>
+            )
+        })
+    }
+    else
+        children =<p style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">Aún no se han aplicado vacunas tipo A a este perro.</p>
+    return children;
+}
+
+//muestra las vacunas A del perro
+function vacunasB(dog){
+    let vac = vacunas.filter((e => (e.perro === dog) && (e.tipo === 'B')));
+    let children;
+    if (vac.length > 0){
+        children = vac.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
+            return (
+                    <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4"> 
+                        <strong>Fecha: </strong>{e.fecha.substring(0,10)}
+                    </li>
+            )
+        })
+    }
+    else
+        children =<p style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">Aún no se han aplicado vacunas contra la rabia a este perro.</p>
+    return children;
+}
+
 function Libreta({ dog }){
     let myDog = dogs.find((d => d.id === dog));
     return(
@@ -90,33 +171,24 @@ function Libreta({ dog }){
                 <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>Peso: </strong>
-                            <span className="card-title2">{peso(dog)}</span>
+                            <span className="card-title2">{peso(myDog.peso)}</span>
                         </h6>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>Enfermedades</strong>
                         </h6>
-                        <ul class="list-group list-group-flush">
                         {enfermedades(dog)}
-                        </ul>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>Antiparasitario</strong>
                         </h6>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
+                        {antiParasit(dog)}
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>Vacunas Tipo A</strong>
                         </h6>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
+                        {vacunasA(dog)}
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>HiVacunas Tipo B</strong>
                         </h6>
-                </div>
-                <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
+                        {vacunasB(dog)}
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>Historial de turnos</strong>
                         </h6>

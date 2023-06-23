@@ -174,6 +174,10 @@ function Libreta({ dog }){
                             <span className="card-title2">{peso(myDog.peso)}</span>
                         </h6>
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
+                            <strong>Castrado: </strong>
+                            <span className="card-title2">{myDog.castrado? "Sí" : "No"}</span>
+                        </h6>
+                        <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
                             <strong>Enfermedades</strong>
                         </h6>
                         {enfermedades(dog)}
@@ -186,7 +190,7 @@ function Libreta({ dog }){
                         </h6>
                         {vacunasA(dog)}
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
-                            <strong>HiVacunas Tipo B</strong>
+                            <strong>Vacunas Tipo B</strong>
                         </h6>
                         {vacunasB(dog)}
                         <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">

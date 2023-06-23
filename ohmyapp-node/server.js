@@ -248,6 +248,7 @@ app.listen(app.get('port'), () =>{
 /*
 comentarios para Checo:
   en mi tabla perro le agregue un campo "peso" de tipo decimal(10,2)
+  y el campo "castrado" de tipo boolean con 0 por default
   
   en mi tabla turno le agregue un campo "atendido" de tipo boolean que por default es 0
   

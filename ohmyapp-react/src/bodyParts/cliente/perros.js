@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Libreta from "../servicios/libreta";
 
 //trae los perros del cliente y los devuelve en un array
 function getDogs(){
@@ -16,6 +17,7 @@ let dogs = getDogs();
 function Perros(){
     let[showDogs, setShowDogs] = useState(false);
     let[showDogData, setShowDogData] = useState(null);
+    let[showLibreta, setShowLibreta] = useState(null);
 
     //muestra/oculta los perros
     const muestraDogs = () => {
@@ -23,12 +25,15 @@ function Perros(){
     }
 
     //muestra datos de un perro
-    const myDog = (id) => {
+    const myDog = (id, showLibreta, setShowLibreta) => {
         let d = dogs.find((e) => (e.id) === id);
+        const mostrarLibreta = (event) => {showLibreta? setShowLibreta(null) : setShowLibreta(event.target.value)};
 
         const myImage = (src) => (
             <div><img src={src} alt="foto del perro" style={{height: "300px", width:"auto"}} /></div>
         )
+
+
 
         return (
             <div>
@@ -50,13 +55,15 @@ function Perros(){
                 <h6 className="card-title mbr-fonts-style mb-3 display-7">
                     <strong>Foto: {d.image? myImage(d.image) : "el perro no posee foto"} </strong> 
                 </h6>
+                <button value={id} className="btn btn-success" onClick={mostrarLibreta}>Ver libreta de {d.name}</button>
+                {(String(id) === showLibreta) && <Libreta dog={id}/>}
                 <br/>
             </div>
         )
     }
 
     //arma la lista de perros
-    const dogList = (showDogData, setShowDogData) => {
+    const dogList = (showDogData, setShowDogData, showLibreta, setShowLibreta) => {
         let children;
 
         //muestra/oculta los datos de un perro
@@ -71,7 +78,7 @@ function Perros(){
                             <button value={e.id} className="btn btn-success" onClick={muestraPerro}>Ver Perro</button>
                             <strong>{e.name}</strong> 
                         </h6>
-                        {String(e.id) ===  showDogData && (myDog(e.id))}
+                        {String(e.id) ===  showDogData && (myDog(e.id, showLibreta, setShowLibreta))}
                     </div>
                 )})}
         //si no hay perros devuelve mensaje
@@ -99,7 +106,7 @@ function Perros(){
                             <div className="card-wrapper">
                                 <div className="row align-items-center">
                                     <div className="col-10 col-md">
-                                        {dogList(showDogData, setShowDogData)}
+                                        {dogList(showDogData, setShowDogData, showLibreta, setShowLibreta)}
                                     </div>
                                 </div>
                             </div>

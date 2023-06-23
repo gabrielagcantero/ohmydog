@@ -27,9 +27,15 @@ function getDogs(){
 let turns = getTurns();
 let dogs = getDogs();
 
+//define qué formulario mostrar (completar!!!)
+function myForm(id){
+    console.log(id);
+}
+
 //arma la lista de turnos
-function turnList(showLibreta, setShowLibreta) {
+function turnList(showLibreta, setShowLibreta, showForm, setShowForm) {
     const mostrarLibreta = (event) => {showLibreta? setShowLibreta(null) : setShowLibreta(event.target.value)};
+    const mostrarForm = (event) => {showForm? setShowForm(null) : setShowForm(event.target.value)};
 
     let d = new Date();
     let today = d.setHours(0,0,0,0);
@@ -60,6 +66,8 @@ function turnList(showLibreta, setShowLibreta) {
                                         </h6>
                                         <button value={t.dog} className="btn btn-success" onClick={mostrarLibreta}>Ver libreta de {dogName}</button>
                                         {(String(t.dog) === showLibreta) && <Libreta dog={t.dog}/>}
+                                        <button value={t.id} className="btn btn-success" onClick={mostrarForm}>Cargar reporte del turno</button>
+                                        {(String(t.id) === showForm) && myForm(t.id)}
                                     </div>
                                 </div>
                             </div>
@@ -91,6 +99,7 @@ function turnList(showLibreta, setShowLibreta) {
 function Turnos(){
     let [showTurn, setShowTurn] = useState(false);
     let [showLibreta, setShowLibreta] = useState(null);
+    let [showForm, setShowForm] = useState(null);
 
     //muestra/oculta el formulario
     const muestraTurnos = () => {setShowTurn(!showTurn)}; 
@@ -105,7 +114,7 @@ function Turnos(){
                     </h3>
                 </div>
                 <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
-                        {turnList(showLibreta, setShowLibreta)}
+                        {turnList(showLibreta, setShowLibreta, showForm, setShowForm)}
                 </div>
             </div>
         </section>

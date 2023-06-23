@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-06-2023 a las 21:48:40
+-- Tiempo de generación: 23-06-2023 a las 17:35:21
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `ohMiPerro`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `antiparasitario`
+--
+
+CREATE TABLE `antiparasitario` (
+  `id_antiparasitario` int(11) NOT NULL,
+  `id_perro` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `cant` decimal(5,2) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -62,6 +76,18 @@ CREATE TABLE `donar` (
   `id_persona` int(11) NOT NULL,
   `id_campaña` int(11) NOT NULL,
   `monto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `enfermedad`
+--
+
+CREATE TABLE `enfermedad` (
+  `id_enfermedad` int(11) NOT NULL,
+  `id_perro` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -121,16 +147,18 @@ CREATE TABLE `perro` (
   `estado_encontrado` tinyint(1) DEFAULT NULL,
   `estado_adopcion` tinyint(1) DEFAULT NULL,
   `cruza` tinyint(1) DEFAULT NULL,
-  `owner` varchar(100) DEFAULT NULL
+  `owner` varchar(100) DEFAULT NULL,
+  `peso` decimal(10,2) DEFAULT NULL,
+  `castrado` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `perro`
 --
 
-INSERT INTO `perro` (`id`, `name`, `nac`, `breed`, `obs`, `image`, `zona_perdido`, `fecha_perdido`, `sex`, `comportamiento`, `edad_estimada`, `color`, `origen`, `fecha_celo`, `estado_encontrado`, `estado_adopcion`, `cruza`, `owner`) VALUES
-(43, 'Fatiga', '2023-06-10', 'Pastor aleman', '', '', NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com'),
-(44, 'uata', '2023-06-01', 'Manchester terrier', 'kk', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com');
+INSERT INTO `perro` (`id`, `name`, `nac`, `breed`, `obs`, `image`, `zona_perdido`, `fecha_perdido`, `sex`, `comportamiento`, `edad_estimada`, `color`, `origen`, `fecha_celo`, `estado_encontrado`, `estado_adopcion`, `cruza`, `owner`, `peso`, `castrado`) VALUES
+(43, 'Fatiga', '2023-06-10', 'Pastor aleman', '', '', NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com', NULL, NULL),
+(44, 'uata', '2023-06-01', 'Manchester terrier', 'kk', '', NULL, NULL, 'm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'checoxis2@gmail.com', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -238,15 +266,18 @@ CREATE TABLE `turno` (
   `dog` int(11) DEFAULT NULL,
   `motive` varchar(100) DEFAULT NULL,
   `aceptar` tinyint(1) DEFAULT 0,
-  `modificacion` varchar(250) DEFAULT NULL
+  `modificacion` varchar(250) DEFAULT NULL,
+  `atendido` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `turno`
 --
 
-INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`, `aceptar`, `modificacion`) VALUES
-(33, 'checoxis2@gmail.com', NULL, '2023-06-20', 'mañana', NULL, NULL, NULL, NULL, NULL, 44, 'Vacuna tipo A', 0, 'no tengo tiempo');
+INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tipo`, `monto`, `peso`, `antiparasitario`, `observaciones`, `dog`, `motive`, `aceptar`, `modificacion`, `atendido`) VALUES
+(33, 'checoxis2@gmail.com', NULL, '2023-06-20', 'mañana', NULL, NULL, NULL, NULL, NULL, 44, 'Vacuna tipo A', 1, 'no tengo tiempo', 1),
+(34, 'checoxis2@gmail.com', NULL, '2023-07-01', 'mañana', NULL, NULL, NULL, NULL, NULL, 43, 'Desparasitación', 1, NULL, 0),
+(35, 'checoxis2@gmail.com', NULL, '2023-06-25', 'tarde', NULL, NULL, NULL, NULL, NULL, 44, 'Castración', 1, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -256,13 +287,22 @@ INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tip
 
 CREATE TABLE `vacuna` (
   `id_vacuna` int(11) NOT NULL,
-  `id_libreta_sanitaria` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL
+  `id_perro` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `dosis` varchar(20) NOT NULL,
+  `fecha` date NOT NULL,
+  `tipo` char(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `antiparasitario`
+--
+ALTER TABLE `antiparasitario`
+  ADD PRIMARY KEY (`id_antiparasitario`);
 
 --
 -- Indices de la tabla `campaña`
@@ -281,6 +321,12 @@ ALTER TABLE `cuidador_paseador`
 --
 ALTER TABLE `donar`
   ADD PRIMARY KEY (`id_persona`,`id_campaña`);
+
+--
+-- Indices de la tabla `enfermedad`
+--
+ALTER TABLE `enfermedad`
+  ADD PRIMARY KEY (`id_enfermedad`);
 
 --
 -- Indices de la tabla `es_dueno`
@@ -341,6 +387,12 @@ ALTER TABLE `vacuna`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `antiparasitario`
+--
+ALTER TABLE `antiparasitario`
+  MODIFY `id_antiparasitario` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `campaña`
 --
 ALTER TABLE `campaña`
@@ -351,6 +403,12 @@ ALTER TABLE `campaña`
 --
 ALTER TABLE `cuidador_paseador`
   MODIFY `id_cuipas` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `enfermedad`
+--
+ALTER TABLE `enfermedad`
+  MODIFY `id_enfermedad` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `es_dueno`
@@ -392,7 +450,7 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `vacuna`

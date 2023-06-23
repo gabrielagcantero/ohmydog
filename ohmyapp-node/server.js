@@ -76,8 +76,6 @@ app.post('/store-dogdata',(req, res) => {
               if(err) throw err;
               res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
             });
-
-
       });
     });
   });
@@ -158,6 +156,24 @@ app.post('/accept-turn', (req, res) => {
     res.json(result);
   });
 });
+
+/*
+  Modificar turno a atendido
+  campos: atendido
+  consulta: UPDATE turno set atendido = "1"  WHERE id = "id_turn"
+*/
+app.post('/attended-turn', (req, res) => {
+  let id_turn = req.body.id;
+  let sql = 'UPDATE turno set atendido = "1"  WHERE id = "'+id_turn+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+
+
+
 
 
 //get clients
@@ -246,11 +262,23 @@ app.listen(app.get('port'), () =>{
 })
 
 /*
+  modificaciones
+    BD nueva
+  metodos agregados
+    POST attended-turn -> pone en 1 el campo atendido de la tabla turnos
+
+  futuros.. todos los metodos post de las != tipos de consutlas
+
+*/
+
+
+
+/*
 comentarios para Checo:
-  en mi tabla perro le agregue un campo "peso" de tipo decimal(10,2)
+  en mi tabla perro le agregue un campo "peso" de tipo decimal(10,2) -> agregar campo en consulta/turno
   y el campo "castrado" de tipo boolean con 0 por default
   
-  en mi tabla turno le agregue un campo "atendido" de tipo boolean que por default es 0
+  en mi tabla turno le agregue un campo "atendido" de tipo boolean que por default es 0 -> metodo POST turno atendido
   
   creé la tabla de enfermedad
     create table enfermedad(

@@ -44,41 +44,7 @@ app.post('/store-clientdata',(req, res) => {
   });
 });
 
-/*add new dog, creo una nueva libreta sanitaria y le asocio el id del perro
-  PERRO -> sql1 = INSERT INTO perro(owner, name, breed, sex, nac, obs, cruza, image) VALUES(d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true, d.image)
-  LIBRETA -> sql3 = INSERT INTO libreta_sanitaria(id_perro) VALUES (dog.id)
-*/
-app.post('/store-dogdata',(req, res) => {
 
-  /*
-    CONSULTA 1: guardo en la tabla perro un nuevo perro
-  */
-  let d = req.body;
-  let data = [d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true, d.image];
-  let sql = "INSERT INTO perro(owner, name, breed, sex, nac, obs, cruza, image) VALUES(?,?,?,?,?,?,?,?)";
-  console.log("hola")
-  conn.query(sql, data,(err, results) => {
-      if(err) throw err;
-
-      /*
-        CONSULTA 2: busco en la tabla perro el perro recien ingresado(busco su id), 
-        uso los daots de la carga xq no tengo el id 
-      */
-      let sql2 = 'SELECT * FROM perro WHERE (owner = "'+ d.owner +'" AND name = "'+d.name+'" AND breed = "'+d.breed+'" AND sex = "'+d.sex+'" AND nac = "'+d.nac+'" AND obs = "'+d.obs+'" AND image = "'+d.image+'")';
-      conn.query(sql2, [0], (err, results2) => {
-          if(err) throw err;
-          
-          /*
-            CONSULTA 3: guardo Libreta NUEVA del perro recien ingresado
-          */
-          let sql3 = 'INSERT INTO libreta_sanitaria(id_perro) VALUES ("'+ results2[0].id+'")';
-          conn.query(sql3, (err, results3) => {
-              if(err) throw err;
-              res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-            });
-      });
-    });
-  });
 
 //add new dog en adopcion
 app.post('/store-dogAdop',(req, res) => {
@@ -94,7 +60,8 @@ app.post('/store-dogAdop',(req, res) => {
     if(err) throw err;
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   });
-  });
+});
+
 
 //add new turn
 app.post('/store-turndata',(req, res) => {
@@ -106,6 +73,50 @@ conn.query(sql, data,(err, results) => {
   res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
 });
 });
+
+/*
+  Agregar una enfermedad
+  consulta: INSERT INTO enfermedad(id_perro, nombre) VALUES(id_perro, nombre)
+ */
+app.post('/store-enfermedad',(req, res) => {
+  let d = req.body;
+  let data = [d.id_perro, d.nombre];
+  let sql = "INSERT INTO enfermedad(id_perro, nombre) VALUES(?,?)";
+  conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+/*
+  Agregar una vacuna
+  consulta: INSERT INTO vacuna(id_perro, nombre, dosis, fecha, tipo) VALUES(d.id_perro, d.nombre, d.dosis, d.fecha, d.tipo)
+ */
+app.post('/store-vacuna',(req, res) => {
+  let d = req.body;
+  let data = [d.id_perro, d.nombre, d.dosis, d.fecha, d.tipo];
+  let sql = "INSERT INTO vacuna(id_perro, nombre, dosis, fecha, tipo) VALUES(?,?,?,?,?)";
+  conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+/*
+  Agregar una antiparasitario
+  consulta: INSERT INTO antiparasitario(id_perro, nombre, cant, date) VALUES(d.id_perro, d.nombre, d.cant, d.date)
+ */
+app.post('/store-antiparasitario',(req, res) => {
+  let d = req.body;
+  let data = [d.id_perro, d.nombre, d.cant, d.date];
+  let sql = "INSERT INTO antiparasitario(id_perro, nombre, cant, date) VALUES(?,?,?,?)";
+  conn.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+  
+
 
 //delete turn
 app.post('/delete-turndata',(req, res) => {
@@ -154,11 +165,6 @@ app.post('/attended-turn', (req, res) => {
     res.json(result);
   });
 });
-
-
-
-
-
 
 //get clients
 app.get('/get-clientdata',(req, res) => {
@@ -250,8 +256,10 @@ app.listen(app.get('port'), () =>{
     BD nueva
   metodos agregados
     POST attended-turn -> pone en 1 el campo atendido de la tabla turnos
-
-  futuros.. todos los metodos post de las != tipos de consutlas
+    POST store-enfermedad
+    POST store-vacuna
+    POST store-antiparasitario
+  
 
 */
 

@@ -152,6 +152,41 @@ conn.query(sql, [0], (err, results) => {
 });
 
 /*
+  Modificar perro por consulta noramal
+  campos: peso y obs
+  consulta: UPDATE perro set castrado = "1", obs = obs, peso = peso  WHERE id = "id_perro"
+*/
+app.post('/consulta-dog', (req, res) => {
+  let id_perro = req.body.id;
+  let obs = req.body.obs;
+  let peso = req.body.peso;
+  let sql = 'UPDATE perro set castrado = "1", obs = "'+ obs +'", peso = "'+ peso +'"  WHERE id = "'+id_perro+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+
+
+/*
+  Modificar perro a castrado
+  campos: castrado y obs
+  consulta: UPDATE perro set castrado = "1", obs = obs  WHERE id = "id_perro"
+*/
+app.post('/castrar-dog', (req, res) => {
+  let id_perro = req.body.id;
+  let obs = req.body.obs;
+  let sql = 'UPDATE perro set castrado = "1", obs = "'+ obs +'"  WHERE id = "'+id_perro+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+
+
+/*
   Modificar turno a aceptado
   campos: aceptar
   consulta: UPDATE turno set aceptar = "1"  WHERE id = "id_turn"
@@ -272,6 +307,8 @@ app.listen(app.get('port'), () =>{
     POST store-enfermedad
     POST store-vacuna
     POST store-antiparasitario
+    POST castrar-dog
+    POST consulta-dog
   
 
 */

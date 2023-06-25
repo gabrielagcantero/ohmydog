@@ -52,7 +52,6 @@ app.post('/store-dogdata',(req, res) => {
   let d = req.body;
   let data = [d.owner, d.name, d.breed, d.sex, d.nac, d.obs, true, d.image];
   let sql = "INSERT INTO perro(owner, name, breed, sex, nac, obs, cruza, image) VALUES(?,?,?,?,?,?,?,?)";
-  //console.log("hola")
   conn.query(sql, data,(err, results) => {
       if(err) throw err;
       res.send(JSON.stringify({"status": 200, "error": null, "response": results}));

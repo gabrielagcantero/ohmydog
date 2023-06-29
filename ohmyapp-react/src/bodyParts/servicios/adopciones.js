@@ -87,7 +87,7 @@ function Adopciones(){
     //oculta el formulario
     const ocultarForm = () => {setShowForm(null)};
 
-    //formulario para modificar el turno
+    //formulario para adoptar perro
     const myForm = (e) => {
         return (
         <section data-bs-version="5.1" className="form7 cid-tCtCU4eUuo">
@@ -126,9 +126,16 @@ function Adopciones(){
     function dogList(showForm){
         let children;
 
+        //quita de la lista los que publicó el usuario
+        let filteredList = dogs;
+        console.log("h" + localStorage.getItem("user"));
+        if(localStorage.getItem("user")){
+            let user = JSON.parse(localStorage.getItem("user")).mail;
+            filteredList = dogs.filter((e) => (e.owner !== user));
+        }
         //si hay perros devuelve la lista
-        if (dogs.length > 0){ 
-            children = dogs.map((e) => {
+        if (filteredList.length > 0){ 
+            children = filteredList.map((e) => {
                 return( 
                     <div className="col-10">
                         <h6 className=" card-title2 mbr-fonts-style m-0 mb-3 display-4">

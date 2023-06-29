@@ -163,7 +163,7 @@ function turnList(showForm, setShowForm) {
         return (
             <>
                 <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
-                    (Éste turno fue modificado)
+                    Éste turno fue modificado
                 </h6>
                 <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                     <strong>Razón: {why} </strong> 
@@ -197,7 +197,7 @@ function turnList(showForm, setShowForm) {
                                         <h6 className="card-subtitle mbr-fonts-style mb-3 display-4">
                                             <strong>Motivo: {t.motive} </strong> 
                                         </h6>
-                                        {t.why && razonMod(t.why)}
+                                        {t.modificacion && razonMod(t.modificacion)}
                                     </div>
                                 </div>
                                 {String(t.id) === showForm && formRachaz(t)}

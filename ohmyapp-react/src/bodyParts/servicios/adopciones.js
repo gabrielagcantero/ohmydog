@@ -24,6 +24,45 @@ function getClients(){
     return mails;
 }
 
+//trae los las acopciones de los clientes y los devuelve en el array
+function getAdopciones(){
+    let adop= [];
+
+    fetch('http://localhost:3000/get-adopciones')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => adopciones.push(e));
+        });
+
+    return adop;
+}
+
+
+/*
+Store in Donaciones
+guarda en la tabla donaciones el "vinculo" entre el perro y la persona que lo publico
+*/
+function storeInAdopciones(event){
+    let storeAdop = JSON.stringify({id: event.target.value});
+ 
+    fetch('http://localhost:3000/store-adopciones', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: storeAdop
+    }).then(function(response) {
+        return response.json();
+    });
+    
+    adopciones = getAdopciones(); // actualiza el array de adopciones
+
+    //ESTO NOSE SI VA
+    window.location.href = window.location.href; //refresca la página
+
+}
+
+
+let adopciones = getAdopciones();
 let dogs = getDogs();
 let clients = getClients();
 

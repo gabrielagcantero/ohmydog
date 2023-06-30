@@ -44,7 +44,7 @@ function exportAntip(event){
 
     //si no se cargo nada es true
     if(Object.entries(datosCompletos.cant).length === 0 ){
-        alert("faltan los datos de la cantidad de antiparasitario aplicado")
+        alert("faltan los datos de la cantidad de antiparasitario aplicado");
     }else{
          //consulta a la BD
         let dog_antip = JSON.stringify(datosCompletos);
@@ -116,3 +116,6 @@ function exportConsulta(event){
     alert("La libreta fue actualizada exitosamente exitosamente.");
     window.location.href = window.location.href;
 }
+
+
+

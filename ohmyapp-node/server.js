@@ -128,7 +128,19 @@ app.post('/store-antiparasitario',(req, res) => {
   });
 });
   
-
+/*
+  Agregar un vinuclo de perro en adopcion con la persona que lo adopto 
+  consulta: INSERT INTO adopciones(id_perro, id_persona) VALUES(id_perroad, id_pers)
+ */
+app.post('/store-adopciones', (req, res) => {
+  let d = req.body;
+  let data = [d.id_perroadop, d.persona];
+  let sql = "INSERT INTO adopciones(id_perro, id_persona) VALUES(?,?)"
+  conn.query(sql, data, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
 
 //delete turn
 app.post('/delete-turndata',(req, res) => {
@@ -151,17 +163,26 @@ conn.query(sql, [0], (err, results) => {
 });
 
 /*
-  Modificar perro por consulta noramal
+  Modificar perro por consulta normal
   campos: peso y obs
-  consulta: UPDATE perro set castrado = "1", obs = obs, peso = peso  WHERE id = "id_perro"
+  consultas:
+  1. UPDATE perro set peso = peso  WHERE id = "id_perro"
+  2. UPDATE turno set observaciones = obs,  WHERE id = "id_perro"
 */
 app.post('/consulta-dog', (req, res) => {
-  let id_perro = req.body.id;
+  let id_perro = req.body.id_perro;
+  let id_turno = req.body.id_turno;
   let obs = req.body.obs;
   let peso = req.body.peso;
-  let sql = 'UPDATE perro set castrado = "1", obs = "'+ obs +'", peso = "'+ peso +'"  WHERE id = "'+id_perro+'"';
+  let sql = 'UPDATE perro peso = "'+ peso +'"  WHERE id = "'+id_perro+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
+
+    let sql2 = 'UPDATE turno observaciones = "'+ obs +'"  WHERE id = "'+id_turno+'"';
+    conn.query(sql2, (err2, result) => {
+      if(err2) throw err2;
+
+    });
     res.json(result);
   });
 });
@@ -289,6 +310,16 @@ app.get('/get-vacuna',(req, res) => {
   })
 });
 
+//get adopciones
+app.get('/get-adopciones',(req, res) => {
+  let sql = 'SELECT * FROM adopciones';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
+
+
 
 //settings
 app.set('port', process.env.PORT || 3000);
@@ -300,8 +331,22 @@ app.listen(app.get('port'), () =>{
 
 /*
   modificaciones
-    BD nueva
+    nueva BD
+    post('/consulta-dog' -> le mande las agregaciones a cada tabla
   metodos agregados
+    POST  store-adopciones
+    GET   get-adopciones  
+
+
+
+
+
+
+
+
+
+
+
     POST attended-turn -> pone en 1 el campo atendido de la tabla turnos
     POST store-enfermedad
     POST store-vacuna
@@ -314,40 +359,3 @@ app.listen(app.get('port'), () =>{
 
 
 
-/*
-comentarios para Checo:
-  en mi tabla perro le agregue un campo "peso" de tipo decimal(10,2) -> agregar campo en consulta/turno
-  y el campo "castrado" de tipo boolean con 0 por default
-  
-  en mi tabla turno le agregue un campo "atendido" de tipo boolean que por default es 0 -> metodo POST turno atendido
-  
-  creé la tabla de enfermedad
-    create table enfermedad(
-      id INT not null auto_increment primary key,
-      perro int not null,
-      nombre varchar(100) not null,
-      foreign key (perro) references perro(id)
-    )
-
-  creé la tabla de antiparasitario
-    create table antiparasitario(
-      id INT not null auto_increment primary key,
-      perro int not null,
-      nombre varchar(100) not null,
-      cant DECIMAL(5, 2),
-      fecha date,
-      foreign key (perro) references perro(id)
-    )
-
-  Borré la tabla de vacunas que estaba y creé otra
-    create table vacuna(
-      id int auto_increment primary key not null,
-        perro int not null,
-        nombre varchar(100),
-        dosis varchar(20),
-        fecha date not null,
-        tipo char not null,
-        foreign key (perro) references perro(id)
-    )
-
-*/

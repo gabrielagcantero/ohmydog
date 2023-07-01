@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Libreta from "../servicios/libreta";
+import Reportes from "./reportes";
 
 //trae los turnos y los guarda en un array
 function getTurns(){
@@ -27,10 +28,7 @@ function getDogs(){
 let turns = getTurns();
 let dogs = getDogs();
 
-//define qué formulario mostrar (completar!!!)
-function myForm(id){
-    console.log(id);
-}
+
 
 //arma la lista de turnos
 function turnList(showLibreta, setShowLibreta, showForm, setShowForm) {
@@ -67,7 +65,7 @@ function turnList(showLibreta, setShowLibreta, showForm, setShowForm) {
                                         <button value={t.dog} className="btn btn-success" onClick={mostrarLibreta}>Ver libreta de {dogName}</button>
                                         {(String(t.dog) === showLibreta) && <Libreta dog={t.dog}/>}
                                         <button value={t.id} className="btn btn-success" onClick={mostrarForm}>Cargar reporte del turno</button>
-                                        {(String(t.id) === showForm) && myForm(t.id)}
+                                        {(String(t.id) === showForm) && <Reportes id={t.id} showForm={showForm} setShowForm={setShowForm} />}
                                     </div>
                                 </div>
                             </div>

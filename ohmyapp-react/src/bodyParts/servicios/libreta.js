@@ -74,7 +74,7 @@ function peso(peso){
 
 //muestra las enfermedades del perro
 function enfermedades(dog){
-    let ill = ills.filter((e => e.perro === dog));
+    let ill = ills.filter((e => e.id_perro === dog));
     let children;
     if (ill.length > 0)
         children = (ill.map((i) => <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">{i.nombre}</li>))
@@ -110,7 +110,7 @@ function Turnos(dog){
         children = turnos.map((t) => {
             return (
                 <div style={{width: "98%"}}>
-                    <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Turno del día {t.day.substring(0,10)} por la {t.hour}</strong></h6>
+                    <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Turno de {t.motive} del día {t.day.substring(0,10)} por la {t.hour}</strong></h6>
                     <p className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Observaciones: </strong>{t.observaciones? t.observaciones : "No hay observaciones"}</p>
                 </div>
             )

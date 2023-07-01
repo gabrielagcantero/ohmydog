@@ -174,13 +174,26 @@ app.post('/consulta-dog', (req, res) => {
   let id_turno = req.body.id_turno;
   let obs = req.body.obs;
   let peso = req.body.peso;
-  let sql = 'UPDATE perro peso = "'+ peso +'"  WHERE id = "'+id_perro+'"';
+  let enf = [id_perro, req.body.enf]
+  let sql = 'UPDATE perro set peso = "'+ peso +'"  WHERE id = "'+id_perro+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
 
-    let sql2 = 'UPDATE turno observaciones = "'+ obs +'"  WHERE id = "'+id_turno+'"';
+    let sql4 = "INSERT INTO enfermedad(id_perro, nombre) VALUES(?,?)";
+    conn.query(sql4, enf, (err4, result) => {
+      if(err4) throw err4;
+
+    });
+
+    let sql2 = 'UPDATE turno set observaciones = "'+ obs +'"  WHERE id = "'+id_turno+'"';
     conn.query(sql2, (err2, result) => {
       if(err2) throw err2;
+
+    });
+
+    let sql3 = 'UPDATE turno set atendido = 1  WHERE id = "'+id_turno+'"';
+    conn.query(sql3, (err3, result) => {
+      if(err3) throw err3;
 
     });
     res.json(result);
@@ -356,6 +369,12 @@ app.listen(app.get('port'), () =>{
   
 
 */
+
+/*Notas:
+
+Hay que modificar el método que guarda el reporte de consulta para que
+ tambien guarde enfermedades. el campo en el form se llama enf.
+ */
 
 
 

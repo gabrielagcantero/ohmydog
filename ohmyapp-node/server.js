@@ -92,7 +92,7 @@ conn.query(sql, data,(err, results) => {
  */
 app.post('/store-enfermedad',(req, res) => {
   let d = req.body;
-  let data = [d.id_perro, d.nombre];
+  let data = [d.id_perro, d.enf];
   let sql = "INSERT INTO enfermedad(id_perro, nombre) VALUES(?,?)";
   conn.query(sql, data,(err, results) => {
     if(err) throw err;
@@ -171,35 +171,13 @@ conn.query(sql, [0], (err, results) => {
 */
 app.post('/consulta-dog', (req, res) => {
   let id_perro = req.body.id_perro;
-  let id_turno = req.body.id_turno;
-  let obs = req.body.obs;
   let peso = req.body.peso;
-  let enf = [id_perro, req.body.enf]
   let sql = 'UPDATE perro set peso = "'+ peso +'"  WHERE id = "'+id_perro+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
-
-    let sql4 = "INSERT INTO enfermedad(id_perro, nombre) VALUES(?,?)";
-    conn.query(sql4, enf, (err4, result) => {
-      if(err4) throw err4;
-
-    });
-
-    let sql2 = 'UPDATE turno set observaciones = "'+ obs +'"  WHERE id = "'+id_turno+'"';
-    conn.query(sql2, (err2, result) => {
-      if(err2) throw err2;
-
-    });
-
-    let sql3 = 'UPDATE turno set atendido = 1  WHERE id = "'+id_turno+'"';
-    conn.query(sql3, (err3, result) => {
-      if(err3) throw err3;
-
-    });
     res.json(result);
   });
 });
-
 
 
 /*
@@ -208,9 +186,8 @@ app.post('/consulta-dog', (req, res) => {
   consulta: UPDATE perro set castrado = "1", obs = obs  WHERE id = "id_perro"
 */
 app.post('/castrar-dog', (req, res) => {
-  let id_perro = req.body.id;
-  let obs = req.body.obs;
-  let sql = 'UPDATE perro set castrado = "1", obs = "'+ obs +'"  WHERE id = "'+id_perro+'"';
+  let id_perro = req.body.id_perro;
+  let sql = 'UPDATE perro set castrado = 1 WHERE id = "'+id_perro+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
     res.json(result);
@@ -233,19 +210,31 @@ app.post('/accept-turn', (req, res) => {
   });
 });
 
+//guarda observaciones de un turno
+app.post('/store-obs', (req, res) => {
+  let id_turno = req.body.id_turno;
+  let obs = req.body.obs;
+  let sql = 'UPDATE turno set observaciones = "'+ obs +'"  WHERE id = "'+id_turno+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
 /*
   Modificar turno a atendido
   campos: atendido
   consulta: UPDATE turno set atendido = "1"  WHERE id = "id_turn"
 */
 app.post('/attended-turn', (req, res) => {
-  let id_turn = req.body.id;
-  let sql = 'UPDATE turno set atendido = "1"  WHERE id = "'+id_turn+'"';
+  let id_turno = req.body.id_turno;
+  let sql = 'UPDATE turno set atendido = "1"  WHERE id = "'+id_turno+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
     res.json(result);
   });
 });
+
 
 //get clients
 app.get('/get-clientdata',(req, res) => {
@@ -369,12 +358,6 @@ app.listen(app.get('port'), () =>{
   
 
 */
-
-/*Notas:
-
-Hay que modificar el método que guarda el reporte de consulta para que
- tambien guarde enfermedades. el campo en el form se llama enf.
- */
 
 
 

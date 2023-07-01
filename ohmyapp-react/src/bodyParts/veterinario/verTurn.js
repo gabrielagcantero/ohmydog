@@ -37,7 +37,7 @@ function turnList(showLibreta, setShowLibreta, showForm, setShowForm) {
 
     let d = new Date();
     let today = d.setHours(0,0,0,0);
-    let filteredTurns = turns.filter((e) => (e.aceptar === 1 && new Date(e.day).getTime() >= today)).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+    let filteredTurns = turns.filter((e) => (e.aceptar === 1 && new Date(e.day).getTime() >= today && e.atendido === 0)).sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;
     //si hay turnos devuelve la lista
     if (filteredTurns.length > 0){

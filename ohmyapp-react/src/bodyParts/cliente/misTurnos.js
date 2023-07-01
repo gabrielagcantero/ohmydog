@@ -96,7 +96,7 @@ const consultar = (event) => {
 //arma la lista de turnos confirmados con los botones de cancelar y modificar
 function turnListConf(showForm, setShowForm) {
     let user = JSON.parse(localStorage.getItem("user")).mail;
-    let filteredTurns = turns.filter((e) => (e.client === user && e.aceptar === 1 
+    let filteredTurns = turns.filter((e) => (e.client === user && e.aceptar === 1 && e.atendido === 0
         && (new Date(e.day).getTime() >= new Date().getTime() || new Date(e.day).toISOString().substring(0,10) === new Date().toISOString().substring(0,10))))
     .sort((a,b) => new Date(a.day).getTime() - new Date(b.day).getTime());
     let children;

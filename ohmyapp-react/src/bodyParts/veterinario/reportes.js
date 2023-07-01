@@ -90,44 +90,81 @@ function exportAntip(event){
     window.location.href = window.location.href;
 }
 
-/*
-    baja a la BD los datos ingresados en el formulario de castracion
-*/
-function exportCastracion(event){
-    
-    //agarro datos del formulario, creo el objeto y lo JSONifico
-    let datos = new FormData(event.target);
-    let datosCompletos = Object.fromEntries(datos.entries());
-    let dog_cast = JSON.stringify(datosCompletos);
-
-    //consulta a la BD
+//consulta a la BD
+function exportCastracion(dog_con){
+    if (JSON.parse(dog_con).castrado === "Sí")
     fetch('http://localhost:3000/castrar-dog', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
         },
-        body: dog_cast
+        body: dog_con
+    }).then(function(response) {
+        return response.json();
+    });
+}
+
+//consulta a la BD
+function exportConsulta(dog_con){
+    //actualiza peso
+    fetch('http://localhost:3000/consulta-dog', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: dog_con
     }).then(function(response) {
         return response.json();
     });
 
-    //emito alerta y mensaje de la HU
-    alert("La libreta fue actualizada exitosamente exitosamente.");
-    window.location.href = window.location.href;
+    //actualiza enfermedades
+   
+    if (JSON.parse(dog_con).enf){
+        fetch('http://localhost:3000/store-enfermedad', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: dog_con
+        }).then(function(response) {
+            return response.json();
+        });
+    }
 }
-
-/*
-    baja a la BD los datos ingresados en el formulario de consulta
-*/
-function exportConsulta(event){
     
+//carga el reporte del turno
+    function send(event){
     //agarro datos del formulario, creo el objeto y lo JSONifico
     let datos = new FormData(event.target);
     let datosCompletos = Object.fromEntries(datos.entries());
     let dog_con = JSON.stringify(datosCompletos);
-
-    //consulta a la BD
-    fetch('http://localhost:3000/consulta-dog', {
+    //los mando donde corresponda
+    switch (datosCompletos.motive){
+        case "Consulta": 
+            exportConsulta(dog_con);
+            break;
+        case "Castración":
+            exportCastracion(dog_con);
+            break;
+        /*case 3:
+          console.log("Seleccionaste la opción 3");
+          break;*/
+        default:
+          alert("Opción no válida");
+      }
+    //guarda observaciones
+    fetch('http://localhost:3000/store-obs', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: dog_con
+    }).then(function(response) {
+        return response.json();
+    });
+ 
+    //pone el turno como atendido
+    fetch('http://localhost:3000/attended-turn', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
@@ -144,7 +181,7 @@ function exportConsulta(event){
 
 function consultar(event){
     event.preventDefault();
-    window.confirm("La información será enviada a la libreta sanitaria del perro.") && exportConsulta(event);
+    window.confirm("La información será enviada a la libreta sanitaria del perro.") && send(event);
 }
 
 const consulta = (peso, setPeso) => {
@@ -160,6 +197,16 @@ const consulta = (peso, setPeso) => {
             <input className="form-control" name="enf" placeholder="Dejar en blanco si no se encontró ninguna enfermedad" pattern="[A-Za-z ]{1,50}"/>
         </div>
 )};
+
+const castracion = (
+    <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+        <label >El perro fue castrado?:</label><br/>
+        <input type="radio" name="castrado" value="Sí" />
+        <label for="opcion1">Sí</label><br></br>
+        <input type="radio" name="castrado" value="No" />
+        <label for="opcion1">No</label><br></br>
+    </div>
+);
 
 
 //define qué formulario mostrar
@@ -185,6 +232,7 @@ function Reportes ({ id, setShowForm }){
                     <form onSubmit={consultar} className="mbr-form form-with-styler mx-auto">
                         <div>   
                             {myturn.motive === "Consulta" && consulta(peso, setPeso)}
+                            {myturn.motive === "Castración" && castracion}
                             <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                 <label for="obs">Observaciones:</label><br/>
                                 <textarea name="obs" rows="5" class="form-control"></textarea>
@@ -192,6 +240,7 @@ function Reportes ({ id, setShowForm }){
                             <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                 <input name="id_turno" type="hidden" value={id} />
                                 <input name="id_perro" type="hidden" value={myturn.dog} />
+                                <input name="motive" type="hidden" value={myturn.motive} />
                             </div>
                             <div className="col-auto mbr-section-btn align-center">
                                 <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Enviar</button>

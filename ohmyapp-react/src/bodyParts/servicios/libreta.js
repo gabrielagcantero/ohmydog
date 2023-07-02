@@ -85,15 +85,15 @@ function enfermedades(dog){
 
 //muestra los antiparasitarios del perro
 function antiParasit(dog){
-    let myAntiP = antiP.filter((e => e.perro === dog));
+    let myAntiP = antiP.filter((e => e.id_perro === dog));
     let children;
     if (myAntiP.length > 0){
-        children = myAntiP.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
+        children = myAntiP.sort((a, b) => new Date(b.date) - new Date(a.date)).map((e) => {
             return (
                     <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
                         <strong>Nombre: </strong>{e.nombre} 
                         <strong>   Cantidad: </strong>{e.cant} ml.  
-                        <strong>   Fecha: </strong>{e.fecha.substring(0,10)}
+                        <strong>   Fecha: </strong>{e.date.substring(0,10)}
                     </li>
             )
         })
@@ -107,7 +107,7 @@ function Turnos(dog){
     let turnos = turns.filter((e => (e.dog === dog) && (e.atendido === 1)));
     let children;
     if (turnos.length > 0){
-        children = turnos.sort((a, b) => new Date(a.day) - new Date(b.day)).map((t) => {
+        children = turnos.sort((a, b) => new Date(b.day) - new Date(a.day)).map((t) => {
             return (
                 <div style={{width: "98%"}}>
                     <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Turno de {t.motive} del día {t.day.substring(0,10)} por la {t.hour}</strong></h6>

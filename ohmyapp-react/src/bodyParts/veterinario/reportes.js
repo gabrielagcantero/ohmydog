@@ -41,37 +41,18 @@ function exportVacun(dog_con){
     });
 }
 
-/*
-    baja a la BD los datos ingresados en el formulario de antiparasitario
-
-    NOSE SI HACER LA VERIFICAICON DE SI PUSO ALGO EN CANTIDAD ACA O SI SE HACE EN OTRO LADO
-*/
-function exportAntip(event){
-    //agarro datos del formulario, creo el objeto y lo JSONifico
-    let datos = new FormData(event.target);
-    let datosCompletos = Object.fromEntries(datos.entries());
-
-    //si no se cargo nada es true
-    if(Object.entries(datosCompletos.cant).length === 0 ){
-        alert("faltan los datos de la cantidad de antiparasitario aplicado");
-    }else{
-         //consulta a la BD
-        let dog_antip = JSON.stringify(datosCompletos);
+//antiparasitario a la BD
+function exportAntip(dog_con){
+    if (JSON.parse(dog_con).nombre)
         fetch('http://localhost:3000/store-antiparasitario', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
             },
-            body: dog_antip
+            body: dog_con
         }).then(function(response) {
             return response.json();
-        });
-
-        //emito alerta y mensaje de la HU
-        alert("La libreta fue actualizada exitosamente exitosamente.");
-    }
-
-    window.location.href = window.location.href;
+        }); 
 }
 
 //castracion a la BD
@@ -147,9 +128,8 @@ function exportConsulta(dog_con){
         case "Vacuna":
             exportVacun(dog_con);
             break;
-
-        default:
-          alert("Opción no válida");
+        case "Desparasitación":
+            exportAntip(dog_con);
       }
     //guarda observaciones
     fetch('http://localhost:3000/store-obs', {
@@ -225,6 +205,14 @@ const vacunaB = (
     </div>
 );
 
+const desparasitacion = (
+    <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+        <label >Ingrese el antiparacitario aplicado:</label><br/>
+        <input className="form-control" name="nombre" pattern="[A-Za-z ]{0,50}" placeholder="Nombre"/><br/>
+        <input  type="number" className="form-control" name="cant" step="0.1"  placeholder="Cantidad en ml."/>
+    </div>
+);
+
 
 //define qué formulario mostrar
 //formulario para adoptar perro
@@ -252,6 +240,7 @@ function Reportes ({ id, setShowForm }){
                             {myturn.motive === "Castración" && castracion}
                             {myturn.motive === "Vacuna tipo A" && vacunaA}
                             {myturn.motive === "Vacuna tipo B" && vacunaB}
+                            {myturn.motive === "Desparasitación" && desparasitacion}
                             <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                 <label for="obs">Observaciones:</label><br/>
                                 <textarea name="obs" rows="5" class="form-control"></textarea>

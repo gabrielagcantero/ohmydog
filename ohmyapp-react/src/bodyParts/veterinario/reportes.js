@@ -26,35 +26,19 @@ function getDogs(){
 let turns = getTurns();
 let dogs = getDogs();
 
-/*
-    baja a la BD los datos ingresados en el formulario de vacunas A o B
-*/
-function exportVacun(event){
-    //agarro datos del formulario, creo el objeto y lo JSONifico
-    let datos = new FormData(event.target);
-    let datosCompletos = Object.fromEntries(datos.entries());
+//manda vacuna a la BD (de los dos tipos)
+function exportVacun(dog_con){
+    if (JSON.parse(dog_con).nombre)
     
-    //si no se cargo nada en tipo de vacuna es true
-    if(Object.entries(datosCompletos.tipo).length === 0 ){
-        alert("faltan datos de tipo de vacuna")
-    }else{
-    
-        let dog_vacun = JSON.stringify(datosCompletos);
-        //consulta a la BD
-        fetch('http://localhost:3000/store-vacuna', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: dog_vacun
-        }).then(function(response) {
-            return response.json();
-        });
-
-        //emito alerta y mensaje de la HU
-        alert("La libreta fue actualizada exitosamente exitosamente.");
-    }
-    window.location.href = window.location.href;
+    fetch('http://localhost:3000/store-vacuna', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: dog_con
+    }).then(function(response) {
+        return response.json();
+    });
 }
 
 /*
@@ -90,7 +74,7 @@ function exportAntip(event){
     window.location.href = window.location.href;
 }
 
-//consulta a la BD
+//castracion a la BD
 function exportCastracion(dog_con){
     if (JSON.parse(dog_con).castrado === "Sí")
     fetch('http://localhost:3000/castrar-dog', {
@@ -118,7 +102,6 @@ function exportConsulta(dog_con){
     });
 
     //actualiza enfermedades
-   
     if (JSON.parse(dog_con).enf){
         fetch('http://localhost:3000/store-enfermedad', {
             method: 'POST',
@@ -134,10 +117,25 @@ function exportConsulta(dog_con){
     
 //carga el reporte del turno
     function send(event){
-    //agarro datos del formulario, creo el objeto y lo JSONifico
+    //agarro datos del formulario, creo el objeto
     let datos = new FormData(event.target);
     let datosCompletos = Object.fromEntries(datos.entries());
-    let dog_con = JSON.stringify(datosCompletos);
+    
+    //agrego el tipo de vacuna si es necesario
+    if (datosCompletos.motive === "Vacuna tipo A"){
+        datosCompletos.tipo = "A";
+        datosCompletos.motive = "Vacuna";
+    } else if (datosCompletos.motive === "Vacuna tipo B"){
+        if (datosCompletos.vacunado === "Sí"){
+            datosCompletos.tipo = "B";
+            datosCompletos.nombre = "Antirrábica";
+            datosCompletos.dosis = "-";
+        }
+        datosCompletos.motive = "Vacuna";
+    }
+
+    let dog_con = JSON.stringify(datosCompletos); //Jsonifico
+    
     //los mando donde corresponda
     switch (datosCompletos.motive){
         case "Consulta": 
@@ -146,9 +144,10 @@ function exportConsulta(dog_con){
         case "Castración":
             exportCastracion(dog_con);
             break;
-        /*case 3:
-          console.log("Seleccionaste la opción 3");
-          break;*/
+        case "Vacuna":
+            exportVacun(dog_con);
+            break;
+
         default:
           alert("Opción no válida");
       }
@@ -208,6 +207,24 @@ const castracion = (
     </div>
 );
 
+const vacunaA = (
+    <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+        <label >Ingrese la vacuna aplicada:</label><br/>
+        <input className="form-control" name="nombre" pattern="[A-Za-z ]{0,50}" placeholder="Nombre"/><br/>
+        <input className="form-control" name="dosis" placeholder="Dosis"/>
+    </div>
+);
+
+const vacunaB = (
+    <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
+        <label >Se aplicó la vacuna antirrábica?:</label><br/>
+        <input type="radio" name="vacunado" value="Sí" />
+        <label for="opcion1">Sí</label><br></br>
+        <input type="radio" name="vacunado" value="No" />
+        <label for="opcion1">No</label><br></br>
+    </div>
+);
+
 
 //define qué formulario mostrar
 //formulario para adoptar perro
@@ -233,6 +250,8 @@ function Reportes ({ id, setShowForm }){
                         <div>   
                             {myturn.motive === "Consulta" && consulta(peso, setPeso)}
                             {myturn.motive === "Castración" && castracion}
+                            {myturn.motive === "Vacuna tipo A" && vacunaA}
+                            {myturn.motive === "Vacuna tipo B" && vacunaB}
                             <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                 <label for="obs">Observaciones:</label><br/>
                                 <textarea name="obs" rows="5" class="form-control"></textarea>
@@ -241,6 +260,7 @@ function Reportes ({ id, setShowForm }){
                                 <input name="id_turno" type="hidden" value={id} />
                                 <input name="id_perro" type="hidden" value={myturn.dog} />
                                 <input name="motive" type="hidden" value={myturn.motive} />
+                                <input name="fecha" type="hidden" value={myturn.day.substring(0,10)} />
                             </div>
                             <div className="col-auto mbr-section-btn align-center">
                                 <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Enviar</button>

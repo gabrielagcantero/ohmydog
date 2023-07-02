@@ -107,7 +107,7 @@ function Turnos(dog){
     let turnos = turns.filter((e => (e.dog === dog) && (e.atendido === 1)));
     let children;
     if (turnos.length > 0){
-        children = turnos.map((t) => {
+        children = turnos.sort((a, b) => new Date(a.day) - new Date(b.day)).map((t) => {
             return (
                 <div style={{width: "98%"}}>
                     <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Turno de {t.motive} del día {t.day.substring(0,10)} por la {t.hour}</strong></h6>
@@ -122,7 +122,7 @@ function Turnos(dog){
 
 //muestra las vacunas A del perro
 function vacunasA(dog){
-    let vac = vacunas.filter((e => (e.perro === dog) && (e.tipo === 'A')));
+    let vac = vacunas.filter((e => (e.id_perro === dog) && (e.tipo === 'A')));
     let children;
     if (vac.length > 0){
         children = vac.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
@@ -142,14 +142,14 @@ function vacunasA(dog){
 
 //muestra las vacunas A del perro
 function vacunasB(dog){
-    let vac = vacunas.filter((e => (e.perro === dog) && (e.tipo === 'B')));
+    let vac = vacunas.filter((e => (e.id_perro === dog) && (e.tipo === 'B')));
     let children;
     if (vac.length > 0){
         children = vac.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
             return (
-                    <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4"> 
-                        <strong>Fecha: </strong>{e.fecha.substring(0,10)}
-                    </li>
+                <li style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4"> 
+                    {e.fecha.substring(0,10)}
+                </li>
             )
         })
     }

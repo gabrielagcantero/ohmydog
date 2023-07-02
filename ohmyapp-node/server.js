@@ -31,7 +31,9 @@ conn.connect((err) =>{
 });
 
 
-
+/*
+  ******************* CARGA DE DATOS ***************************************************************
+*/
 
 //add new client
 app.post('/store-clientdata',(req, res) => {
@@ -130,17 +132,33 @@ app.post('/store-antiparasitario',(req, res) => {
   
 /*
   Agregar un vinuclo de perro en adopcion con la persona que lo adopto 
-  consulta: INSERT INTO adopciones(id_perro, id_persona) VALUES(id_perroad, id_pers)
+  BODY -> id_perroadop | mail
+  consulta: INSERT INTO adopciones(id_perro, id_persona) VALUES(id_perroad, mail)
  */
-app.post('/store-adopciones', (req, res) => {
-  let d = req.body;
-  let data = [d.id_perroadop, d.persona];
-  let sql = "INSERT INTO adopciones(id_perro, id_persona) VALUES(?,?)"
-  conn.query(sql, data, (err, results) => {
-    if(err) throw err;
-    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  app.post('/store-adopciones', (req, res) => {
+    let d = req.body;
+    let data = [d.id_perroadop, d.mail];
+    let sql = "INSERT INTO adopciones(id_perro, id_persona) VALUES(?,?)"
+    conn.query(sql, data, (err, results) => {
+      if(err) throw err;
+      res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+    });
   });
-});
+
+/*  
+  agrega una urgencia a la BD  -> seteo el atendido en 1 y aceptar en 1
+  BODY -> "mail", "day", "id_perro" y "obs"
+  consulta: INSERT INTO turno(id_perro, id_persona) VALUES(?,?)
+*/
+
+
+
+
+
+/*
+    ************ ELIMINACIONES ******************************************************** 
+*/
+
 
 //delete turn
 app.post('/delete-turndata',(req, res) => {
@@ -161,6 +179,19 @@ conn.query(sql, [0], (err, results) => {
   res.json(results);
 })
 });
+
+/*  elimina las referencias a las adopciones de un perro en adopcion
+  BODY -> id_perroadop
+*/
+app.post('/delete-adopciones',(req, res) => {
+  let id = req.body.id_perroadop;
+  let sql = 'DELETE FROM adopciones where id_perro ="' + id + '"';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+  });
+
 
 /*
   Modificar perro por consulta normal
@@ -244,6 +275,20 @@ app.get('/get-clientdata',(req, res) => {
     res.json(results);
   })}
 );
+
+/*  
+  devuelve SOLO los clientes con toda su data
+  SELECT * FROM persona WHERE veter = "0"
+*/
+app.get('/get-only-clientdata',(req, res) => {
+  let sql = 'SELECT * FROM persona WHERE veter = "0"';
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })}
+);
+
+
 
 /*
   Obetener datos del cliente
@@ -334,9 +379,9 @@ app.listen(app.get('port'), () =>{
 /*
   modificaciones
     nueva BD
-    post('/consulta-dog' -> le mande las agregaciones a cada tabla
+    
   metodos agregados
-    POST  store-adopciones
+    POST  delete-adopciones
     GET   get-adopciones  
 
 

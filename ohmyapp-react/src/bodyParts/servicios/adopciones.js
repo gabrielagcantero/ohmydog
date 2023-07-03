@@ -44,8 +44,8 @@ let adopciones = getAdopciones();
 Store in Donaciones
 guarda en la tabla donaciones el "vinculo" entre el perro y la persona que lo publico
 */
-function storeInAdopciones(event){
-    let storeAdop = JSON.stringify({id: event.target.value});
+function storeInAdopciones(data){
+    let storeAdop = JSON.stringify(data);
  
     fetch('http://localhost:3000/store-adopciones', {
         method: 'POST',
@@ -81,12 +81,20 @@ function sendMail(event){
     emailjs.send("service_xtovo5k", "template_n7u8keb", templateParams , "zH503YKcv1sGAlHMu");
 
     alert("el mensaje ha sido enviado");
+    storeInAdopciones(datosCompletos);
     window.location.href = window.location.href;
 }
 
+//cuadro de confirmación anted de enviar mail
 function consultar(event){
     event.preventDefault();
-    window.confirm("Se enviará un mensaje con sus datos a la persona que publicó el perro.") && sendMail(event);
+    //vuelve a controlar que ese mail no haya solicitado ese perro
+    const datos = new FormData(event.target); //toma los datos del formulario
+    const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+    let user = datosCompletos.mail;
+    let id_perroadop = datosCompletos.id_perroadop;
+    let filteredMails = adopciones.filter((a) => String(a.id_perro) === id_perroadop && a.mail === user);
+    filteredMails.length > 0? alert("Usted ya ha enviado una solicitud para adoptar a este perro") : window.confirm("Se enviará un mensaje con sus datos a la persona que publicó el perro.") && sendMail(event);
 }
 
 //formulario para adoptar
@@ -120,13 +128,14 @@ function Adopciones(){
     const muestraDogs = () => {setShowDogs(!showDogs)};
 
     //controla si el usuario ya mandó mail para ese perro
-    const control = (event) => {
-        let user = JSON.parse(localStorage.getItem("user")).id_persona
-        console.log(event.target.value)
-        let filteredMails = adopciones.filter((a) => {return a.id_perro === event.target.value 
-        && a.id_persona === user});
-        console.log(filteredMails);
-        muestraForm(event);
+    function control(event){
+        let user;
+        if (localStorage.getItem("user"))
+            user = JSON.parse(localStorage.getItem("user")).mail
+        else 
+            user = null;
+        let filteredMails = adopciones.filter((a) => String(a.id_perro) === event.target.value && a.mail === user);
+        filteredMails.length > 0? alert("Usted ya ha enviado una solicitud para adoptar a este perro") : muestraForm(event);
     }
 
     //muestra formulario de adopcion
@@ -157,6 +166,7 @@ function Adopciones(){
                                 </div>
                                 <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <input name="dog" type="hidden" value={e.name} />
+                                    <input name="id_perroadop" type="hidden" value={e.id_perroadop} />
                                     <input name="owner" type="hidden" value={e.owner} />
                                 </div>
                                 <div className="col-auto mbr-section-btn align-center">

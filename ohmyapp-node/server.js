@@ -138,7 +138,7 @@ app.post('/store-antiparasitario',(req, res) => {
   app.post('/store-adopciones', (req, res) => {
     let d = req.body;
     let data = [d.id_perroadop, d.mail];
-    let sql = "INSERT INTO adopciones(id_perro, id_persona) VALUES(?,?)"
+    let sql = "INSERT INTO adopciones(id_perro, mail) VALUES(?,?)"
     conn.query(sql, data, (err, results) => {
       if(err) throw err;
       res.send(JSON.stringify({"status": 200, "error": null, "response": results}));

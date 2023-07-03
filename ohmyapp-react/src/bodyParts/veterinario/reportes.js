@@ -115,6 +115,8 @@ function exportConsulta(dog_con){
         datosCompletos.motive = "Vacuna";
     }
 
+    console.log(datosCompletos)
+
     let dog_con = JSON.stringify(datosCompletos); //Jsonifico
     
     //los mando donde corresponda

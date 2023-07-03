@@ -24,7 +24,7 @@ function getClients(){
     return mails;
 }
 
-//trae los las acopciones de los clientes y los devuelve en el array
+//trae las solicitudes de adopción de los clientes y los devuelve en el array
 function getAdopciones(){
     let adop= [];
 
@@ -36,6 +36,9 @@ function getAdopciones(){
     return adop;
 }
 
+let dogs = getDogs();
+let clients = getClients();
+let adopciones = getAdopciones();
 
 /*
 Store in Donaciones
@@ -61,10 +64,6 @@ function storeInAdopciones(event){
 
 }
 
-
-let adopciones = getAdopciones();
-let dogs = getDogs();
-let clients = getClients();
 
 function sendMail(event){
     event.preventDefault();
@@ -120,6 +119,16 @@ function Adopciones(){
     //muestra/oculta los datos de los perros
     const muestraDogs = () => {setShowDogs(!showDogs)};
 
+    //controla si el usuario ya mandó mail para ese perro
+    const control = (event) => {
+        let user = JSON.parse(localStorage.getItem("user")).id_persona
+        console.log(event.target.value)
+        let filteredMails = adopciones.filter((a) => {return a.id_perro === event.target.value 
+        && a.id_persona === user});
+        console.log(filteredMails);
+        muestraForm(event);
+    }
+
     //muestra formulario de adopcion
     const muestraForm = (event) => {showForm? setShowForm(null) : setShowForm(event.target.value)};
 
@@ -167,7 +176,6 @@ function Adopciones(){
 
         //quita de la lista los que publicó el usuario
         let filteredList = dogs;
-        console.log("h" + localStorage.getItem("user"));
         if(localStorage.getItem("user")){
             let user = JSON.parse(localStorage.getItem("user")).mail;
             filteredList = dogs.filter((e) => (e.owner !== user));
@@ -199,7 +207,7 @@ function Adopciones(){
                             <h6 className="card-title mbr-fonts-style mb-3 display-7">
                                 <strong>Características adicionales: {e.obs? e.obs : "-"} </strong> 
                             </h6>
-                            <button value={e.id_perroadop} className="btn btn-success" onClick={muestraForm}>Adoptar</button>
+                            <button value={e.id_perroadop} className="btn btn-success" onClick={control}>Adoptar</button>
                             {String(e.id_perroadop) === showForm && myForm(e)}
                             <br/><br/><br/>
                         </div>

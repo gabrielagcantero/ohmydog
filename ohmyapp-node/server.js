@@ -122,7 +122,7 @@ app.post('/store-vacuna',(req, res) => {
  */
 app.post('/store-antiparasitario',(req, res) => {
   let d = req.body;
-  let data = [d.id_perro, d.nombre, d.cant, d.date];
+  let data = [d.id_perro, d.nombre, d.cant, d.fecha];
   let sql = "INSERT INTO antiparasitario(id_perro, nombre, cant, date) VALUES(?,?,?,?)";
   conn.query(sql, data,(err, results) => {
     if(err) throw err;

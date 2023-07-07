@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Libreta from "../servicios/libreta";
+import Urgencia from "../veterinario/urgencia";
 
 //trae los mails de los clientes y los devuelve en un array
 function getClients(){
@@ -33,6 +34,7 @@ function Clients(){
     let[showDogs, setShowDogs] = useState(null);
     let[showDogData, setShowDogData] = useState(null);
     let[showLibreta, setShowLibreta] = useState(null);
+    let[showForm, setShowForm] = useState(null);
 
     //muestra/oculta los clientes
     const muestraClients = () => {
@@ -40,9 +42,10 @@ function Clients(){
     }
 
     //muestra datos de un perro
-    const myDog = (id, showLibreta, setShowLibreta) => {
+    const myDog = (id, showLibreta, setShowLibreta, showForm, setShowForm) => {
         let d = dogs.find((e) => (e.id) === id);
         const mostrarLibreta = (event) => {showLibreta? setShowLibreta(null) : setShowLibreta(event.target.value)};
+        const mostrarForm = (event) => {showForm? setShowForm(null) : setShowForm(event.target.value)};
 
         const myImage = (src) => (
             <div><img src={src} alt="foto del perro" style={{height: "300px", width:"auto"}} /></div>
@@ -70,13 +73,15 @@ function Clients(){
                 </h6>
                 <button value={id} className="btn btn-success" onClick={mostrarLibreta}>Ver libreta de {d.name}</button>
                 {(String(id) === showLibreta) && <Libreta dog={id}/>}
+                <button value={d.id} className="btn btn-success" onClick={mostrarForm}>Cargar urgencia</button>
+                {(String(d.id) === showForm) && <Urgencia dog={id}/>}
                 <br/>
             </div>
         )
     }
 
     //muestra la lista de perros de un cliente
-    const dogList = (showDogs, showDogData, setShowDogData, showLibreta, setShowLibreta) => {
+    const dogList = (showDogs, showDogData, setShowDogData, showLibreta, setShowLibreta, showForm, setShowForm ) => {
         let l = dogs.filter((d) => d.owner === showDogs);
         let children;
 
@@ -92,7 +97,7 @@ function Clients(){
                             <button value={e.id} className="btn btn-success" onClick={muestraPerro}>Ver perro</button>
                             <strong>{e.name}</strong> 
                         </h6>
-                        {String(e.id) ===  showDogData && (myDog(e.id, showLibreta, setShowLibreta))}
+                        {String(e.id) ===  showDogData && (myDog(e.id, showLibreta, setShowLibreta, showForm, setShowForm))}
                     </div>
                 )})}
         //si no hay perros devuelve mensaje
@@ -109,7 +114,7 @@ function Clients(){
     }
 
     //muestra los datos del cliente
-    const clientData = (mail, showDogs, setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta) => {
+    const clientData = (mail, showDogs, setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta, showForm, setShowForm) => {
 
         //muestra/oculta los perros del cliente
         const mostrarListaP = (event) => {showDogs? setShowDogs(null) : setShowDogs(event.target.value)};
@@ -133,14 +138,14 @@ function Clients(){
                     <strong>Teléfono: {c.tel} </strong> 
                 </h6>
                 <button value={c.mail} className="btn btn-success" onClick={mostrarListaP}>Ver perros de {c.frist_name}</button>
-                {c.mail ===  showDogs && (dogList(showDogs, showDogData, setShowDogData, showLibreta, setShowLibreta))}
+                {c.mail ===  showDogs && (dogList(showDogs, showDogData, setShowDogData, showLibreta, setShowLibreta, showForm, setShowForm))}
                 <br/><br/>
             </div>
         )
     }
     
     //arma la lista de clientes
-    const clientList = (showCLientData, setShowClientData, showDogs,setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta) => {
+    const clientList = (showCLientData, setShowClientData, showDogs,setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta, showForm, setShowForm) => {
         let children;
     
         //muestra/oculta los datos del cliente
@@ -155,7 +160,7 @@ function Clients(){
                             <button value={e.mail} className="btn btn-success" onClick={mostrarCliente}>Ver Cliente</button>
                             <strong>{e.mail}</strong> 
                         </h6>
-                        {e.mail ===  showCLientData && clientData(e.mail, showDogs, setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta)}
+                        {e.mail ===  showCLientData && clientData(e.mail, showDogs, setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta, showForm, setShowForm)}
                     </div>
                 )})}
         //si no hay clientes devuelve mensaje
@@ -184,7 +189,7 @@ function Clients(){
                         <div >
                             <div className="card-wrapper">
                                 <div className="row align-items-center">
-                                        {clientList(showCLientData, setShowClientData, showDogs, setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta)}
+                                        {clientList(showCLientData, setShowClientData, showDogs, setShowDogs, showDogData, setShowDogData, showLibreta, setShowLibreta, showForm, setShowForm)}
                                 </div>
                             </div>
                         </div>

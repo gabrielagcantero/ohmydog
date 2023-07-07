@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //trae los turnos y los guarda en un array
 function getTurns(){
@@ -23,8 +23,21 @@ function getDogs(){
     return dogs;
 }
 
+//trae los clientes y los devuelve en un array
+function getClients(){
+    let mails= [];
+
+    fetch('http://localhost:3000/get-clientdata')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => mails.push(e));
+        });
+
+    return mails;
+}
+
 let turns = getTurns();
 let dogs = getDogs();
+let clients = getClients();
 
 //manda vacuna a la BD (de los dos tipos)
 function exportVacun(dog_con){
@@ -97,7 +110,7 @@ function exportConsulta(dog_con){
 }
     
 //carga el reporte del turno
-    function send(event){
+function send(event){
     //agarro datos del formulario, creo el objeto
     let datos = new FormData(event.target);
     let datosCompletos = Object.fromEntries(datos.entries());
@@ -115,7 +128,8 @@ function exportConsulta(dog_con){
         datosCompletos.motive = "Vacuna";
     }
 
-    console.log(datosCompletos)
+    //claculo lo que le queda de la bonificación
+    datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.total), 0);
 
     let dog_con = JSON.stringify(datosCompletos); //Jsonifico
     
@@ -154,6 +168,28 @@ function exportConsulta(dog_con){
     }).then(function(response) {
         return response.json();
     });
+
+    //update del monto del turno (body: dog_con campos: id_turno, bonif )
+    /*fetch('http://localhost:3000/update-monto', {
+         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: dog_con
+    }).then(function(response) {
+        return response.json(); 
+    });*/
+
+    //update del descuento del usuario (body: dog_con campos: client, total )
+    /*fetch('http://localhost:3000/update-descuento', {
+        method: 'POST',
+        headers: {  
+            'Content-Type': 'application/json'
+        },
+        body: dog_con
+    }).then(function(response) {
+        return response.json();
+    });*/
 
     //emito alerta y mensaje de la HU
     alert("La libreta fue actualizada exitosamente exitosamente.");
@@ -209,7 +245,7 @@ const vacunaB = (
 
 const desparasitacion = (
     <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
-        <label >Ingrese el antiparacitario aplicado:</label><br/>
+        <label >Ingrese el antiparasitario aplicado:</label><br/>
         <input className="form-control" name="nombre" pattern="[A-Za-z ]{0,50}" placeholder="Nombre"/><br/>
         <input  type="number" className="form-control" name="cant" step="0.1"  placeholder="Cantidad en ml."/>
     </div>
@@ -223,7 +259,25 @@ function Reportes ({ id, setShowForm }){
 
     let myturn = turns.find((t) => t.id === id);
     let myDog = dogs.find((d) => d.id === myturn.dog);
+    let myClient = clients.find((c) => c.mail === myturn.client);
     const [peso, setPeso] = useState(myDog.peso);
+    const [price, setPrice] = useState(0);
+    const [total, setTotal] = useState('');
+
+    const handlePrice = (event) => {
+        setPrice(parseFloat(event.target.value)); // Actualizar el valor cuando cambie el input
+    }
+
+    //calcula el monto a cobrar
+    const calcular = () => {
+        setTotal(Math.max(parseFloat(price) - parseFloat(myClient.bonif_donacion), 0));
+        console.log(total);
+    }
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        document.getElementById("mytotal").innerText = 'Total a cobrar: $' + total;
+      });
     
     return (
     <section data-bs-version="5.1" className="form7 cid-tCtCU4eUuo">
@@ -247,11 +301,24 @@ function Reportes ({ id, setShowForm }){
                                 <label for="obs">Observaciones:</label><br/>
                                 <textarea name="obs" rows="5" class="form-control"></textarea>
                             </div>
+                            <div className="col-lg-12 col-md-12 col-sm-12 form-group row mb-3" >
+                                <p>Bonificación del cliente: ${myClient.bonif_donacion}</p>
+                                <div class="form-inline" >
+                                    <label for="monto" style={{paddingTop:"5px"}}>Valor de la consulta: $</label>
+                                    <input style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} />
+                                    <span><button type="button" className="btn-outline-primary btn-sm" onClick={calcular}>Calcular total</button></span>
+                                </div>
+                                <p></p>
+                                <p id="mytotal"></p>
+                            </div>
                             <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                 <input name="id_turno" type="hidden" value={id} />
                                 <input name="id_perro" type="hidden" value={myturn.dog} />
                                 <input name="motive" type="hidden" value={myturn.motive} />
                                 <input name="fecha" type="hidden" value={myturn.day.substring(0,10)} />
+                                <input name="total" type="hidden" value={total} />
+                                <input name="client" type="hidden" value={myClient.id_persona} />
+                                <input name="bonif" type="hidden" value={myClient.bonif_donacion} />
                             </div>
                             <div className="col-auto mbr-section-btn align-center">
                                 <button type="submit" class="btn btn-info display-4"  style={{width: "50%", margin: "auto"}}>Enviar</button>

@@ -12,7 +12,7 @@ function getDogs(){
     return dogs;
 }
 
-//trae los mails de los clientes y los devuelve en un array
+//trae los mails de los clientes y devuelve los mails en un array
 function getClients(){
     let mails= [];
 

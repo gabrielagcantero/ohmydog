@@ -175,7 +175,7 @@ function send(event){
         });
 
         //update del monto del turno (body: dog_con campos: id_turno, total )
-        /*fetch('http://localhost:3000/update-monto', {
+        fetch('http://localhost:3000/update-monto', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -183,10 +183,10 @@ function send(event){
             body: dog_con
         }).then(function(response) {
             return response.json(); 
-        });*/
+        });
 
         //update del descuento del usuario (body: dog_con campos: client, bonif )
-        /*fetch('http://localhost:3000/update-descuento', {
+        fetch('http://localhost:3000/update-descuento', {
             method: 'POST',
             headers: {  
                 'Content-Type': 'application/json'
@@ -194,7 +194,7 @@ function send(event){
             body: dog_con
         }).then(function(response) {
             return response.json();
-        });*/
+        });
 
         //emito alerta y mensaje de la HU
         alert("La libreta fue actualizada exitosamente exitosamente.");

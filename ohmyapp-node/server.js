@@ -145,13 +145,70 @@ app.post('/store-antiparasitario',(req, res) => {
     });
   });
 
-/*  
-  agrega una urgencia a la BD  -> seteo el atendido en 1 y aceptar en 1
-  BODY -> "mail", "day", "id_perro" y "obs"
-  consulta: INSERT INTO turno(id_perro, id_persona) VALUES(?,?)
+
+/*
+  Agrega un nuevo paseador, campo paseador por defecto en 1
+  BODY -> frist_name, last_name, servicio(por defecto la BD carga como paseador), monto, tel y mail 
+  consulta: INSERT INTO cuidador_paseador(email, frist_name, telefono, pass, last_name, monto) VALUES(mail, frist_name, tel, pass, last_name, monto)
 */
+app.post('/store-cuidador_paseador', (req, res) => {
+  let d = req.body;
+  let data = [d.mail, d.frist_name, d.tel, d.pass, d.last_name, d.monto];
+  let sql = "INSERT INTO cuidador_paseador(id_perro, mail) VALUES(?,?,?,?,?,?)"
+  conn.query(sql, data, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
 
 
+/*
+  store campaña
+  BODY -> nombre, monto, desc, date_cierre, | mail
+  consulta: INSERT INTO campaña(nombre, mail_persona, descripcion, monto, fecha_cierre) VALUES(nombre, mail, desc, monto, date_cierre)
+*/
+app.post('/store-campaña', (req, res) => {
+  let d = req.body;
+  let data = [d.nombre, d.mail, d.desc, d.monto, d.date_cierre];
+  let sql = "INSERT INTO campaña(nombre, mail_persona, descripcion, monto, fecha_cierre) VALUES(?,?,?,?,?)"
+  conn.query(sql, data, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+
+/*
+  store urgencia
+  BODY -> id_perro, date, obs, monto
+  consulta: INSERT INTO urgencia(id_perro, date, obs, monto) VALUES(id_perro, date, obs, monto)
+*/
+app.post('/store-urgencia', (req, res) => {
+  let d = req.body;
+  let data = [d.id_perro, d.date, d.obs, d.monto];
+  let sql = "INSERT INTO urgencia(id_perro, date, obs, monto) VALUES(?,?,?,?)"
+  conn.query(sql, data, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
+
+
+/*
+  store donacion
+
+  BODY -> id_persona, id_campaña, monto
+  consulta: INSERT INTO donar(id_persona, id_campaña, monto) VALUES(id_persona, id_campaña, monto)
+*/
+app.post('/store-donacion', (req, res) => {
+  let d = req.body;
+  let data = [d.id_persona, d.id_campaña, d.monto];
+  let sql = "INSERT INTO urgencia(id_persona, id_campaña, monto) VALUES(?,?,?)"
+  conn.query(sql, data, (err, results) => {
+    if(err) throw err;
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+});
 
 
 
@@ -192,6 +249,11 @@ app.post('/delete-adopciones',(req, res) => {
   })
   });
 
+
+
+  /*
+  ************* MODIFICACIONES/UPDATES *****************************************
+  */
 
 /*
   Modificar perro por consulta normal
@@ -265,6 +327,93 @@ app.post('/attended-turn', (req, res) => {
     res.json(result);
   });
 });
+
+
+/*
+  Modificar estado de campaña a activa
+  BODY -> id_campaña
+  campos: estado_activa
+  consulta: UPDATE campaña set estado_activa = "1"  WHERE id = "id_campaña"
+*/
+app.post('/activar-campaña', (req, res) => {
+  let id_campaña = req.body.id_campaña;
+  let sql = 'UPDATE campaña set estado_activa = "1"  WHERE id = "'+id_campaña+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+/*
+  Modificar estado de campaña a desactivada
+  BODY -> id_campaña
+  campos: estado_activa
+  consulta: UPDATE campaña set estado_activa = "0"  WHERE id = "id_campaña"
+*/
+app.post('/desactivar-campaña', (req, res) => {
+  let id_campaña = req.body.id_campaña;
+  let sql = 'UPDATE campaña set estado_activa = "0"  WHERE id = "'+id_campaña+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+
+/*
+  update monto turno
+  BODY -> id_turno, bonif(creo que seria como el monto de la consulta menos la bonificacion)
+  campos: id, monto
+  consulta: UPDATE turno set monto = "bonif"  WHERE id = "id_turno"
+*/
+app.post('/update-monto', (req, res) => {
+  let id_turno = req.body.id_turno;
+  let bonif = req.body.bonif;
+  let total = req.body.total;
+  let sql = 'UPDATE turno set monto = "'+total+'"  WHERE id = "'+id_turno+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+
+/*
+  update del descuento del usuario
+  BODY -> client, total
+  campos: id, monto
+  consulta: UPDATE persona set bonif_donacion = "total"  WHERE id_persona = "client"
+*/
+app.post('/update-descuento', (req, res) => {
+  let client = req.body.client;
+  let total = req.body.total;
+  let bonif = req.body.bonif;
+  let sql = 'UPDATE persona set bonif_donacion = "'+bonif+'"  WHERE id_persona = "'+client+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+/*
+  update campaña -> acutaliza el monto_actual de la campaña
+  BODY -> id_campaña, monto
+  campos: id, monto
+  consulta: UPDATE campaña set monto_actual = "monto"  WHERE id_campaña = "id_campaña"
+*/
+app.post('/update-campaña', (req, res) => {
+  let id_campaña = req.body.id_campaña;
+  let monto = req.body.monto;
+  let sql = 'UPDATE campaña set monto_actual = "'+monto+'"  WHERE id_campaña = "'+id_campaña+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
+
+/*
+  ************** GETS ***************************************************
+*/
 
 
 //get clients
@@ -366,6 +515,50 @@ app.get('/get-adopciones',(req, res) => {
   })
 });
 
+/*
+  get paseador
+  trae a todos los paseadores, los paseadores tienen el campo paseador seteado en 1(se carga asi por defecrto)
+*/
+app.get('/get-paseador', (req, res) =>{
+  let sql = 'SELECT * FROM cuidador_paseador WHERE paseador = "1"'
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
+
+/*
+  get tarjetas
+*/
+app.get('/get-tarjeta', (req, res) =>{
+  let sql = 'SELECT * FROM tarjeta'
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
+
+/*
+  get campaña
+*/
+app.get('/get-campaña', (req, res) =>{
+  let sql = 'SELECT * FROM campaña'
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
+
+/*
+  get urgencia
+*/
+app.get('/get-urgencia', (req, res) =>{
+  let sql = 'SELECT * FROM urgencia'
+  conn.query(sql, [0], (err, results) => {
+    if(err) throw err;
+    res.json(results);
+  })
+});
 
 
 //settings
@@ -378,15 +571,20 @@ app.listen(app.get('port'), () =>{
 
 /*
   modificaciones
-    nueva BD
+    
     
   metodos agregados
-    POST  delete-adopciones
-    GET   get-adopciones  
-
-
-
-
+    POST  store-paseador -> seteado por defecto en la BD como paseador
+    GET   /get-paseador -> trae solo apseadores
+    GET   get-tarjeta
+    GET  get-campaña
+    POST  store-campaña
+    POST  activar-campaña
+    POST  desactivar-campaña
+    get y post urgenica
+    post update monto y descuento
+    post  store-donacion
+    post update-campaña -> actualiza el monto_actual 
 
 
 

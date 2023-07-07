@@ -24,9 +24,9 @@ function VeteServ({log, veter}){
                         <CargaCli />
                         <CargaDog />
                         <CargaPaseador />
+                        <Clients/>
                         <Turnos />
                         <Aceptar />
-                        <Clients/>
                         <CargaAdop />
                         <MisAdopciones />
                     </div>

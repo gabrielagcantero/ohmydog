@@ -43,7 +43,7 @@ function send(event){
     else {
     
         //claculo lo que le queda de la bonificación
-        datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.total), 0);
+        datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.price), 0);
 
         let dog_con = JSON.stringify(datosCompletos); //Jsonifico
         
@@ -115,7 +115,7 @@ function Urgencia({ dog }){
                             <p>Bonificación del cliente: ${myClient.bonif_donacion}</p>
                             <div class="form-inline" >
                                 <label for="monto" style={{paddingTop:"5px"}}>Valor de la consulta: $</label>
-                                <input style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} required/>
+                                <input name="price" style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} required/>
                                 <span><button type="button" className="btn-outline-primary btn-sm" onClick={calcular}>Calcular total</button></span>
                             </div>
                             <p></p>

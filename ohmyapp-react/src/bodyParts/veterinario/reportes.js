@@ -114,86 +114,92 @@ function send(event){
     //agarro datos del formulario, creo el objeto
     let datos = new FormData(event.target);
     let datosCompletos = Object.fromEntries(datos.entries());
+
+    //controla que se haya ingresado un valor en el campo de total
+    if (datosCompletos.total === "")
+        alert("Debe ingresar un valor en 'Valor de la consulta' y calcular el total.");
+    else {
     
-    //agrego el tipo de vacuna si es necesario
-    if (datosCompletos.motive === "Vacuna tipo A"){
-        datosCompletos.tipo = "A";
-        datosCompletos.motive = "Vacuna";
-    } else if (datosCompletos.motive === "Vacuna tipo B"){
-        if (datosCompletos.vacunado === "Sí"){
-            datosCompletos.tipo = "B";
-            datosCompletos.nombre = "Antirrábica";
-            datosCompletos.dosis = "-";
+        //agrego el tipo de vacuna si es necesario
+        if (datosCompletos.motive === "Vacuna tipo A"){
+            datosCompletos.tipo = "A";
+            datosCompletos.motive = "Vacuna";
+        } else if (datosCompletos.motive === "Vacuna tipo B"){
+            if (datosCompletos.vacunado === "Sí"){
+                datosCompletos.tipo = "B";
+                datosCompletos.nombre = "Antirrábica";
+                datosCompletos.dosis = "-";
+            }
+            datosCompletos.motive = "Vacuna";
         }
-        datosCompletos.motive = "Vacuna";
-    }
 
-    //claculo lo que le queda de la bonificación
-    datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.total), 0);
+        //claculo lo que le queda de la bonificación
+        datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.total), 0);
 
-    let dog_con = JSON.stringify(datosCompletos); //Jsonifico
+        let dog_con = JSON.stringify(datosCompletos); //Jsonifico
+        
+        //los mando donde corresponda
+        switch (datosCompletos.motive){
+            case "Consulta": 
+                exportConsulta(dog_con);
+                break;
+            case "Castración":
+                exportCastracion(dog_con);
+                break;
+            case "Vacuna":
+                exportVacun(dog_con);
+                break;
+            case "Desparasitación":
+                exportAntip(dog_con);
+        }
+        //guarda observaciones
+        fetch('http://localhost:3000/store-obs', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: dog_con
+        }).then(function(response) {
+            return response.json();
+        });
     
-    //los mando donde corresponda
-    switch (datosCompletos.motive){
-        case "Consulta": 
-            exportConsulta(dog_con);
-            break;
-        case "Castración":
-            exportCastracion(dog_con);
-            break;
-        case "Vacuna":
-            exportVacun(dog_con);
-            break;
-        case "Desparasitación":
-            exportAntip(dog_con);
-      }
-    //guarda observaciones
-    fetch('http://localhost:3000/store-obs', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: dog_con
-    }).then(function(response) {
-        return response.json();
-    });
- 
-    //pone el turno como atendido
-    fetch('http://localhost:3000/attended-turn', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: dog_con
-    }).then(function(response) {
-        return response.json();
-    });
-
-    //update del monto del turno (body: dog_con campos: id_turno, bonif )
-    /*fetch('http://localhost:3000/update-monto', {
-         method: 'POST',
-        headers: {
+        //pone el turno como atendido
+        fetch('http://localhost:3000/attended-turn', {
+            method: 'POST',
+            headers: {
             'Content-Type': 'application/json'
-        },
-        body: dog_con
-    }).then(function(response) {
-        return response.json(); 
-    });*/
+            },
+            body: dog_con
+        }).then(function(response) {
+            return response.json();
+        });
 
-    //update del descuento del usuario (body: dog_con campos: client, total )
-    /*fetch('http://localhost:3000/update-descuento', {
-        method: 'POST',
-        headers: {  
-            'Content-Type': 'application/json'
-        },
-        body: dog_con
-    }).then(function(response) {
-        return response.json();
-    });*/
+        //update del monto del turno (body: dog_con campos: id_turno, bonif )
+        /*fetch('http://localhost:3000/update-monto', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: dog_con
+        }).then(function(response) {
+            return response.json(); 
+        });*/
 
-    //emito alerta y mensaje de la HU
-    alert("La libreta fue actualizada exitosamente exitosamente.");
-    window.location.href = window.location.href;
+        //update del descuento del usuario (body: dog_con campos: client, total )
+        /*fetch('http://localhost:3000/update-descuento', {
+            method: 'POST',
+            headers: {  
+                'Content-Type': 'application/json'
+            },
+            body: dog_con
+        }).then(function(response) {
+            return response.json();
+        });*/
+
+        //emito alerta y mensaje de la HU
+        alert("La libreta fue actualizada exitosamente exitosamente.");
+        window.location.href = window.location.href;
+    }
 }
 
 function consultar(event){
@@ -305,7 +311,7 @@ function Reportes ({ id, setShowForm }){
                                 <p>Bonificación del cliente: ${myClient.bonif_donacion}</p>
                                 <div class="form-inline" >
                                     <label for="monto" style={{paddingTop:"5px"}}>Valor de la consulta: $</label>
-                                    <input style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} />
+                                    <input style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} required/>
                                     <span><button type="button" className="btn-outline-primary btn-sm" onClick={calcular}>Calcular total</button></span>
                                 </div>
                                 <p></p>

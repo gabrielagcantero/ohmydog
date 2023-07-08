@@ -75,6 +75,15 @@ function send(event){
     }
 }
 
+function setearFecha(){
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    let day = date.getDay()+2;
+    return ''+year+'-'+month+'-'+day+''
+}
+
+
 function Urgencia({ dog }){
     const [price, setPrice] = useState(0);
     const [total, setTotal] = useState('');
@@ -123,7 +132,7 @@ function Urgencia({ dog }){
                         </div>
                         <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                             <input name="id_perro" type="hidden" value={myDog.id} />
-                            <input name="date" type="hidden" value={new Date()} />
+                            <input name="date" type="hidden" value={setearFecha()} />
                             <input name="monto" type="hidden" value={total} />
                             <input name="client" type="hidden" value={myClient.id_persona} />
                             <input name="bonif" type="hidden" value={myClient.bonif_donacion} />

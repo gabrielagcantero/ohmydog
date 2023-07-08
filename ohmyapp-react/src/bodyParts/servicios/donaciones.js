@@ -72,13 +72,14 @@ function donar(event){
         .then(function(response) {return response.json();});
 
         //guardo la donacion en la tabla donar para tener el los historiales de las donaciones
-        fetch('http://localhost:3000/store-donacion, {
+        fetch('http://localhost:3000/store-donacion', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
         },
         body: myDonacion})
         .then(function(response) {return response.json();});
+        
     }
 
 

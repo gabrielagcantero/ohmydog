@@ -13,12 +13,17 @@ function getPaseadores(){
 let pas = getPaseadores();
 
 //arma la lista de paseadores
-const pasList = () => {
+const pasList = (zona) => {
     let children;
+    let myPas;
+    if (zona !== "todas")
+        myPas = pas.filter((e) => e.zona === zona);
+    else
+        myPas = pas;
 
     //si hay paseadores devuelve la lista
-    if (pas.length > 0){ 
-        children = pas.map((e) => {
+    if (myPas.length > 0){ 
+        children = myPas.map((e) => {
             return( 
                 <div className="col-10 ">
                     <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
@@ -45,9 +50,9 @@ const pasList = () => {
     //si no hay clientes devuelve mensaje
     else{ 
         children = (
-            <div className="col-12 col-md">
+            <div className="col-10">
                 <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
-                    <strong>En este momento no hay paseadores registrados en el sistema</strong> 
+                    <strong>En este momento no hay paseadores registrados en el sistema para esta zona</strong> 
                 </h6>
             </div>
     )}
@@ -55,8 +60,41 @@ const pasList = () => {
     return children;
 }
 
+const selectZona = (zona, setZona) => {
+
+    const handleOptionChange = (event) => {
+        const selectedValue = event.target.value;
+        setZona(selectedValue);
+    };
+
+    return(
+        <div className="col-10 form-inline">
+            <label for="zona" className="form-label" style={{marginTop: "10px", paddingRight: "10px"}}>Zona:</label>
+            <select className="form-select" style={{width: "30%"}} name="zona" value={zona} onChange={handleOptionChange}>
+                <option value="todas" selected>Todas</option>
+                <option value="Bosque">Bosque</option>
+                <option value="Parque Alberti">Parque Alberti</option>
+                <option value="Parque Castelli">Parque Castelli</option>
+                <option value="Parque Saavedra">Parque Saavedra</option>
+                <option value="Parque Vucetich">Parque Vucetich</option>
+                <option value="Plaza Alsina">Plaza Alsina</option>
+                <option value="Plaza Azcuénaga">Plaza Azcuénaga</option>
+                <option value="Plaza Belgrano">Plaza Belgrano</option>
+                <option value="Plaza Dardo Rocha">Plaza Dardo Rocha</option>
+                <option value="Plaza Hipólito Yrigoyen">Plaza Hipólito Yrigoyen</option>
+                <option value="Plaza Italia">Plaza Italia</option>
+                <option value="Plaza Matheu">Plaza Matheu</option>
+                <option value="Plaza Moreno">Plaza Moreno</option>
+                <option value="Plaza San Martín">Plaza San Martín</option> 
+            </select>
+            <br/>
+        </div>
+    )
+}
+
 function Paseadores(){
     let [showPaseadores, setShowPaseadores] = useState(false);
+    let [zona, setZona] = useState("todas")
 
     //muestra/oculta los clientes
     const muestraPaseadores = () => {
@@ -76,7 +114,8 @@ function Paseadores(){
                         <div >
                             <div className="card-wrapper">
                                 <div className="row align-items-center">
-                                        {pasList()}
+                                        {selectZona(zona, setZona)}<br/><br/><br/>
+                                        {pasList(zona)}
                                 </div>
                             </div>
                         </div>

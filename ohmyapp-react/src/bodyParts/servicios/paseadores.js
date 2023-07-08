@@ -26,13 +26,16 @@ const pasList = () => {
                         <button value={e.email} className="btn btn-success" >Contactar</button> 
                     </h6>
                     <div>
-                        <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                        <h6 className="card-title mbr-fonts-style mb-3 display-8">
                             <strong>Zona: {(e.zona)} </strong> 
                         </h6>
-                        <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                        <h6 className="card-title mbr-fonts-style mb-3 display-8">
+                            <strong>Precio: ${(e.monto)}/hora </strong> 
+                        </h6>
+                        <h6 className="card-title mbr-fonts-style mb-3 display-8">
                             <strong>Email: {e.email} </strong> 
                         </h6>
-                        <h6 className="card-title2 mbr-fonts-style mb-3 display-7">
+                        <h6 className="card-title mbr-fonts-style mb-3 display-8">
                             <strong>Teléfono: {e.telefono} </strong> 
                         </h6>
                         <br/><br/>

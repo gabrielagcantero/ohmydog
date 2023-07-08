@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 function getMails(){
     const mails= [];
 
-    fetch('http://localhost:3000/get-paseador')
+    fetch('http://localhost:3000/get-paseadores')
         .then((response) => response.json())
-        .then((results) => {results.map((e) => mails.push(e.mail));
+        .then((results) => {results.map((e) => mails.push(e.email));
         });
 
     return mails;
@@ -16,6 +16,7 @@ let mails = getMails();
 
 //guarda en "myPaseador" los datos del paseador en formato Json y los pasa a la BD
 function exportPas(event){
+    event.preventDefault(); //para que no refresque por defecto
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
     
@@ -25,26 +26,29 @@ function exportPas(event){
         alert("Debe ingresar el precio del servicio");
     } else {
         //ver si el mail ya está registrado
-        if (mails.includes(datosCompletos.mail))
+        if (mails.includes(datosCompletos.email))
             alert("El mail que ingresó ya se encuentra registrado en el sistema de paseadores")
         else {//si está todo bien
             let myPaseador = JSON.stringify(datosCompletos)
-
-            //lo lleva a la BD
-            fetch('http://localhost:3000/store-paseador', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: myPaseador
-            }).then(function(response) {
-                return response.json();
-            });
-
-            alert("Los datos del nuevo paseador han sido guardados");
-            window.location.href = window.location.href;
+            window.confirm("Los datos serán agregados a la lista de paseadores. Desea continuar?") && send(myPaseador);
         }
     }
+}
+
+function send(myPaseador){
+    //lo lleva a la BD
+    fetch('http://localhost:3000/store-paseador', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: myPaseador
+    }).then(function(response) {
+        return response.json();
+    });
+
+    alert("Los datos del nuevo paseador han sido guardados");
+    window.location.href = window.location.href;
 }
 
 function CargaPaseador(){
@@ -52,11 +56,6 @@ function CargaPaseador(){
     let [showCargaPas, setShowCargaPas] = useState(false); 
 
     const CargaPas = () => {setShowCargaPas(!showCargaPas)}; //muestra/oculta el formulario
-
-    const guardar = (event) => {
-            event.preventDefault(); //para que no refresque por defecto
-            exportPas(event);
-        };
 
     // formulario para carga de paseador
     const formCargaPaseador = (
@@ -70,7 +69,7 @@ function CargaPaseador(){
                 </div>
                 <div class="row justify-content-center mt-12" style={{marginTop: "20px"}}>
                     <div class="col-lg-12 mx-auto mbr-form">
-                        <form onSubmit={guardar} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
+                        <form onSubmit={exportPas} class="mbr-form form-with-styler mx-auto" data-form-title="Carga de cliente" id="cliForm">
                             <div class="dragArea row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                                     <input type="text" pattern="[a-zA-Z ]{2,40}" name="frist_name" placeholder="Nombre" className="form-control" required/>

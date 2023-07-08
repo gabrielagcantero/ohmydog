@@ -1,5 +1,5 @@
 import Adopciones from "./adopciones";
-import Urgencias from "./urgencias";
+import Paseadores from "./paseadores";
 
 function Services(){
     return(
@@ -14,7 +14,7 @@ function Services(){
                 </div>
                 <div className="row">  
                     <Adopciones />
-                    <Urgencias />
+                    <Paseadores />
                 </div>
             </div>
         </section>

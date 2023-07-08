@@ -22,7 +22,7 @@ const pasList = () => {
             return( 
                 <div className="col-10 ">
                     <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
-                        <strong>{e.frist_name} + ' ' + {e.last_name} </strong>
+                        <strong>{e.frist_name} {e.last_name} </strong>
                         <button value={e.email} className="btn btn-success" >Contactar</button> 
                     </h6>
                     <div>

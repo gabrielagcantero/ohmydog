@@ -149,14 +149,17 @@ app.post('/store-antiparasitario',(req, res) => {
 /*
   Agrega un nuevo paseador, campo paseador por defecto en 1
   BODY -> frist_name, last_name, servicio(por defecto la BD carga como paseador), monto, tel y mail 
-  consulta: INSERT INTO cuidador_paseador(email, frist_name, telefono, pass, last_name, monto) VALUES(mail, frist_name, tel, pass, last_name, monto)
+  consulta: INSERT INTO cuidador_paseador(email, frist_name, telefono, pass, last_name, monto, zona) VALUES(mail, frist_name, tel, pass, last_name, monto)
 */
-app.post('/store-cuidador_paseador', (req, res) => {
+app.post('/store-paseador', (req, res) => {
+  console.log("0");
   let d = req.body;
-  let data = [d.mail, d.frist_name, d.tel, d.pass, d.last_name, d.monto];
-  let sql = "INSERT INTO cuidador_paseador(id_perro, mail) VALUES(?,?,?,?,?,?)"
+  let data = [d.email, d.frist_name, d.telefono, d.last_name, d.precio, d.zona];
+  let sql = "INSERT INTO cuidador_paseador(email, frist_name, telefono, last_name, monto, zona) VALUES(?,?,?,?,?,?)"
+  console.log("1");
   conn.query(sql, data, (err, results) => {
     if(err) throw err;
+    console.log("2");
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   });
 });
@@ -519,7 +522,7 @@ app.get('/get-adopciones',(req, res) => {
   get paseador
   trae a todos los paseadores, los paseadores tienen el campo paseador seteado en 1(se carga asi por defecrto)
 */
-app.get('/get-paseador', (req, res) =>{
+app.get('/get-paseadores', (req, res) =>{
   let sql = 'SELECT * FROM cuidador_paseador WHERE paseador = "1"'
   conn.query(sql, [0], (err, results) => {
     if(err) throw err;

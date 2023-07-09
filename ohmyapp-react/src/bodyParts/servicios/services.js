@@ -1,6 +1,7 @@
 import Adopciones from "./adopciones";
 import Paseadores from "./paseadores";
 import PedirCampaña from "./pedirCampaña";
+import VerCampañas from "./verCampañas";
 
 function Services(){
     return(
@@ -15,10 +16,11 @@ function Services(){
                 </div>
                 <div className="row">  
                     <Adopciones />
-                    <Paseadores />
+                    <VerCampañas />
                     {//no muestra la tarjeta si el usuario es un vetrinario
                     !localStorage.getItem("user")? <PedirCampaña />
                     : !JSON.parse(localStorage.getItem("user")).veter && <PedirCampaña />}
+                    <Paseadores />
                 </div>
             </div>
         </section>

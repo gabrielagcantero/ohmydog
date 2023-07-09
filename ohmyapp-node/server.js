@@ -571,8 +571,8 @@ app.get('/get-campaña', (req, res) =>{
 /*
   get campañas activas
 */
-app.get('/get-campaña-activa', (req, res) =>{
-  let sql = 'SELECT * FROM campaña WHERE estado_activa = "1"'
+app.get('/get-campana-activa', (req, res) =>{
+  let sql = 'SELECT * FROM campana WHERE estado_activa = "1"'
   conn.query(sql, [0], (err, results) => {
     if(err) throw err;
     res.json(results);

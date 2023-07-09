@@ -156,7 +156,9 @@ function Paseadores(){
                     <div className="col-10 ">
                         <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4">
                             <strong>{e.frist_name} {e.last_name} </strong>
-                            <button value={e.email} className="btn btn-success" onClick={muestraForm}>Contactar</button> 
+                            {//no muestra el botón si el usuario es un vetrinario
+                            !localStorage.getItem("user")? <button value={e.email} className="btn btn-success" onClick={muestraForm}>Contactar</button>
+                            : !JSON.parse(localStorage.getItem("user")).veter && <button value={e.email} className="btn btn-success" onClick={muestraForm}>Contactar</button>}
                         </h6>
                         <div>
                             <h6 className="card-title mbr-fonts-style mb-3 display-8">

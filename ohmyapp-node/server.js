@@ -205,8 +205,8 @@ app.post('/store-urgencia', (req, res) => {
 */
 app.post('/store-donacion', (req, res) => {
   let d = req.body;
-  let data = [d.id_persona, d.id_campaña, d.monto];
-  let sql = "INSERT INTO urgencia(id_persona, id_campaña, monto) VALUES(?,?,?)"
+  let data = [d.id_persona, d.id_campana, d.monto];
+  let sql = "INSERT INTO donar(id_persona, id_campana, monto) VALUES(?,?,?)"
   conn.query(sql, data, (err, results) => {
     if(err) throw err;
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
@@ -338,9 +338,9 @@ app.post('/attended-turn', (req, res) => {
   campos: estado_activa
   consulta: UPDATE campaña set estado_activa = "1"  WHERE id = "id_campaña"
 */
-app.post('/activar-campaña', (req, res) => {
-  let id_campaña = req.body.id_campaña;
-  let sql = 'UPDATE campaña set estado_activa = "1"  WHERE id = "'+id_campaña+'"';
+app.post('/activar-campana', (req, res) => {
+  let id_campana = req.body.id_campana;
+  let sql = 'UPDATE campana set estado_activa = "1"  WHERE id = "'+id_campana+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
     res.json(result);
@@ -353,9 +353,9 @@ app.post('/activar-campaña', (req, res) => {
   campos: estado_activa
   consulta: UPDATE campaña set estado_activa = "0"  WHERE id = "id_campaña"
 */
-app.post('/desactivar-campaña', (req, res) => {
-  let id_campaña = req.body.id_campaña;
-  let sql = 'UPDATE campaña set estado_activa = "0"  WHERE id = "'+id_campaña+'"';
+app.post('/desactivar-campana', (req, res) => {
+  let id_campana = req.body.id_campana;
+  let sql = 'UPDATE campana set estado_activa = "0"  WHERE id = "'+id_campana+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
     res.json(result);
@@ -404,10 +404,10 @@ app.post('/update-descuento', (req, res) => {
   campos: id, monto
   consulta: UPDATE campaña set monto_actual = "monto"  WHERE id_campaña = "id_campaña"
 */
-app.post('/update-campaña', (req, res) => {
-  let id_campaña = req.body.id_campaña;
+app.post('/update-campana', (req, res) => {
+  let id_campana = req.body.id_campana;
   let monto = req.body.monto;
-  let sql = 'UPDATE campaña set monto_actual = "'+monto+'"  WHERE id_campaña = "'+id_campaña+'"';
+  let sql = 'UPDATE campana set monto_actual = "'+monto+'"  WHERE id_campana = "'+id_campana+'"';
   conn.query(sql, (err, result) => {
     if(err) throw err;
     res.json(result);
@@ -559,8 +559,8 @@ app.get('/get-tarjeta', (req, res) =>{
 /*
   get campaña
 */
-app.get('/get-campaña', (req, res) =>{
-  let sql = 'SELECT * FROM campaña'
+app.get('/get-campana', (req, res) =>{
+  let sql = 'SELECT * FROM campana'
   conn.query(sql, [0], (err, results) => {
     if(err) throw err;
     res.json(results);

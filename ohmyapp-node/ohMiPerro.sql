@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-07-2023 a las 01:40:56
+-- Tiempo de generación: 10-07-2023 a las 01:45:44
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -65,15 +65,14 @@ INSERT INTO `antiparasitario` (`id_antiparasitario`, `id_perro`, `nombre`, `cant
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `campaña`
+-- Estructura de tabla para la tabla `campana`
 --
 
-CREATE TABLE `campaña` (
-  `id_campaña` int(11) NOT NULL,
+CREATE TABLE `campana` (
+  `id_campana` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `mail_persona` varchar(50) NOT NULL,
   `descripcion` varchar(150) NOT NULL,
-  `monto` int(11) NOT NULL,
+  `monto` decimal(11,2) NOT NULL DEFAULT 0.00,
   `fecha_cierre` varchar(50) NOT NULL,
   `estado_activa` tinyint(1) NOT NULL DEFAULT 1,
   `monto_actual` decimal(11,2) NOT NULL DEFAULT 0.00
@@ -97,6 +96,13 @@ CREATE TABLE `cuidador_paseador` (
   `zona` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `cuidador_paseador`
+--
+
+INSERT INTO `cuidador_paseador` (`id_cuipas`, `email`, `frist_name`, `telefono`, `pass`, `last_name`, `paseador`, `monto`, `zona`) VALUES
+(1, 'joshelpaseador@gmail.com', 'josh', '123456789456', NULL, 'washington', 1, 0.02, 'Parque Vucetich');
+
 -- --------------------------------------------------------
 
 --
@@ -105,7 +111,7 @@ CREATE TABLE `cuidador_paseador` (
 
 CREATE TABLE `donar` (
   `id_persona` int(11) NOT NULL,
-  `id_campaña` int(11) NOT NULL,
+  `id_campana` int(11) NOT NULL,
   `monto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -312,6 +318,16 @@ CREATE TABLE `urgencia` (
   `monto` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `urgencia`
+--
+
+INSERT INTO `urgencia` (`id_urgencia`, `id_perro`, `date`, `obs`, `monto`) VALUES
+(1, 44, '2023-06-06', 'asdas', 1232),
+(2, 43, '2023-07-06', 'asdas', 123),
+(3, 44, '2023-07-08', 'jhg', 12312),
+(4, 44, '2023-07-08', 'asd', 123);
+
 -- --------------------------------------------------------
 
 --
@@ -357,10 +373,10 @@ ALTER TABLE `antiparasitario`
   ADD PRIMARY KEY (`id_antiparasitario`);
 
 --
--- Indices de la tabla `campaña`
+-- Indices de la tabla `campana`
 --
-ALTER TABLE `campaña`
-  ADD PRIMARY KEY (`id_campaña`);
+ALTER TABLE `campana`
+  ADD PRIMARY KEY (`id_campana`);
 
 --
 -- Indices de la tabla `cuidador_paseador`
@@ -372,7 +388,7 @@ ALTER TABLE `cuidador_paseador`
 -- Indices de la tabla `donar`
 --
 ALTER TABLE `donar`
-  ADD PRIMARY KEY (`id_persona`,`id_campaña`);
+  ADD PRIMARY KEY (`id_persona`,`id_campana`);
 
 --
 -- Indices de la tabla `enfermedad`
@@ -451,16 +467,16 @@ ALTER TABLE `antiparasitario`
   MODIFY `id_antiparasitario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `campaña`
+-- AUTO_INCREMENT de la tabla `campana`
 --
-ALTER TABLE `campaña`
-  MODIFY `id_campaña` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `campana`
+  MODIFY `id_campana` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `cuidador_paseador`
 --
 ALTER TABLE `cuidador_paseador`
-  MODIFY `id_cuipas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cuipas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `enfermedad`
@@ -508,7 +524,7 @@ ALTER TABLE `turno`
 -- AUTO_INCREMENT de la tabla `urgencia`
 --
 ALTER TABLE `urgencia`
-  MODIFY `id_urgencia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_urgencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `vacuna`

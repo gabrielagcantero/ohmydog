@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 
 /*
-    agarra los datos del formulario de campañay los baja a la BD
+    agarra los datos del formulario de campaña y los baja a la BD
 */
 function exportCampaña(event){
     const datos = new FormData(event.target); //toma los datos del formulario
@@ -31,4 +31,10 @@ function exportCampaña(event){
     alert("La campaña se creo correctamente");
     window.location.href = window.location.href;
 }
+
+function CargaCampaña() {
+    console.log("CargaCampaña");
+}
+
+export default CargaCampaña;
 

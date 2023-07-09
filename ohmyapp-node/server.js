@@ -592,19 +592,6 @@ app.get('/get-urgencia', (req, res) =>{
 });
 
 
-/*
-  get donar
-*/
-app.get('/get-donar', (req, res) =>{
-  let sql = 'SELECT * FROM donar'
-  conn.query(sql, [0], (err, results) => {
-    if(err) throw err;
-    res.json(results);
-  })
-});
-
-
-
 //settings
 app.set('port', process.env.PORT || 3000);
 

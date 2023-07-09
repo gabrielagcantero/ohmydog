@@ -6,6 +6,7 @@ import Clients from './veterinario/clients';
 import CargaAdop from './servicios/cargaAdop';
 import MisAdopciones from './servicios/misAdopciones';
 import CargaPaseador from './veterinario/cargaPaseador';
+import CargaCampaña from './veterinario/cargaCampaña';
 
 function VeteServ({log, veter}){
 
@@ -24,6 +25,7 @@ function VeteServ({log, veter}){
                         <CargaCli />
                         <CargaDog />
                         <CargaPaseador />
+                        <CargaCampaña />
                         <Clients/>
                         <Turnos />
                         <Aceptar />

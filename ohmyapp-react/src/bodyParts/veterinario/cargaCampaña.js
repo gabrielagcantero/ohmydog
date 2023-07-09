@@ -27,7 +27,7 @@ function exportCampaña(datosCompletos){
         let myCampaña = JSON.stringify(datosCompletos); //lo paso a JSON
 
         //lo lleva a la BD
-        fetch('http://localhost:3000/store-campaña', {
+        fetch('http://localhost:3000/store-campana', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'

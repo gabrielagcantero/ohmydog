@@ -168,12 +168,12 @@ app.post('/store-paseador', (req, res) => {
 /*
   store campaña
   BODY -> nombre, monto, desc, date_cierre, | mail
-  consulta: INSERT INTO campaña(nombre, mail_persona, descripcion, monto, fecha_cierre) VALUES(nombre, mail, desc, monto, date_cierre)
+  consulta: INSERT INTO campaña(nombre, descripcion, monto, fecha_cierre) VALUES(nombre, desc, monto, date_cierre)
 */
-app.post('/store-campaña', (req, res) => {
+app.post('/store-campana', (req, res) => {
   let d = req.body;
-  let data = [d.nombre, d.mail, d.desc, d.monto, d.date_cierre];
-  let sql = "INSERT INTO campaña(nombre, mail_persona, descripcion, monto, fecha_cierre) VALUES(?,?,?,?,?)"
+  let data = [d.nombre, d.desc, d.monto, d.date_cierre];
+  let sql = "INSERT INTO campana(nombre, descripcion, monto, fecha_cierre) VALUES(?,?,?,?)"
   conn.query(sql, data, (err, results) => {
     if(err) throw err;
     res.send(JSON.stringify({"status": 200, "error": null, "response": results}));

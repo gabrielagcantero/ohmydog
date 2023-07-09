@@ -414,9 +414,20 @@ app.post('/update-campaña', (req, res) => {
   });
 });
 
-//update tarjeta
-
-
+/*
+  update tarjeta -> actualiza el saldo de la misma(despues de hacer una donacion)
+  BODY ->  numero, saldo_actualizado
+  consulta: UPDATE tarjeta set saldo = "saldo_actualizado" WHERE numero = "numero"
+*/
+app.post('/update-tarjeta', (req, res) => {
+  let numero = req.body.numero;
+  let saldo_actualizado = req.body.saldo_actualizado;
+  let sql = 'UPDATE tarjeta set saldo = "'+saldo_actualizado+'" WHERE numero = "'+numero+'"';
+  conn.query(sql, (err, result) => {
+    if(err) throw err;
+    res.json(result);
+  });
+});
 
 /*
   ************** GETS ***************************************************

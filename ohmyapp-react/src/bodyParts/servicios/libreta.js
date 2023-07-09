@@ -59,11 +59,23 @@ function getVacunas(){
     return vacunas;
 }
 
+function getUrgencias(){
+    const urgencias= [];
+
+    fetch('http://localhost:3000/get-urgencia')
+        .then((response) => response.json())
+        .then((results) => {results.map((e) => urgencias.push(e));
+        });
+    
+    return urgencias;
+}
+
 let dogs = getDogs();
 let turns = getTurns();
 let ills = getIlls();
 let antiP = getAntiP();
 let vacunas = getVacunas();
+let urgencias = getUrgencias();
 
 //muestra el peso del perro
 function peso(peso){
@@ -112,6 +124,7 @@ function Turnos(dog){
                 <div style={{width: "98%"}}>
                     <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Turno de {t.motive} del día {t.day.substring(0,10)} por la {t.hour}</strong></h6>
                     <p className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Observaciones: </strong>{t.observaciones? t.observaciones : "No hay observaciones"}</p>
+                    <p className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Importe abonado: $</strong>{t.monto}</p>
                 </div>
             )
         })
@@ -158,6 +171,24 @@ function vacunasB(dog){
     return children;
 }
 
+function Urgencias(dog){
+    let urg = urgencias.filter((e => (e.id_perro === dog)));
+    let children;
+    if (urg.length > 0){
+        children = urg.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).map((e) => {
+            return (
+                <div style={{width: "98%"}}>
+                    <h6 className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Urgencia del día {e.date.substring(0,10)}</strong></h6>
+                    <p className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Observaciones: </strong>{e.obs? e.obs : "No hay observaciones"}</p>
+                    <p className="card-title2 mbr-fonts-style m-0 mb-3 display-4"><strong>Importe abonado: $</strong>{e.monto}</p>
+                </div>
+            )
+        })
+    } else
+        children =<p style={{width: "98%"}} className="card-title2 mbr-fonts-style m-0 mb-3 display-4">Aún no se han registrado urgencias para este perro.</p>;
+    return children;
+}
+
 function Libreta({ dog }){
     let myDog = dogs.find((d => d.id === dog));
     return(
@@ -197,6 +228,10 @@ function Libreta({ dog }){
                             <strong>Historial de turnos</strong>
                         </h6>
                         {Turnos(dog)}
+                        <h6  className="card-title mbr-fonts-style m-0 mb-3 display-4">
+                            <strong>Historial de Urgencias</strong>
+                        </h6>
+                        {Urgencias(dog)}
                 </div>
             </div>
         </section>

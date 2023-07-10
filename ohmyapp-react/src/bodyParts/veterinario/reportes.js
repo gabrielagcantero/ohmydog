@@ -116,7 +116,7 @@ function send(event){
     let datosCompletos = Object.fromEntries(datos.entries());
 
     //controla que se haya ingresado un valor en el campo de total
-    if (datosCompletos.total === "")
+    if (!datosCompletos.total)
         alert("Debe ingresar un valor en 'Valor de la consulta' y calcular el total.");
     else {
     

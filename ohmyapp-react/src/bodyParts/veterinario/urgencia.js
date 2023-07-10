@@ -42,11 +42,11 @@ function send(event){
         alert("Debe ingresar un valor en 'Valor de la consulta' y calcular el total.");
     else {
         //claculo lo que le queda de la bonificación
-        datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.price), 0);
+        datosCompletos.bonif = Math.max(parseFloat(datosCompletos.bonif) - parseFloat(datosCompletos.monto), 0);
 
         let dog_con = JSON.stringify(datosCompletos); //Jsonifico
         
-        //manda a la BD (body: dog_con campos: id_perro, date, obs, monto)
+        //manda a la BD (body: dog_con campos: id_perro, date, obs, total)
         fetch('http://localhost:3000/store-urgencia', {
             method: 'POST',
             headers: {
@@ -57,7 +57,7 @@ function send(event){
             return response.json();
         });
 
-        //update del descuento del usuario (body: dog_con campos: client, total )
+        //update del descuento del usuario (body: dog_con campos: client, monto )
         fetch('http://localhost:3000/update-descuento', {
             method: 'POST',
             headers: {  
@@ -123,7 +123,7 @@ function Urgencia({ dog }){
                             <p>Bonificación del cliente: ${myClient.bonif_donacion}</p>
                             <div class="form-inline" >
                                 <label for="monto" style={{paddingTop:"5px"}}>Valor de la consulta: $</label>
-                                <input name="price" style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} required/>
+                                <input name="monto" style={{width:"20%", marginLeft:"5px", marginRight:"5px"}} type="number" step="0.01" min="0.00" value={price} onChange={handlePrice} required/>
                                 <span><button type="button" className="btn-outline-primary btn-sm" onClick={calcular}>Calcular total</button></span>
                             </div>
                             <p></p>
@@ -131,8 +131,8 @@ function Urgencia({ dog }){
                         </div>
                         <div className="col-lg-12 col-md-12 col-sm-12 form-group mb-3" >
                             <input name="id_perro" type="hidden" value={myDog.id} />
-                            <input name="date" type="hidden" value={setearFecha()} />
-                            <input name="monto" type="hidden" value={total} />
+                            <input name="date" type="hidden" value={new Date().toISOString().substring(0,10)} />
+                            <input name="total" type="hidden" value={total} />
                             <input name="client" type="hidden" value={myClient.id_persona} />
                             <input name="bonif" type="hidden" value={myClient.bonif_donacion} />
                         </div>

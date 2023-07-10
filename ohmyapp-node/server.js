@@ -188,7 +188,7 @@ app.post('/store-campana', (req, res) => {
 */
 app.post('/store-urgencia', (req, res) => {
   let d = req.body;
-  let data = [d.id_perro, d.date, d.obs, d.monto];
+  let data = [d.id_perro, d.date, d.obs, d.total];
   let sql = "INSERT INTO urgencia(id_perro, date, obs, monto) VALUES(?,?,?,?)"
   conn.query(sql, data, (err, results) => {
     if(err) throw err;

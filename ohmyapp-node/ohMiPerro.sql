@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-07-2023 a las 01:45:44
+-- Tiempo de generación: 10-07-2023 a las 04:10:27
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -72,7 +72,7 @@ CREATE TABLE `campana` (
   `id_campana` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `descripcion` varchar(150) NOT NULL,
-  `monto` decimal(11,2) NOT NULL DEFAULT 0.00,
+  `monto` decimal(11,2) DEFAULT 0.00,
   `fecha_cierre` varchar(50) NOT NULL,
   `estado_activa` tinyint(1) NOT NULL DEFAULT 1,
   `monto_actual` decimal(11,2) NOT NULL DEFAULT 0.00

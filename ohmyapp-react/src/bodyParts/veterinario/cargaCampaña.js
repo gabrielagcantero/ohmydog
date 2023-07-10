@@ -7,17 +7,15 @@ import React, { useState } from "react";
 function controlCampaña(event){
     const datos = new FormData(event.target); //toma los datos del formulario
     const datosCompletos = Object.fromEntries(datos.entries()); //los convierte en un objeto
+
+    if (!datosCompletos.monto) datosCompletos.monto = null; //si no se ingresa monto, se pone 0
     
     //Controles
     //control Fecha -> si la fecha de finalizacion ingresada es previa a la actual
     if (new Date(datosCompletos.date_cierre).getTime() < new Date().getTime()){ 
         alert("La fecha de finalizacion de campaña debe ser posterior a la fecha actual")
     }else{
-        //control de los campos incompletos
-        if (!datosCompletos.monto)
-            alert("Debe ingresar un monto a recaudar");
-        else
-            window.confirm("Se creará una nueva campaña de donación. ¿Desea continuar?") && exportCampaña(datosCompletos);
+        window.confirm("Se creará una nueva campaña de donación con los datos proporcionados. ¿Desea continuar?") && exportCampaña(datosCompletos);
     }
 }
 

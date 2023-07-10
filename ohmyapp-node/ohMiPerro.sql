@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-07-2023 a las 04:10:27
+-- Tiempo de generación: 10-07-2023 a las 15:45:15
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -60,7 +60,8 @@ CREATE TABLE `antiparasitario` (
 --
 
 INSERT INTO `antiparasitario` (`id_antiparasitario`, `id_perro`, `nombre`, `cant`, `date`) VALUES
-(1, 44, 'fgh', 12.00, '2023-08-02');
+(1, 44, 'fgh', 12.00, '2023-08-02'),
+(2, 44, 'curaplus', 12.00, '2023-08-02');
 
 -- --------------------------------------------------------
 
@@ -300,9 +301,9 @@ INSERT INTO `turno` (`id`, `client`, `id_libreta_sanitaria`, `day`, `hour`, `tip
 (36, 'philippaeilhartchat@gmail.com', NULL, '2023-06-29', 'tarde', NULL, NULL, NULL, NULL, NULL, 45, 'Consulta', 1, NULL, 0),
 (38, 'checoxis2@gmail.com', NULL, '2023-07-23', 'mañana', NULL, NULL, 0, NULL, 'asdfgh', 44, 'Vacuna tipo A', 1, NULL, 1),
 (39, 'checoxis2@gmail.com', NULL, '2023-07-29', 'tarde', NULL, 800, 0, NULL, 'rabiososo', 43, 'Vacuna tipo B', 1, NULL, 1),
-(40, 'checoxis2@gmail.com', NULL, '2023-08-02', 'tarde', NULL, NULL, 0, NULL, '', 44, 'Desparasitación', 1, NULL, 1),
+(40, 'checoxis2@gmail.com', NULL, '2023-08-02', 'tarde', NULL, 3000, 0, NULL, 'esta enfermo', 44, 'Desparasitación', 1, NULL, 1),
 (41, 'checoxis2@gmail.com', NULL, '2023-07-23', 'mañana', NULL, NULL, 0, NULL, 'fghj', 43, 'Castración', 1, NULL, 1),
-(43, 'checoxis2@gmail.com', NULL, '2023-08-05', 'mañana', NULL, 0, 0, NULL, 'asd', 43, 'Vacuna tipo A', 1, 'sasa', 1);
+(43, 'checoxis2@gmail.com', NULL, '2023-08-05', 'mañana', NULL, 0, 0, NULL, 'asd', 43, 'Vacuna tipo A', 1, 'sasa', 0);
 
 -- --------------------------------------------------------
 
@@ -315,7 +316,7 @@ CREATE TABLE `urgencia` (
   `id_perro` int(11) NOT NULL,
   `date` date NOT NULL,
   `obs` varchar(500) NOT NULL,
-  `monto` int(11) NOT NULL DEFAULT 0
+  `monto` decimal(11,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -323,10 +324,10 @@ CREATE TABLE `urgencia` (
 --
 
 INSERT INTO `urgencia` (`id_urgencia`, `id_perro`, `date`, `obs`, `monto`) VALUES
-(1, 44, '2023-06-06', 'asdas', 1232),
-(2, 43, '2023-07-06', 'asdas', 123),
-(3, 44, '2023-07-08', 'jhg', 12312),
-(4, 44, '2023-07-08', 'asd', 123);
+(1, 44, '2023-06-06', 'asdas', 1232.00),
+(2, 43, '2023-07-06', 'asdas', 123.00),
+(3, 44, '2023-07-08', 'jhg', 12312.00),
+(4, 44, '2023-07-08', 'asd', 123.00);
 
 -- --------------------------------------------------------
 
@@ -464,7 +465,7 @@ ALTER TABLE `adopciones`
 -- AUTO_INCREMENT de la tabla `antiparasitario`
 --
 ALTER TABLE `antiparasitario`
-  MODIFY `id_antiparasitario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_antiparasitario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `campana`
